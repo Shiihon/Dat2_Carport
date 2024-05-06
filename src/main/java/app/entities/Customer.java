@@ -4,15 +4,17 @@ public class Customer implements Account {
     int customerId;
     String email;
     String password;
+    String role;
     String firstName;
     String lastName;
     String address;
     String phoneNumber;
 
-    public Customer(int customerId, String email, String password, String firstName, String lastName, String address, int phoneNumber) {
+    public Customer(int customerId, String email, String password, String role, String firstName, String lastName, String address, String phoneNumber) {
         this.customerId = customerId;
         this.email = email;
         this.password = password;
+        this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -31,6 +33,11 @@ public class Customer implements Account {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getRole() {
+        return role;
     }
 
     public String getFirstName() {
@@ -55,6 +62,7 @@ public class Customer implements Account {
                 "customerId=" + customerId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", address='" + address + '\'' +

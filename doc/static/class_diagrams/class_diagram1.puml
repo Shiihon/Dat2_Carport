@@ -59,18 +59,21 @@ interface Account {
     + int getId()
     + String getEmail()
     + String getPassword()
+    + String getRole()
 }
 
 class Seller implements Account {
     - int sellerId
     - String email
     - String password
+    - String role
 }
 
 class Customer implements Account {
     - int customerId
     - String email
     - String password
+    - String role
     - String firstName
     - String lastName
     - String address

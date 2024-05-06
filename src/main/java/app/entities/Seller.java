@@ -4,11 +4,13 @@ public class Seller implements Account {
     int sellerId;
     String email;
     String password;
+    String role;
 
-    public Seller(int sellerId, String email, String password) {
+    public Seller(int sellerId, String email, String password, String role) {
         this.sellerId = sellerId;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     @Override
@@ -27,11 +29,17 @@ public class Seller implements Account {
     }
 
     @Override
+    public String getRole() {
+        return role;
+    }
+
+    @Override
     public String toString() {
         return "Seller{" +
                 "sellerId=" + sellerId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }
