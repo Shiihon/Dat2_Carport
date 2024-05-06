@@ -82,7 +82,9 @@ public class AccountMapperTest {
                 "CUSTOMER",
                 "Foo",
                 "Bar",
-                "Ruten 6, 2700 Brønshøj",
+                "Ruten 6",
+                2700,
+                "Brønshøj",
                 "68 68 55 78"
         ));
         expectedAccounts.add(new Seller(
@@ -98,7 +100,9 @@ public class AccountMapperTest {
                 "CUSTOMER",
                 "Adam",
                 "Sørensen",
-                "Molestien 11, 2450 København SV",
+                "Molestien 11",
+                2450,
+                "København SV",
                 "06 25 01 79"
         ));
 
@@ -132,8 +136,8 @@ public class AccountMapperTest {
                                         account.getRole(),
                                         ((Customer) account).getFirstName(),
                                         ((Customer) account).getLastName(),
-                                        ((Customer) account).getAddress().split(", ")[0],
-                                        Integer.parseInt(((Customer) account).getAddress().split(", ")[1].substring(0, 4)),
+                                        ((Customer) account).getAddress(),
+                                        ((Customer) account).getZip(),
                                         ((Customer) account).getPhoneNumber());
                             } else {
                                 return String.format(

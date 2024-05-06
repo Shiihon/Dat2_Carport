@@ -36,9 +36,7 @@ public class AccountMapper {
                     if (role.equals("SELLER")) {
                         return new Seller(id, email, password, role);
                     } else {
-                        String fullAddress = String.format("%s, %d %s", address, zip, city);
-
-                        return new Customer(id, email, password, role, firstName, lastName, fullAddress, phoneNumber);
+                        return new Customer(id, email, password, role, firstName, lastName, address, zip, city, phoneNumber);
                     }
                 } else {
                     throw new DatabaseException("Login failed. Try again.");
