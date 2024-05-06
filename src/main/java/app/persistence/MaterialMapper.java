@@ -13,11 +13,11 @@ public class MaterialMapper {
         return null;
     }
 
-    public Material getMaterialById(int materialVariantId, ConnectionPool connectionPool) {
-        return null;
-    }
-
     public void createMaterial(Material material, ConnectionPool connectionPool) {
 
+    }
+
+    public Material getMaterialById(int materialVariantId, ConnectionPool connectionPool) {
+        return null;
     }
 }
