@@ -4,20 +4,21 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Order {
-    int orderId;
-    String title;
-    orderStatus status;
-    Integer totalPrice;
-    List<OrderBillItem> orderBill;
-    LocalDateTime timestamp;
 
-    public enum orderStatus {
+    public enum OrderStatus {
         WAITING_FOR_REVIEW,
         REVIEW_APPROVED,
         PAID
     }
 
-    public Order(int orderId, String title, orderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    int orderId;
+    String title;
+    OrderStatus status;
+    Integer totalPrice;
+    List<OrderBillItem> orderBill;
+    LocalDateTime timestamp;
+
+    public Order(int orderId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.title = title;
         this.status = status;
@@ -34,7 +35,7 @@ public class Order {
         return title;
     }
 
-    public orderStatus getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 

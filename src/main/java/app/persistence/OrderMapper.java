@@ -11,7 +11,7 @@ public class OrderMapper {
         return null;
     }
 
-    public List<Order> getAllOrdersByStatus (Order.orderStatus status, ConnectionPool connectionPool){
+    public List<Order> getAllOrdersByStatus (Order.OrderStatus status, ConnectionPool connectionPool){
         return null;
     }
 
@@ -23,7 +23,7 @@ public class OrderMapper {
 
     }
 
-    public void setOrderStatus(int orderId, Order.orderStatus status, ConnectionPool connectionPool){
+    public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool){
 
     }
 
