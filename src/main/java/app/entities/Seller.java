@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.Objects;
+
 public class Seller implements Account {
     int sellerId;
     String email;
@@ -31,6 +33,19 @@ public class Seller implements Account {
     @Override
     public String getRole() {
         return role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Seller seller = (Seller) o;
+        return sellerId == seller.sellerId && Objects.equals(getEmail(), seller.getEmail()) && Objects.equals(getPassword(), seller.getPassword()) && Objects.equals(getRole(), seller.getRole());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sellerId, getEmail(), getPassword(), getRole());
     }
 
     @Override
