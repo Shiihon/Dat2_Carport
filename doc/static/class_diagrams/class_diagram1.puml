@@ -71,10 +71,10 @@ class Customer implements Account {
     - int customerId
     - String email
     - String password
-    - String address
     - String firstName
     - String lastName
-    - int phoneNumber
+    - String address
+    - String phoneNumber
 }
 
 class CarportSchematicGenerator {
