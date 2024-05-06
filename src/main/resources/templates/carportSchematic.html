@@ -10,8 +10,15 @@
 <body>
 <div th:replace="~{fragments :: header('Header fragment')}"></div>
 
-<a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
 
+<h1>Carport Schematic</h1>
+<h2>Ordre nr: 1248</h2>
+
+<div class="carport-svg-topview">
+
+    <div th:utext="${svg}"></div>
+
+</div>
 
 
 </body>

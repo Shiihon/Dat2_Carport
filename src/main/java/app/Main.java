@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.OrderController;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -19,5 +20,6 @@ public class Main {
         // Routing
 
         app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
     }
 }
