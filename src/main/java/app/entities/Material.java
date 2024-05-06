@@ -29,8 +29,16 @@ public class Material {
         return materialId;
     }
 
+    public void setMaterialId(int materialId) {
+        this.materialId = materialId;
+    }
+
     public int getMaterialVariantId() {
         return materialVariantId;
+    }
+
+    public void setMaterialVariantId(int materialVariantId) {
+        this.materialVariantId = materialVariantId;
     }
 
     public String getDescription() {
