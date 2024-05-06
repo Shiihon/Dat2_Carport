@@ -38,8 +38,7 @@ public class Seller implements Account {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Seller seller = (Seller) o;
+        if (!(o instanceof Seller seller)) return false;
         return sellerId == seller.sellerId && Objects.equals(getEmail(), seller.getEmail()) && Objects.equals(getPassword(), seller.getPassword()) && Objects.equals(getRole(), seller.getRole());
     }
 
