@@ -2,20 +2,20 @@ package app.entities;
 
 public class Material {
 
+    public enum MaterialType {
+        WOOD,
+        SCREWS
+    }
+
     int materialId;
     int materialVariantId;
     String description;
     String unit;
     int price;
     Integer length;
-    Type materialType; // spørg victor!
+    MaterialType materialType;
 
-    public enum Type {
-        WOOD,
-        SCREWS
-    }
-
-    public Material(int materialId, int materialVariantId, String description, String unit, int price, Integer length, Type materialType) {
+    public Material(int materialId, int materialVariantId, String description, String unit, int price, Integer length, MaterialType materialType) {
         this.materialId = materialId;
         this.materialVariantId = materialVariantId;
         this.description = description;
@@ -49,7 +49,7 @@ public class Material {
         return length;
     }
 
-    public Type getMaterialType() {
+    public MaterialType getMaterialType() {
         return materialType;
     }
 
