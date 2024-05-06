@@ -1,19 +1,19 @@
 package app.entities;
 
 public class Seller implements Account {
-    int salespersonId;
+    int sellerId;
     String email;
     String password;
 
-    public Seller(int salespersonId, String email, String password) {
-        this.salespersonId = salespersonId;
+    public Seller(int sellerId, String email, String password) {
+        this.sellerId = sellerId;
         this.email = email;
         this.password = password;
     }
 
     @Override
     public int getId() {
-        return salespersonId;
+        return sellerId;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class Seller implements Account {
     @Override
     public String toString() {
         return "Seller{" +
-                "salespersonId=" + salespersonId +
+                "sellerId=" + sellerId +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';

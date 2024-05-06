@@ -62,7 +62,7 @@ interface Account {
 }
 
 class Seller implements Account {
-    - int salespersonId
+    - int sellerId
     - String email
     - String password
 }
