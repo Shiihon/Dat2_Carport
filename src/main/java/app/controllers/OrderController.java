@@ -1,12 +1,36 @@
 package app.controllers;
 
+import app.persistence.ConnectionPool;
 import app.services.CarportSvg;
-import app.services.Svg;
+import io.javalin.Javalin;
 import io.javalin.http.Context;
-
 import java.util.Locale;
 
 public class OrderController {
+
+    public void addRoutes(Javalin app, ConnectionPool connectionPool) {
+
+    }
+
+    public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
+
+    }
+
+    public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
+
+    }
+
+    public void payOrder(Context ctx, ConnectionPool connectionPool) {
+
+    }
+
+    public void viewInvoice(Context ctx, ConnectionPool connectionPool) {
+
+    }
+
+    public void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+
+    }
 
     public static void viewCarportSchematic(Context ctx){
         Locale.setDefault(new Locale("US"));
