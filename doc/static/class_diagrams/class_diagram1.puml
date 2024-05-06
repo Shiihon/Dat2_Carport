@@ -77,6 +77,8 @@ class Customer implements Account {
     - String firstName
     - String lastName
     - String address
+    - int zip
+    - String city
     - String phoneNumber
 }
 
