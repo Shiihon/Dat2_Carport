@@ -14,7 +14,7 @@ public class AccountMapper {
 
     public static Account login(String email, String password, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "SELECT account_id, account_role, account_first_name, account_last_name, account_address, account_zip, city, account_phone_number " +
-                "FROM accounts INNER JOIN postal_codes ON account_zip = zip " +
+                "FROM accounts LEFT JOIN postal_codes ON account_zip = zip " +
                 "WHERE account_email = ? AND account_password = ?";
 
         try (Connection connection = connectionPool.getConnection()) {
