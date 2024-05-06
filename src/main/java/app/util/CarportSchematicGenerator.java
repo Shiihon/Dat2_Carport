@@ -1,4 +1,4 @@
-package app.generators;
+package app.util;
 
 public class CarportSchematicGenerator {
 

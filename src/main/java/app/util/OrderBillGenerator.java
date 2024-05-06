@@ -1,4 +1,4 @@
-package app.generators;
+package app.util;
 
 import app.entities.OrderBillItem;
 
