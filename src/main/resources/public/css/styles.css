@@ -4,6 +4,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* Stylesheet for the application */
 
 
+/**** Color pallet ****/
+
+:root {
+    --text: 5, 3, 21;
+    --background: 251, 251, 254;
+    --primary: 0, 39, 80;
+    --secondary: 1, 61, 122;
+    --accent: 255, 255, 255;
+}
+
 h1.title {
     color: #369;
     font-family: Arial, Helvetica, sans-serif;
