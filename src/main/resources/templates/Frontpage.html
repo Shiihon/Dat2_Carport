@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<title>Frontpage</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div th:replace="~{fragments :: header('Header fragment')}"></div>
+
+<a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
+
+<h2>Byg en Carport med fladt tag!</h2>
+<p>Med et specialudviklet computerprogram kan vi lynhurtigt
+    beregne prisen og give dig et tilbud på din forespørgsel. Ved bestilling medfølger standardbyggevejledning.
+
+    Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
+
+<form th:action="@{/addtobasket}" method="post">
+    <div class="dropdown">
+
+        <select name="amount" id="amount">
+            <option value="" disabled selected>Carport bredde (cm):</option>
+            <option value="240"/>
+            240 cm</option>
+            <option value="270"/>
+            270 cm</option>
+            <option value="300"/>
+            300 cm</option>
+            <option value="330"/>
+            330 cm</option>
+            <option value="360"/>
+            360 cm</option>
+            <option value="390"/>
+            390 cm </option>
+            <option value="420"/>
+            420 cm</option>
+            <option value="450"/>
+            450 cm</option>
+            <option value="480"/>
+            480 cm</option>
+            <option value="510"/>
+            510 cm</option>
+            <option value="540"/>
+            540 cm</option>
+            <option value="570"/>
+            570 cm</option>
+            <option value="600"/>
+            600 cm</option>
+        </select>
+
+        <select name="amount" id="amount">
+            <option value="" disabled selected>Carport længde (cm):</option>
+            <option value="240"/>
+            240 cm</option>
+            <option value="270"/>
+            270 cm</option>
+            <option value="300"/>
+            300 cm</option>
+            <option value="330"/>
+            330 cm</option>
+            <option value="360"/>
+            360 cm</option>
+            <option value="390"/>
+            390 cm </option>
+            <option value="420"/>
+            420 cm</option>
+            <option value="450"/>
+            450 cm</option>
+            <option value="480"/>
+            480 cm</option>
+            <option value="510"/>
+            510 cm</option>
+            <option value="540"/>
+            540 cm</option>
+            <option value="570"/>
+            570 cm</option>
+            <option value="600"/>
+            600 cm</option>
+            <option value="630"/>
+            630 cm</option>
+            <option value="660"/>
+            660 cm</option>
+            <option value="690"/>
+            690 cm</option>
+            <option value="720"/>
+            720 cm</option>
+            <option value="750"/>
+            750 cm</option>
+            <option value="780"/>
+            780 cm</option>
+        </select>
+    </div>
+
+    <input class="input-large" type="text" name="taskname" placeholder="Evt. bemærkninger.. "/>
+
+    <div class="button-container">
+        <button class="addtocart" type="submit" formaction="addtocart">Forsæt</button>
+    </div>
+</form>
+
+</body>
+</html>

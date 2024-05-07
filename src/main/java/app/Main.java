@@ -19,7 +19,7 @@ public class Main {
 
         // Routing
 
-        app.get("/", ctx -> ctx.render("index.html"));
+        app.get("/", ctx -> ctx.render("Frontpage.html"));
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
     }
 }
