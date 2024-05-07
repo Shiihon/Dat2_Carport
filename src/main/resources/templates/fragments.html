@@ -39,6 +39,12 @@
             </nav>
         </header>
 
+        <div th:fragment="error" class="error-container" th:unless="${#strings.isEmpty(error)}">
+            <p class="error" th:text="${error}">
+                Error message
+            </p>
+        </div>
+
         <footer th:fragment="footer" class="footer-container">
             <a th:if="${#ctx.session.currentUser} == null" th:href="@{/createuser}">Create account</a>
             <a th:if="${#ctx.session.currentUser} != null" th:href="@{/logout}">Logout</a>
