@@ -16,16 +16,15 @@ public class MaterialMapper {
     }
 
     public void createMaterial(Material material, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO materials (material_id, material_description, material_unit, material_price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO materials (material_description, material_unit, material_price) VALUES (?, ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
-            ps.setInt(1, material.getMaterialId());
-            ps.setString(2, material.getDescription());
-            ps.setString(3, material.getUnit());
-            ps.setInt(4, material.getPrice());
+            ps.setString(1, material.getDescription());
+            ps.setString(2, material.getUnit());
+            ps.setInt(3, material.getPrice());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected == 1) {
@@ -50,19 +49,20 @@ public class MaterialMapper {
 
     private static void createMaterialVariant(Material material, ConnectionPool connectionPool) throws
             DatabaseException {
-        String sql = "INSERT INTO material_variants (material_variant_id, material_id, length)VALUES( ?, ?, ?)";
+        String sql = "INSERT INTO material_variants (material_id, length)VALUES( ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
         ) {
-            ps.setInt(1, material.getMaterialVariantId());
-            ps.setInt(2, material.getMaterialId());
-            ps.setInt(3, material.getLength());
+            ps.setInt(1, material.getMaterialId());
+            ps.setInt(2, material.getLength());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected == 1) {
                 throw new DatabaseException("Error could not insert new material variant");
+            } else {
+                throw new DatabaseException("Error material variant could not be inserted");
             }
 
         } catch (SQLException e) {
