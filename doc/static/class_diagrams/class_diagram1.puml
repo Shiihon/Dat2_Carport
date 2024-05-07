@@ -34,7 +34,9 @@ class OrderController {
 
 class AccountMapper {
     + {static} Account login(String email, String password, ConnectionPool connectionPool)
-    + {static} void createAccount(String email, String password, ConnectionPool connectionPool)
+    + {static} void createAccount(Account account, ConnectionPool connectionPool)
+    + {static} Account getAccountById(int accountId, ConnectionPool connectionPool)
+    - {static} Account getAccount(int accountId, String email, String password, ResultSet rs)
 }
 
 class OrderMapper {
