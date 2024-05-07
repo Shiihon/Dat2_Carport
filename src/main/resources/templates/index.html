@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<title>Frontpage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<head>
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
-<div th:replace="~{fragments :: header('Header fragment', _)}"></div>
+<div class="main-container">
+    <div th:replace="~{fragments :: header('Header fragment', _)}"></div>
 
-<h1>Welcome to the Javalin / Thymeleaf demo</h1>
+    <div class="main-content">
+        <h1>Welcome to the Javalin / Thymeleaf demo</h1>
 
-<p>This is your first web application in this world</p>
-
+        <p>This is your first web application in this world</p>
+    </div>
+</div>
 </body>
 </html>
