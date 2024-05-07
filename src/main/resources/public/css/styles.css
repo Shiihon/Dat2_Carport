@@ -1,5 +1,9 @@
 /* Stylesheet for the application */
 
+/**** Import font ****/
+@import url('https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap'); /* Stylesheet for the application */
+
+
 h1.title {
     color: #369;
     font-family: Arial, Helvetica, sans-serif;
