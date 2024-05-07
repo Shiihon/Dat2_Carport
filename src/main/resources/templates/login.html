@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/login.css" th:href="@{/css/login.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+    </div>
+
+    <div class="main-content">
+        <h1 class="title">Login</h1>
+
+        <div class="login-form-container">
+            <form class="login-form-content" method="post">
+                <div th:replace="~{fragments :: error}"></div>
+
+                <div class="fields-container">
+                    <p class="create-account-prompt">Nu kunde?
+                        <a href="/create-account">Opret bruger</a>
+                    </p>
+
+                    <div class="fields-content">
+                        <label>
+                            <input type="email" maxlength="40" autocomplete="email" placeholder="Indtast email"
+                                   name="email" required>
+                        </label>
+                        <label>
+                            <input type="password" minlength="4" maxlength="50" autocomplete="current-password"
+                                   placeholder="Indtast password" name="password" required>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" formaction="/login">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
