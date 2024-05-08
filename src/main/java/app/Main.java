@@ -18,8 +18,7 @@ public class Main {
         }).start(7070);
 
         // Routing
-
-        app.get("/", ctx -> ctx.render("Frontpage.html"));
+        app.get("/", ctx -> ctx.render("frontpage.html"));
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
     }
 }

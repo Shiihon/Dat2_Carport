@@ -1,15 +1,41 @@
 package app.controllers;
 
+import app.entities.Customer;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
 import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class OrderController {
 
     public void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.post("continuerequest", ctx -> continueRequest(ctx, connectionPool));
 
+    }
+
+    private void continueRequest(Context ctx, ConnectionPool connectionPool) {
+
+        Customer customer = ctx.sessionAttribute("currentUser");
+
+        String carportWidth = ctx.formParam("width-option");
+        String carportLength = ctx.formParam("length-option");
+
+        //gemmer attributer i nuværende session
+        ctx.sessionAttribute("carportWidth", carportWidth);
+        ctx.sessionAttribute("carportLength", carportLength);
+
+        if (customer == null) {
+            //gemmer destinationen til når brugeren er logget ind
+            ctx.sessionAttribute("loginRedirect", "/order-overview");
+            ctx.redirect("/login.html");
+        } else {
+            ctx.redirect("/order-overview");
+        }
     }
 
     public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
