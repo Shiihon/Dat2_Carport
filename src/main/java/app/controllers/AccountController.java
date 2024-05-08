@@ -8,7 +8,6 @@ import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-
 public class AccountController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
@@ -16,6 +15,7 @@ public class AccountController {
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/create-account", ctx -> ctx.render("create-account.html"));
         app.post("/create-account", ctx -> createAccount(ctx, connectionPool));
+        app.get("/logout", ctx -> logout(ctx));
     }
 
     public static void createAccount(Context ctx, ConnectionPool connectionPool) {
@@ -73,7 +73,8 @@ public class AccountController {
         }
     }
 
-    public void logout(Context ctx, ConnectionPool connectionPool) {
-
+    public static void logout(Context ctx) {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
     }
 }
