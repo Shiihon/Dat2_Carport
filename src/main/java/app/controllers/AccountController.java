@@ -16,17 +16,6 @@ public class AccountController {
     }
 
     public void login(Context ctx, ConnectionPool connectionPool) {
-
-        //KODE TIL US3
-        String redirectPath = ctx.sessionAttribute("loginRedirect");
-        if (redirectPath != null) {
-            ctx.redirect(redirectPath);
-            //fjerner redirect stien efter den er kørt en gang
-            ctx.sessionAttribute("loginRedirect", null);
-        } else {
-            ctx.redirect("/frontpage");
-        }
-
     }
 
     public void logout(Context ctx, ConnectionPool connectionPool) {
