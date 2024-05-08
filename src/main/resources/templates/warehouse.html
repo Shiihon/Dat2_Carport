@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da-dk">
+
+<head th:fragment="head(title)">
+    <title th:text="${title}">WarehousePage</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/warehouse.css" th:href="@{/css/warehouse.css}" rel="stylesheet"/>
+
+</head>
+
+<body>
+<div class="main-container">
+    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+    </div>
+    <div class="main-content">
+        <form>
+            <table>
+                <thead>
+                <tr>
+                    <th>Beskrivelse</th>
+                    <th>Enhed</th>
+                    <th>Materiale Type</th>
+                    <th>Længde</th>
+                    <th>Pris</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="material: ${materialList}">
+                    <td th:text="${material.getDescription()}"></td>
+                    <td th:text="${material.getUnit()}"></td>
+                    <td th:text="${material.getMaterialType()}"></td>
+                    <td th:text="| ${material.getLength()} cm|"></td>
+                    <td th:text="| ${material.getPrice()} kr.|"></td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
