@@ -17,7 +17,7 @@ public class Svg {
                 </defs>
             """;
 
-    private static final String SVG_RECT_TEMPLATE = "<rect x=\"%.2f\" y=\"%.2f\" height=\"%.2f\" width=\"%.2f\" style=\"%s\" />";
+    private static final String SVG_RECT_TEMPLATE = "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" style=\"%s\" />";
 
     private static final String SVG_LINE_TEMPLATE = "<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" style=\"%s\" />";
 
@@ -32,9 +32,9 @@ public class Svg {
         svg.append(SVG_ARROW_DEFS);
     }
 
-    public void addRectangle(double x, double y, double height, double width, String style){
+    public void addRectangle(double x, double y, double width, double height, String style) {
 
-        svg.append(String.format(SVG_RECT_TEMPLATE, x, y, height, width, style));
+        svg.append(String.format(SVG_RECT_TEMPLATE, x, y, width, height, style));
 
     }
 
