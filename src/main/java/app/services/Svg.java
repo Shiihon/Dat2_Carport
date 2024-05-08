@@ -44,11 +44,6 @@ public class Svg {
 
     }
 
-    public void addArrow(int x1, int y1, int x2, int y2, String style){
-
-        svg.append(String.format(SVG_LINE_TEMPLATE, x1, y1, x2, y2, style));
-
-    }
     public void addText(double x, double y, double rotation, String text) {
 
         svg.append(String.format(SVG_TEXT_TEMPLATE, x, y, rotation, text));
