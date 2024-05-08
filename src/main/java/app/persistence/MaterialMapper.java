@@ -4,18 +4,49 @@ import app.entities.Material;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaterialMapper {
-    public Material getMaterial(String description, ConnectionPool connectionPool) {
+
+    public static Material getMaterial(String description, ConnectionPool connectionPool) {
         return null;
     }
 
-    public List<Material> getAllMaterials(String description, ConnectionPool connectionPool) {
+    public static List<Material> getAllMaterials(String description, ConnectionPool connectionPool) {
         return null;
     }
 
-    public void createMaterial(Material material, ConnectionPool connectionPool) throws DatabaseException {
+    public static List<Material> getAllMaterials(ConnectionPool connectionPool) {
+
+        List<Material> materialList = new ArrayList<>();
+        String sql = "SELECT material_id, material_description, material_unit, material_price, material_type, length, material_variant_id " +
+                "FROM materials " +
+                "INNER JOIN material_variants " +
+                "USING (material_id)";
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int materialId = rs.getInt("material_id");
+                int materialVariantId = rs.getInt("material_variant_id");
+                String description = rs.getString("material_description");
+                String unit = rs.getString("material_unit");
+                int price = rs.getInt("material_price");
+                int length = rs.getInt("length");
+                String materialType = rs.getString("material_type");
+                materialList.add(new Material(materialId, materialVariantId, description, unit, price, length, Material.MaterialType.valueOf(materialType)));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e); // for connectionpool.
+        }
+        return materialList;
+    }
+
+    public static void createMaterial(Material material, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO materials (material_description, material_unit, material_price) VALUES (?, ?, ?)";
 
         try (
@@ -43,7 +74,7 @@ public class MaterialMapper {
         }
     }
 
-    public Material getMaterialById(int materialVariantId, ConnectionPool connectionPool) {
+    public static Material getMaterialById(int materialVariantId, ConnectionPool connectionPool) {
         return null;
     }
 
