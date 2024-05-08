@@ -2,11 +2,19 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.AccountController;
+import app.persistence.ConnectionPool;
 import app.controllers.OrderController;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
 public class Main {
+
+    private static final String USER = "postgres";
+    private static final String PASSWORD = "postgres";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String DB = "postgres";
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     public static void main(String[] args) {
         // Initializing Javalin and Jetty webserver
@@ -18,7 +26,8 @@ public class Main {
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("frontpage.html"));
-        app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
+
+        app.get("/", ctx -> ctx.render("index.html"));
+        AccountController.addRoutes(app, connectionPool);
     }
 }

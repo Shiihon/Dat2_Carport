@@ -7,4 +7,6 @@ public interface Account {
     String getEmail();
 
     String getPassword();
+
+    String getRole();
 }
