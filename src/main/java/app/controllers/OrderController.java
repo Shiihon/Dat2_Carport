@@ -1,14 +1,10 @@
 package app.controllers;
 
 import app.entities.Customer;
-import app.entities.Order;
 import app.persistence.ConnectionPool;
 import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class OrderController {
