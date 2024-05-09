@@ -33,8 +33,10 @@ class OrderController {
 }
 
 class AccountMapper {
-    + {static} Account login(String email, String password)
-    + {static} void createAccount(String email, String password)
+    + {static} Account login(String email, String password, ConnectionPool connectionPool)
+    + {static} void createAccount(Account account, ConnectionPool connectionPool)
+    + {static} Account getAccountById(int accountId, ConnectionPool connectionPool)
+    - {static} Account getAccount(int accountId, String email, String password, ResultSet rs)
 }
 
 class OrderMapper {
@@ -57,24 +59,30 @@ class MaterialMapper {
 
 interface Account {
     + int getId()
+    + void setId(int id)
     + String getEmail()
     + String getPassword()
+    + String getRole()
 }
 
 class Seller implements Account {
     - int sellerId
     - String email
     - String password
+    - String role
 }
 
 class Customer implements Account {
     - int customerId
     - String email
     - String password
-    - String address
+    - String role
     - String firstName
     - String lastName
-    - int phoneNumber
+    - String address
+    - int zip
+    - String city
+    - String phoneNumber
 }
 
 class CarportSchematicGenerator {
