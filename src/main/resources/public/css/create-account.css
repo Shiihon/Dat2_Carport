@@ -15,7 +15,7 @@
 }
 
 
-/**** Login Fields Container ****/
+/**** Create Account Fields Container ****/
 
 .fields-container {
     display: flex;
@@ -28,10 +28,6 @@
 }
 
 .login-prompt > a {
-    color: rgb(var(--secondary), 0.95);
-}
-
-.login-prompt > a:visited {
     color: rgb(var(--secondary), 0.95);
 }
 
