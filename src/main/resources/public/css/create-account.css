@@ -31,10 +31,6 @@
     color: rgb(var(--secondary), 0.95);
 }
 
-.login-prompt > a:visited {
-    color: rgb(var(--secondary), 0.95);
-}
-
 .fields-content {
     display: flex;
     flex-direction: column;
