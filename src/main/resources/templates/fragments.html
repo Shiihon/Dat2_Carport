@@ -10,13 +10,40 @@
 </head>
 
 <body>
-<div id="page-container">
-    <div id="page-content">
-        <header th:fragment="header(title)">
+<div class="main-container">
+    <div class="main-content">
+        <header th:fragment="header(title, buttons)">
             <div class="header-image">
                 <img src="../public/images/FOGHeader.png" th:src="@{/images/FOGHeader.png}" alt="FOG"/>
             </div>
+
+            <nav class="navigation-bar">
+                <ul class="nav-bar">
+                    <li class="left-nav-bar">
+                        <ul class="nav-bar-buttons">
+                            <li class="nav-bar-button" th:each="button: ${buttons}">
+                                <th:block th:replace="${button}"/>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="right-nav-bar">
+                        <ul class="nav-bar-buttons">
+                            <li class="nav-bar-button" th:unless="${#strings.equals(title, 'Login')}">
+                                <a th:if="${#ctx.session.currentAccount == null}" href="/login">Log ind</a>
+                                <a th:if="${#ctx.session.currentAccount != null}" href="/logout">Log ud</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
         </header>
+
+        <div th:fragment="error" class="error-container" th:unless="${#strings.isEmpty(error)}">
+            <p class="error" th:text="${error}">
+                Error message
+            </p>
+        </div>
 
         <footer th:fragment="footer" class="footer-container">
             <a th:if="${#ctx.session.currentUser} == null" th:href="@{/createuser}">Create account</a>
