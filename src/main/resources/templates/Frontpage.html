@@ -23,30 +23,30 @@
 
     Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
 
-<form th:action="@{/addtobasket}" method="post">
-    <div class="dropdown">
+    <form th:action="@{/continuerequest}" method="post">
+        <div class="dropdown">
 
-        <select name="amount-option">
-            <option value="" disabled selected>Carport Bredde:</option>
-            <option th:each="amount: ${#numbers.sequence(1, 12)}" th:value="${240 + amount * 30}"
-                    th:text="${240 + amount * 30}">Amount
-            </option>
-        </select>
+            <select name="width-option">
+                <option value="" disabled selected>Carport bredde:</option>
+                <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                        th:text="${240 + amount * 30} + cm">Amount
+                </option>
+            </select>
 
-        <select name="amount-option">
-            <option value="" disabled selected>Carport Længde:</option>
-            <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
-                    th:text="${240 + amount * 30}">Amount
-            </option>
-        </select>
-    </div>
+            <select name="length-option">
+                <option value="" disabled selected>Carport længde:</option>
+                <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                        th:text="${240 + amount * 30} + cm">Amount
+                </option>
+            </select>
+        </div>
 
-    <input class="input-large" type="text" name="taskname" placeholder="Evt. bemærkninger.. "/>
+        <input class="input-large" type="text" name="taskname" placeholder="Evt. bemærkninger.. "/>
 
-    <div class="button-container">
-        <button class="addtocart" type="submit" formaction="addtocart">Forsæt</button>
-    </div>
-</form>
+        <div class="button-container">
+            <button class="continuerequest" type="submit" formaction="continuerequest">Forsæt</button>
+        </div>
+    </form>
 
 </div>
 
