@@ -47,7 +47,7 @@ public class MaterialMapper {
     }
 
     public static void createMaterial(Material material, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO materials (material_description, material_unit, material_price) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO materials (material_description, material_unit, material_price, material_type) VALUES (?, ?, ?, ?)";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -56,6 +56,7 @@ public class MaterialMapper {
             ps.setString(1, material.getDescription());
             ps.setString(2, material.getUnit());
             ps.setInt(3, material.getPrice());
+            ps.setString(4, material.getMaterialType().toString());
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected == 1) {
@@ -90,9 +91,7 @@ public class MaterialMapper {
             ps.setInt(2, material.getLength());
             int rowsAffected = ps.executeUpdate();
 
-            if (rowsAffected == 1) {
-                throw new DatabaseException("Error could not insert new material variant");
-            } else {
+            if (rowsAffected == 0) {
                 throw new DatabaseException("Error material variant could not be inserted");
             }
 
