@@ -5,7 +5,7 @@ public class CarportSvg {
     private static final int frameSize = 100; // The extra frame size where other things like arrows can be drawn
 
     private static final int postDistanceFromSide = 35; // The distance from the post to the side of the carport
-    private static final int maxPostDistance = 200; // The max distance there can be between two posts
+    private static final int maxPostDistance = 225; // The max distance there can be between two posts
     private static final int postDistanceBuffer = 110; // Small buffer distance to ensure a post won't be placed right on the edge
     private static final int postSize = 15; // The size of the post
 
@@ -16,15 +16,15 @@ public class CarportSvg {
 
     private final int frameWidth;
     private final int frameHeight;
-    private final int carportWidth;
-    private final int carportLength;
+    private final int carportSchematicWidth;
+    private final int carportSchematicHeight;
     private Svg carportSvg;
 
     public CarportSvg(int carportWidth, int carportLength) {
         this.frameWidth = carportLength + frameSize;
         this.frameHeight = carportWidth + frameSize * 2;
-        this.carportWidth = carportLength;
-        this.carportLength = carportWidth;
+        this.carportSchematicWidth = carportLength;
+        this.carportSchematicHeight = carportWidth;
 
         createSchematicFrame();
         createInnerCarportSchematic();
@@ -37,27 +37,35 @@ public class CarportSvg {
 
         // Total carport width
         carportSvg.addLine(20, frameSize, 20, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
-        carportSvg.addLine(20, frameSize, 80, frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(20, frameHeight - frameSize, 80, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addText(10, frameHeight * 0.5, -90, String.format("%d cm", carportLength));
+
+        carportSvg.addLine(20, frameSize, 90, frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(20, frameHeight - frameSize, 90, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+
+        carportSvg.addText(10, frameHeight * 0.5, -90, String.format("%d cm", carportSchematicHeight));
+
 
         // Inner carport width
         carportSvg.addLine(60, frameSize + postDistanceFromSide - rafterWidth * 0.5, 60, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
-        carportSvg.addLine(60, frameSize + postDistanceFromSide - rafterWidth * 0.5, frameSize, frameSize + postDistanceFromSide - rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(60, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, frameSize, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addText(50, frameHeight * 0.5, -90, String.format("%d cm", carportLength - postDistanceFromSide * 2));
+
+        carportSvg.addLine(60, frameSize + postDistanceFromSide - rafterWidth * 0.5, 90, frameSize + postDistanceFromSide - rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(60, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, 90, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+
+        carportSvg.addText(50, frameHeight * 0.5, -90, String.format("%d cm", carportSchematicHeight - postDistanceFromSide * 2));
+
 
         // Carport length
         carportSvg.addLine(frameSize, frameHeight - frameSize * 0.5, frameWidth, frameHeight - frameSize * 0.5, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
-        carportSvg.addLine(frameSize, frameHeight - frameSize * 0.5, frameSize, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(frameWidth - 1, frameHeight - frameSize * 0.5, frameWidth - 1, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addText(frameSize + (frameWidth - frameSize) * 0.5, frameHeight - frameSize * 0.5 + 20, 0, String.format("%d cm", carportWidth));
+
+        carportSvg.addLine(frameSize, frameHeight - frameSize * 0.5, frameSize, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(frameWidth - 1, frameHeight - frameSize * 0.5, frameWidth - 1, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+
+        carportSvg.addText(frameSize + (frameWidth - frameSize) * 0.5, frameHeight - frameSize * 0.5 + 20, 0, String.format("%d cm", carportSchematicWidth));
     }
 
     private void createInnerCarportSchematic() {
-        Svg innerSvg = new Svg(frameWidth - carportWidth, (frameHeight - carportLength) / 2, String.format("%d %d", carportWidth, carportLength), String.valueOf(carportWidth));
+        Svg innerSvg = new Svg(frameWidth - carportSchematicWidth, (frameHeight - carportSchematicHeight) / 2, String.format("%d %d", carportSchematicWidth, carportSchematicHeight), String.valueOf(carportSchematicWidth));
 
-        innerSvg.addRectangle(0, 0, carportWidth, carportLength, "stroke-width:2px; stroke:#000000; fill: #ffffff");
+        innerSvg.addRectangle(0, 0, carportSchematicWidth, carportSchematicHeight, "stroke-width:2px; stroke:#000000; fill: #ffffff");
 
         addPosts(innerSvg);
         addBeams(innerSvg);
@@ -66,38 +74,38 @@ public class CarportSvg {
     }
 
     private void addPosts(Svg svg) {
-        int numPosts = Math.max((carportWidth - postDistanceBuffer) / maxPostDistance, 2);
-        double postDistance = (double) carportWidth / numPosts;
+        int numPosts = Math.max((int) Math.ceil((double) (carportSchematicWidth - postDistanceBuffer) / maxPostDistance), 2);
+        double postDistance = (double) carportSchematicWidth / numPosts;
 
         for (double i = 0; i < numPosts; i++) {
             double x = i * postDistance + postDistance * 0.5;
 
             svg.addRectangle(x - postSize * 0.5, postDistanceFromSide - postSize * 0.5, postSize, postSize, "stroke-width:2px; stroke:#000000; fill: #FF5733");
-            svg.addRectangle(x - postSize * 0.5, carportLength - postDistanceFromSide - postSize * 0.5, postSize, postSize, "stroke-width:2px; stroke:#000000; fill: #FF5733");
+            svg.addRectangle(x - postSize * 0.5, carportSchematicHeight - postDistanceFromSide - postSize * 0.5, postSize, postSize, "stroke-width:2px; stroke:#000000; fill: #FF5733");
         }
     }
 
     private void addBeams(Svg svg) {
-        svg.addRectangle(0, postDistanceFromSide - beamWidth * 0.5, carportWidth, beamWidth, "stroke-width:1px; stroke:#000000; fill: #ffffff");
-        svg.addRectangle(0, carportLength - postDistanceFromSide - beamWidth * 0.5, carportWidth, beamWidth, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+        svg.addRectangle(0, postDistanceFromSide - beamWidth * 0.5, carportSchematicWidth, beamWidth, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+        svg.addRectangle(0, carportSchematicHeight - postDistanceFromSide - beamWidth * 0.5, carportSchematicWidth, beamWidth, "stroke-width:1px; stroke:#000000; fill: #ffffff");
     }
 
     private void addRafters(Svg svg) {
-        int numRafters = (int) Math.floor((carportWidth - rafterWidth * 1.5) / maxRafterDistance);
-        double rafterDistance = (carportWidth - rafterWidth * 1.5) / numRafters;
+        int numRafters = (int) Math.ceil((carportSchematicWidth - rafterWidth * 1.5) / maxRafterDistance);
+        double rafterDistance = (carportSchematicWidth - rafterWidth * 1.5) / numRafters;
 
         for (double i = 0; i <= numRafters; i++) {
             double x = rafterWidth * 1.5 * 0.5 + i * rafterDistance;
 
-            svg.addRectangle(x - rafterWidth * 0.5, 0, rafterWidth, carportLength, "stroke-width:1px; stroke:#000000; fill: #ffffff");
+            svg.addRectangle(x - rafterWidth * 0.5, 0, rafterWidth, carportSchematicHeight, "stroke-width:1px; stroke:#000000; fill: #ffffff");
         }
 
         // Steel cross
-        svg.addLine(rafterDistance, postDistanceFromSide + beamWidth * 0.5, rafterDistance * (numRafters - 1), carportLength - postDistanceFromSide - beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        svg.addLine(rafterDistance + rafterWidth, postDistanceFromSide + beamWidth * 0.5, rafterDistance * (numRafters - 1) + rafterWidth, carportLength - postDistanceFromSide - beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        svg.addLine(rafterDistance, postDistanceFromSide + beamWidth * 0.5, rafterDistance * (numRafters - 1), carportSchematicHeight - postDistanceFromSide - beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        svg.addLine(rafterDistance + rafterWidth, postDistanceFromSide + beamWidth * 0.5, rafterDistance * (numRafters - 1) + rafterWidth, carportSchematicHeight - postDistanceFromSide - beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
 
-        svg.addLine(rafterDistance, carportLength - postDistanceFromSide - beamWidth * 0.5, rafterDistance * (numRafters - 1), postDistanceFromSide + beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        svg.addLine(rafterDistance + rafterWidth, carportLength - postDistanceFromSide - beamWidth * 0.5, rafterDistance * (numRafters - 1) + rafterWidth, postDistanceFromSide + beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        svg.addLine(rafterDistance, carportSchematicHeight - postDistanceFromSide - beamWidth * 0.5, rafterDistance * (numRafters - 1), postDistanceFromSide + beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        svg.addLine(rafterDistance + rafterWidth, carportSchematicHeight - postDistanceFromSide - beamWidth * 0.5, rafterDistance * (numRafters - 1) + rafterWidth, postDistanceFromSide + beamWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
     }
 
     @Override
