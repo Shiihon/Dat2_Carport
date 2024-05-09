@@ -15,8 +15,12 @@
 <div class="main-container">
     <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
         <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+        <a class="nav-bar-button" href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
     </div>
+
     <div class="main-content">
+        <h2>Lager</h2>
+
         <form>
             <table>
                 <thead>
