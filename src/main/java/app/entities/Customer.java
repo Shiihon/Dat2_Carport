@@ -34,6 +34,11 @@ public class Customer implements Account {
     }
 
     @Override
+    public void setId(int id) {
+        this.customerId = id;
+    }
+
+    @Override
     public String getEmail() {
         return email;
     }
