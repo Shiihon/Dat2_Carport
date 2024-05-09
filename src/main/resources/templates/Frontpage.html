@@ -8,7 +8,12 @@
 </head>
 
 <body>
-<div th:replace="~{fragments :: header('Header fragment')}"></div>
+<div class="main-container">
+<div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+    <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+</div>
+
+
 
 <a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
 
@@ -21,76 +26,18 @@
 <form th:action="@{/addtobasket}" method="post">
     <div class="dropdown">
 
-        <select name="amount" id="amount">
-            <option value="" disabled selected>Carport bredde (cm):</option>
-            <option value="240"/>
-            240 cm</option>
-            <option value="270"/>
-            270 cm</option>
-            <option value="300"/>
-            300 cm</option>
-            <option value="330"/>
-            330 cm</option>
-            <option value="360"/>
-            360 cm</option>
-            <option value="390"/>
-            390 cm </option>
-            <option value="420"/>
-            420 cm</option>
-            <option value="450"/>
-            450 cm</option>
-            <option value="480"/>
-            480 cm</option>
-            <option value="510"/>
-            510 cm</option>
-            <option value="540"/>
-            540 cm</option>
-            <option value="570"/>
-            570 cm</option>
-            <option value="600"/>
-            600 cm</option>
+        <select name="amount-option">
+            <option value="" disabled selected>Carport Bredde:</option>
+            <option th:each="amount: ${#numbers.sequence(1, 12)}" th:value="${240 + amount * 30}"
+                    th:text="${240 + amount * 30}">Amount
+            </option>
         </select>
 
-        <select name="amount" id="amount">
-            <option value="" disabled selected>Carport længde (cm):</option>
-            <option value="240"/>
-            240 cm</option>
-            <option value="270"/>
-            270 cm</option>
-            <option value="300"/>
-            300 cm</option>
-            <option value="330"/>
-            330 cm</option>
-            <option value="360"/>
-            360 cm</option>
-            <option value="390"/>
-            390 cm </option>
-            <option value="420"/>
-            420 cm</option>
-            <option value="450"/>
-            450 cm</option>
-            <option value="480"/>
-            480 cm</option>
-            <option value="510"/>
-            510 cm</option>
-            <option value="540"/>
-            540 cm</option>
-            <option value="570"/>
-            570 cm</option>
-            <option value="600"/>
-            600 cm</option>
-            <option value="630"/>
-            630 cm</option>
-            <option value="660"/>
-            660 cm</option>
-            <option value="690"/>
-            690 cm</option>
-            <option value="720"/>
-            720 cm</option>
-            <option value="750"/>
-            750 cm</option>
-            <option value="780"/>
-            780 cm</option>
+        <select name="amount-option">
+            <option value="" disabled selected>Carport Længde:</option>
+            <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
+                    th:text="${240 + amount * 30}">Amount
+            </option>
         </select>
     </div>
 
@@ -100,6 +47,8 @@
         <button class="addtocart" type="submit" formaction="addtocart">Forsæt</button>
     </div>
 </form>
+
+</div>
 
 </body>
 </html>

@@ -8,7 +8,11 @@
 </head>
 
 <body>
-<div th:replace="~{fragments :: header('Header fragment')}"></div>
+<div class="main-container">
+<div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+    <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+</div>
+
 
 
 <h1>Carport Schematic</h1>
@@ -16,6 +20,7 @@
 
 <div class="carport-svg-topview" th:utext="${svg}"></div>
 
+</div>
 
 </body>
 </html>
