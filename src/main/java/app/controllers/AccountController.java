@@ -16,6 +16,7 @@ public class AccountController {
         app.post("/login", ctx -> login(ctx, connectionPool));
         app.get("/create-account", ctx -> ctx.render("create-account.html"));
         app.post("/create-account", ctx -> createAccount(ctx, connectionPool));
+        app.get("/logout", ctx -> logout(ctx));
     }
 
     public static void createAccount(Context ctx, ConnectionPool connectionPool) {
@@ -45,7 +46,6 @@ public class AccountController {
             AccountMapper.createAccount(account, connectionPool);
 
             ctx.sessionAttribute("currentAccount", account);
-
             String loginRedirect = ctx.sessionAttribute("loginRedirect");
 
             if (loginRedirect != null) {
@@ -74,14 +74,22 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
 
             ctx.sessionAttribute("currentAccount", account);
-            ctx.redirect("/");
+            String loginRedirect = ctx.sessionAttribute("loginRedirect");
+
+            if (loginRedirect != null) {
+                ctx.redirect(loginRedirect);
+                ctx.sessionAttribute("loginRedirect", null);
+            } else {
+                ctx.redirect("/");
+            }
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
             ctx.render("login.html");
         }
     }
 
-    public void logout(Context ctx, ConnectionPool connectionPool) {
-
+    public static void logout(Context ctx) {
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
     }
 }
