@@ -53,14 +53,6 @@ h1.title {
 
 }
 
-/* SVG */
-
-.carport-svg-topview {
-    max-width: 40%;
-    display: block;
-    margin: auto;
-}
-
 .main-container {
     max-width: 1200px;
 }

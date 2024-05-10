@@ -34,8 +34,6 @@ public class OrderController {
 
     public static void viewCarportSchematic(Context ctx){
 
-
-
         Locale.setDefault(new Locale("US"));
         CarportSvg svg = new CarportSvg(600, 780);
         ctx.attribute("svg", svg.toString());
