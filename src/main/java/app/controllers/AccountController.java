@@ -45,7 +45,15 @@ public class AccountController {
             AccountMapper.createAccount(account, connectionPool);
 
             ctx.sessionAttribute("currentAccount", account);
-            ctx.redirect("/");
+
+            String loginRedirect = ctx.sessionAttribute("loginRedirect");
+
+            if (loginRedirect != null) {
+                ctx.sessionAttribute("loginRedirect", null);
+                ctx.redirect(loginRedirect);
+            } else {
+                ctx.redirect("/");
+            }
         } catch (DatabaseException e) {
             ctx.attribute("createAccountName", String.join(" ", name));
             ctx.attribute("createAccountAddress", address);
