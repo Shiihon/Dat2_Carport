@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
+<head>
 <title>Frontpage</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,19 +10,17 @@
 
 <body>
 <div class="main-container">
-<div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
-    <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
-</div>
+    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+    </div>
 
+    <a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
 
+    <h2>Byg en Carport med fladt tag!</h2>
+    <p>Med et specialudviklet computerprogram kan vi lynhurtigt
+        beregne prisen og give dig et tilbud på din forespørgsel. Ved bestilling medfølger standardbyggevejledning.
 
-<a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
-
-<h2>Byg en Carport med fladt tag!</h2>
-<p>Med et specialudviklet computerprogram kan vi lynhurtigt
-    beregne prisen og give dig et tilbud på din forespørgsel. Ved bestilling medfølger standardbyggevejledning.
-
-    Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
+        Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
 
     <form th:action="@{/continuerequest}" method="post">
         <div class="dropdown">

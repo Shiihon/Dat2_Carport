@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<title>Frontpage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<head>
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 
 <body>
 <div class="main-container">
-<div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
-    <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
-</div>
+    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
+        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
+    </div>
 
+    <div class="main-content">
+        <h1>Carport Schematic</h1>
+        <h2>Ordre nr: 1248</h2>
 
-
-<h1>Carport Schematic</h1>
-<h2>Ordre nr: 1248</h2>
-
-<div class="carport-svg-topview" th:utext="${svg}"></div>
+        <div class="carport-svg-topview" th:utext="${svg}"></div>
+    </div>
 
 </div>
 
