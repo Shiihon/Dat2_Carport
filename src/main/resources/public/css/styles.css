@@ -89,7 +89,7 @@ li.nav-bar-button > a {
     color: black;
 }
 
-li.nav-bar-button > a.active {
+li.nav-bar-button.active > a {
     background-color: rgb(var(--text), 0.1);
 }
 
