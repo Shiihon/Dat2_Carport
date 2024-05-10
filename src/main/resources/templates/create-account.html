@@ -83,9 +83,14 @@
 </div>
 
 <script type="text/javascript">
+    // This function is called whenever the user types in the phone number field
     function validatePhoneNumber(e) {
         let phoneNumber = e.value;
 
+        /*
+            Start by replacing all spaces in the input to prepare it for the next step
+            Then use replace with regex to locate 4 2-digit numbers and formats them to have a space in between the numbers
+         */
         e.value = phoneNumber.replace(/ /g, '').replace(/(\d{1,2})(\d{1,2})?(\d{1,2})?(\d{1,2})?/, function (txt, p1, p2, p3, p4) {
             if (p4) {
                 return `${p1} ${p2} ${p3} ${p4}`;
