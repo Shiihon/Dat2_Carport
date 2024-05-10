@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <title>Frontpage</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+  <link href="../public/css/schematic.css" th:href="@{/css/schematic.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+  <ul th:replace="~{fragments :: header('Orders Page', ~{::li.nav-bar-button})}">
+    <li class="nav-bar-button">
+      <a href="/" th:href="@{/}">Tilbage</a>
+    </li>
+  </ul>
+
+  <div class="main-content">
+    <h1>Mine Ordrer</h1>
+    <li class="orderbox">
+      <a href="">Betal</a>
+      <a href="">Hent stykliste</a>
+      <a href="">Hent Faktura</a>
+      <a href="/carportschematic">Se Tegning</a>
+    </li>
+
+
+  </div>
+
+</div>
+
+</body>
+</html>
