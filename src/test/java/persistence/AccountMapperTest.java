@@ -28,12 +28,6 @@ public class AccountMapperTest {
     public static void setupTables() throws DatabaseException {
         try (Connection connection = connectionPool.getConnection()) {
             try (Statement stmt = connection.createStatement()) {
-                // Create test schema if it does not exist
-                stmt.execute("CREATE SCHEMA IF NOT EXISTS test");
-
-                // Set the test schema to be selected
-                stmt.execute("SET search_path TO test");
-
                 // Drop existing test tables
                 stmt.execute("DROP TABLE IF EXISTS test.postal_codes CASCADE");
                 stmt.execute("DROP TABLE IF EXISTS test.accounts CASCADE");
