@@ -1,6 +1,5 @@
-package services;
+package app.services;
 
-import app.util.OrderBillGenerator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

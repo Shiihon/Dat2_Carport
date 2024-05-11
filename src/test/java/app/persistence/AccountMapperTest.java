@@ -1,11 +1,9 @@
-package persistence;
+package app.persistence;
 
 import app.entities.Account;
 import app.entities.Customer;
 import app.entities.Seller;
 import app.exceptions.DatabaseException;
-import app.persistence.AccountMapper;
-import app.persistence.ConnectionPool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
