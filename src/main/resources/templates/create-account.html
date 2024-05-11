@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Opret konto</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/create-account.css" th:href="@{/css/create-account.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Create Account', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <h1 class="title">Opret konto</h1>
+
+        <div class="create-account-form-container">
+            <form class="create-account-form-content" method="post">
+                <div th:replace="~{fragments :: error}"></div>
+
+                <div class="fields-container">
+                    <p class="login-prompt">Allerede kunde?
+                        <a href="/login" th:href="@{/login}">Log ind</a>
+                    </p>
+
+                    <div class="fields-content">
+                        <div class="info-fields">
+                            <label>
+                                <input type="text" maxlength="30" autocomplete="first_name"
+                                       placeholder="Fornavn og efternavn"
+                                       name="name" th:value="${createAccountName}" required>
+                            </label>
+                            <label>
+                                <input type="text" maxlength="30" autocomplete="address" placeholder="Adresse"
+                                       name="address" th:value="${createAccountAddress}" required>
+                            </label>
+                            <label>
+                                <input type="number" min="0" max="9999" autocomplete="postal_code"
+                                       placeholder="Postnummer" name="postal_code"
+                                       th:value="${createAccountZip}" required>
+                            </label>
+                            <label>
+                                <input type="number" maxlength="4" autocomplete="city" placeholder="By"
+                                       name="city" readonly disabled>
+                            </label>
+                            <label>
+                                <input type="tel" minlength="11" maxlength="11" autocomplete="phone"
+                                       placeholder="12 34 56 78" name="phone_number" id="phone"
+                                       pattern="[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}" onkeyup="validatePhoneNumber(this)"
+                                       th:value="${createAccountPhoneNumber}" required>
+                            </label>
+                        </div>
+
+                        <div class="account-fields">
+                            <label>
+                                <input type="email" maxlength="40" autocomplete="email" placeholder="Email"
+                                       name="email" th:value="${createAccountEmail}" required>
+                            </label>
+                            <label>
+                                <input type="password" minlength="4" maxlength="50" autocomplete="current-password"
+                                       placeholder="Kodeord" name="password1" required>
+                            </label>
+                            <label>
+                                <input type="password" minlength="4" maxlength="50" autocomplete="current-password"
+                                       placeholder="Gentag kodeord" name="password2" required>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button type="submit" formaction="/create-account">Opret konto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // This function is called whenever the user types in the phone number field
+    function validatePhoneNumber(e) {
+        let phoneNumber = e.value;
+
+        /*
+            Start by replacing all spaces in the input to prepare it for the next step
+            Then use replace with regex to locate 4 2-digit numbers and formats them to have a space in between the numbers
+         */
+        e.value = phoneNumber.replace(/ /g, '').replace(/(\d{1,2})(\d{1,2})?(\d{1,2})?(\d{1,2})?/, function (txt, p1, p2, p3, p4) {
+            if (p4) {
+                return `${p1} ${p2} ${p3} ${p4}`;
+            } else if (p3) {
+                return `${p1} ${p2} ${p3}`;
+            } else if (p2) {
+                return `${p1} ${p2}`;
+            } else if (p1) {
+                return `${p1}`;
+            } else {
+                return phoneNumber;
+            }
+        }).substring(0, 11);
+    }
+</script>
+</body>
+</html>

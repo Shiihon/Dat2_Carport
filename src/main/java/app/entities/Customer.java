@@ -27,10 +27,26 @@ public class Customer implements Account {
         this.phoneNumber = phoneNumber;
     }
 
+    public Customer(String email, String password, String role, String firstName, String lastName, String address, int zip, String city, String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        this.city = city;
+        this.zip = zip;
+        this.address = address;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.role = role;
+        this.password = password;
+        this.email = email;
+    }
 
     @Override
     public int getId() {
         return customerId;
+    }
+
+    @Override
+    public void setId(int id) {
+        this.customerId = id;
     }
 
     @Override

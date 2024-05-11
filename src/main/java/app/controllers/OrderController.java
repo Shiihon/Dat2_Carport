@@ -12,9 +12,9 @@ import java.util.Locale;
 
 public class OrderController {
 
-    public void addRoutes(Javalin app, ConnectionPool connectionPool) {
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
         app.post("continuerequest", ctx -> continueRequest(ctx, connectionPool));
-
     }
 
     private void continueRequest(Context ctx, ConnectionPool connectionPool) {
@@ -43,8 +43,7 @@ public class OrderController {
 
         String title = "Carport bredde: " + width + "& Carport længde: " + height;
 
-        Order newOrder = new Order(-1,title, Order.OrderStatus.WAITING_FOR_REVIEW,null,null, LocalDateTime.now());
-
+        Order newOrder = new Order(-1, title, Order.OrderStatus.WAITING_FOR_REVIEW, null, null, LocalDateTime.now());
 
 
     }
@@ -65,7 +64,7 @@ public class OrderController {
 
     }
 
-    public static void viewCarportSchematic(Context ctx){
+    public static void viewCarportSchematic(Context ctx) {
         Locale.setDefault(new Locale("US"));
         CarportSvg svg = new CarportSvg(600, 780);
         ctx.attribute("svg", svg.toString());
