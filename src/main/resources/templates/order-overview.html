@@ -14,11 +14,11 @@
 
 <h2>Dine valg:</h2>
 <p>Bredde: <span th:text="${carportWidth}">[Bredde]</span></p>
-<p>Højde: <span th:text="${carportHeight}">[Højde]</span></p>
+<p>Længde: <span th:text="${carportLength}">[Længde]</span></p>
 
 <form th:action="@{/sendrequest}" method="post">
     <input type="hidden" name="width" th:value="${carportWidth}" />
-    <input type="hidden" name="height" th:value="${carportHeight}" />
+    <input type="hidden" name="length" th:value="${carportLength}" />
     <button type="submit">Send forespørgsel</button>
 </form>
 
