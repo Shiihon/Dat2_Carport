@@ -1,10 +1,13 @@
 package app.controllers;
 
 import app.entities.Customer;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
 import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 public class OrderController {
@@ -35,6 +38,14 @@ public class OrderController {
     }
 
     public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
+        String width = ctx.formParam("width");
+        String height = ctx.formParam("height");
+
+        String title = "Carport bredde: " + width + "& Carport længde: " + height;
+
+        Order newOrder = new Order(-1,title, Order.OrderStatus.WAITING_FOR_REVIEW,null,null, LocalDateTime.now());
+
+
 
     }
 
