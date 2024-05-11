@@ -2,8 +2,8 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
-import app.controllers.OrderController;
 import app.controllers.AccountController;
+import app.controllers.OrderController;
 import app.controllers.WarehouseController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
