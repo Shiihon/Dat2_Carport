@@ -34,7 +34,7 @@ public class WarehouseController {
         try {
             Material material = new Material(description, unit, price, length, Material.MaterialType.valueOf(materials));
             MaterialMapper.createMaterial(material, connectionPool);
-            ctx.redirect("/warehouse.html");
+            ctx.redirect("/warehouse");
 
         } catch (DatabaseException e) {
             ctx.attribute("error", "Kunne ikke registrerer materialet");
