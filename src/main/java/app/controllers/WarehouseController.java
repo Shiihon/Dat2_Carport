@@ -38,7 +38,7 @@ public class WarehouseController {
 
         } catch (DatabaseException e) {
             ctx.attribute("error", "Kunne ikke registrerer materialet");
-            ctx.render("/registerNewMaterial.html");
+            ctx.render("/addNewMaterial");
         }
     }
 }
