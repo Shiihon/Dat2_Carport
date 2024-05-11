@@ -16,7 +16,10 @@
     <ul th:replace="~{fragments :: header('Login', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
             <a href="/" th:href="@{/}">Tilbage</a>
-            <a class="nav-bar-button" href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
+        </li>
+
+        <li class="nav-bar-button">
+            <a href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
         </li>
     </ul>
 
