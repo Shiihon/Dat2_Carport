@@ -29,14 +29,14 @@
                 <select name="width-option">
                     <option value="" disabled selected>Carport bredde:</option>
                     <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
-                            th:text="${240 + amount * 30} + cm">Amount
+                            th:text="${240 + amount * 30}">Amount
                     </option>
                 </select>
 
                 <select name="length-option">
                     <option value="" disabled selected>Carport længde:</option>
                     <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
-                            th:text="|${240 + amount * 30} cm|">Amount
+                            th:text="${240 + amount * 30}">Amount
                     </option>
                 </select>
             </div>

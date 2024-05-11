@@ -51,6 +51,10 @@ public class Order {
         return timestamp;
     }
 
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
