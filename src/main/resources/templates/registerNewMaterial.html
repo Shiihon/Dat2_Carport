@@ -11,32 +11,34 @@
 <body>
 
 <div class="main-container">
-    <div th:replace="~{fragments :: header('registrerVare', ~{::a.nav-bar-button})}">
-        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
-    </div>
+    <ul th:replace="~{fragments :: header('registrerVare', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
 
     <div class="main-content">
         <h1 class="title">Registrering af nyt materiale</h1>
 
         <form action="/addNewMaterial" method="post">
-            <label for="beskrivelse">Beskrivelse af materialet:</label>
-            <input type="text" id="beskrivelse" name="beskrivelse" required>
+            <label for="description">Beskrivelse af materialet:</label>
+            <input type="text" id="description" name="description" required>
             <br>
-            <label for="enhed">Enhed:</label>
-            <input type="text" id="enhed" name="enhed" required>
+            <label for="unit">Enhed:</label>
+            <input type="text" id="unit" name="unit" required>
             <br>
-            <label for="materiale">Materiale type:</label>
-            <select id="materiale" name="materiale" required>
+            <label for="material">Materiale type:</label>
+            <select id="material" name="material" required>
                 <option value="">Vælg materiale type</option>
                 <option value="SCREWS">Skruer</option>
                 <option value="WOOD">Træ</option>
             </select>
             <br>
-            <label for="længde">Længde:</label>
-            <input type="number" id="længde" name="længde" required>
+            <label for="length">Længde:</label>
+            <input type="number" id="length" name="length" required>
             <br>
-            <label for="pris">Pris:</label>
-            <input type="number" id="pris" name="pris" required>
+            <label for="price">Pris:</label>
+            <input type="number" id="price" name="price" required>
             <br>
             <br>
             <input type="submit" value="Opret vare" onclick="alert('Varen er nu oprettet')">
