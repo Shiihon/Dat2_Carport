@@ -71,7 +71,7 @@ public class AccountController {
         String password = ctx.formParam("password");
 
         try {
-            Account account = AccountMapper.login();
+            Account account = AccountMapper.login(email, password, connectionPool);
 
             ctx.sessionAttribute("currentAccount", account);
             String loginRedirect = ctx.sessionAttribute("loginRedirect");
