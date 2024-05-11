@@ -17,7 +17,7 @@ public class OrderController {
         app.post("continuerequest", ctx -> continueRequest(ctx, connectionPool));
     }
 
-    private void continueRequest(Context ctx, ConnectionPool connectionPool) {
+    private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
 
         Customer customer = ctx.sessionAttribute("currentUser");
 
