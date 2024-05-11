@@ -69,7 +69,7 @@ public class OrderController {
 
     }
 
-        public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
+    public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
 
     }
 
