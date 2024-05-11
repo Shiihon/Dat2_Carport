@@ -11,9 +11,11 @@
 
 <body>
 <div class="main-container">
-    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
-        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
-    </div>
+    <ul th:replace="~{fragments :: header('Login', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
 
     <div class="main-content">
         <h1 class="title">Login</h1>
@@ -24,7 +26,7 @@
 
                 <div class="fields-container">
                     <p class="create-account-prompt">Nu kunde?
-                        <a href="/create-account">Opret bruger</a>
+                        <a href="/create-account" th:href="@{/create-account}">Opret bruger</a>
                     </p>
 
                     <div class="fields-content">

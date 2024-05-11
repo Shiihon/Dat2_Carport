@@ -21,6 +21,11 @@ public class Seller implements Account {
     }
 
     @Override
+    public void setId(int id) {
+        this.sellerId = id;
+    }
+
+    @Override
     public String getEmail() {
         return email;
     }

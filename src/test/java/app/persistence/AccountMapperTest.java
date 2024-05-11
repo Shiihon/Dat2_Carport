@@ -1,11 +1,9 @@
-package persistence;
+package app.persistence;
 
 import app.entities.Account;
 import app.entities.Customer;
 import app.entities.Seller;
 import app.exceptions.DatabaseException;
-import app.persistence.AccountMapper;
-import app.persistence.ConnectionPool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,23 +20,12 @@ import java.util.stream.Collectors;
 
 public class AccountMapperTest {
 
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "cupcake_development";
-
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @BeforeAll
     public static void setupTables() throws DatabaseException {
         try (Connection connection = connectionPool.getConnection()) {
             try (Statement stmt = connection.createStatement()) {
-                // Create test schema if it does not exist
-                stmt.execute("CREATE SCHEMA IF NOT EXISTS test");
-
-                // Set the test schema to be selected
-                stmt.execute("SET search_path TO test");
-
                 // Drop existing test tables
                 stmt.execute("DROP TABLE IF EXISTS test.postal_codes CASCADE");
                 stmt.execute("DROP TABLE IF EXISTS test.accounts CASCADE");
@@ -73,6 +60,7 @@ public class AccountMapperTest {
         expectedPostalCodes.put(2700, "Brønshøj");
         expectedPostalCodes.put(2200, "København N");
         expectedPostalCodes.put(2450, "København SV");
+        expectedPostalCodes.put(3460, "Birkerød");
 
         // Create accounts
         expectedAccounts.add(new Customer(
@@ -113,7 +101,7 @@ public class AccountMapperTest {
                 stmt.execute("DELETE FROM test.accounts CASCADE");
 
                 // Insert postal codes
-                String postalCodeSql = "INSERT INTO postal_codes (zip, city)  VALUES" + expectedPostalCodes.entrySet().stream()
+                String postalCodeSql = "INSERT INTO test.postal_codes (zip, city)  VALUES" + expectedPostalCodes.entrySet().stream()
                         .map(postalCodeEntry -> String.format(
                                 "(%d, '%s')",
                                 postalCodeEntry.getKey(),
@@ -125,20 +113,20 @@ public class AccountMapperTest {
                 // Insert accounts
                 stmt.execute("SELECT setval('accounts_account_id_seq', 1)");
 
-                String accountSql = "INSERT INTO accounts (account_id, account_email,account_password, account_role, account_first_name, account_last_name, account_address, account_zip, account_phone_number) VALUES" + expectedAccounts.stream()
+                String accountSql = "INSERT INTO test.accounts (account_id, account_email,account_password, account_role, account_first_name, account_last_name, account_address, account_zip, account_phone_number) VALUES" + expectedAccounts.stream()
                         .map(account -> {
-                            if (account instanceof Customer) {
+                            if (account instanceof Customer customer) {
                                 return String.format(
                                         "(%d, '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s')",
-                                        account.getId(),
-                                        account.getEmail(),
-                                        account.getPassword(),
-                                        account.getRole(),
-                                        ((Customer) account).getFirstName(),
-                                        ((Customer) account).getLastName(),
-                                        ((Customer) account).getAddress(),
-                                        ((Customer) account).getZip(),
-                                        ((Customer) account).getPhoneNumber());
+                                        customer.getId(),
+                                        customer.getEmail(),
+                                        customer.getPassword(),
+                                        customer.getRole(),
+                                        customer.getFirstName(),
+                                        customer.getLastName(),
+                                        customer.getAddress(),
+                                        customer.getZip(),
+                                        customer.getPhoneNumber());
                             } else {
                                 return String.format(
                                         "(%d, '%s', '%s', '%s', %s, %s, %s, %s, %s)",
@@ -174,5 +162,39 @@ public class AccountMapperTest {
         Account actualAccountSeller = AccountMapper.login(expectedAccountSeller.getEmail(), expectedAccountSeller.getPassword(), connectionPool);
 
         Assertions.assertEquals(expectedAccountSeller, actualAccountSeller);
+    }
+
+    @Test
+    public void createAccountCustomerTest() throws DatabaseException {
+        Account expectedAccountCustomer = new Customer(
+                expectedAccounts.size() + 1,
+                "bob@gmail.com",
+                "1234",
+                "CUSTOMER",
+                "Bob",
+                "Smith",
+                "Birkerød Kongevej 111",
+                3460,
+                "Birkerød",
+                "18 05 54 95");
+
+        AccountMapper.createAccount(expectedAccountCustomer, connectionPool);
+        Account actualAccountCustomer = AccountMapper.getAccountById(expectedAccountCustomer.getId(), connectionPool);
+
+        Assertions.assertEquals(expectedAccountCustomer, actualAccountCustomer);
+    }
+
+    @Test
+    public void createAccountSellerTest() throws DatabaseException {
+        Account expectedAccountCustomer = new Seller(
+                expectedAccounts.size() + 1,
+                "josh@gmail.com",
+                "1234",
+                "SELLER");
+
+        AccountMapper.createAccount(expectedAccountCustomer, connectionPool);
+        Account actualAccountCustomer = AccountMapper.getAccountById(expectedAccountCustomer.getId(), connectionPool);
+
+        Assertions.assertEquals(expectedAccountCustomer, actualAccountCustomer);
     }
 }
