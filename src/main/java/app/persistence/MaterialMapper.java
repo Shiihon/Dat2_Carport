@@ -52,7 +52,7 @@ public class MaterialMapper {
         return materials;
     }
 
-    public static List<Material> getAllMaterials(ConnectionPool connectionPool) {
+    public static List<Material> getAllMaterials(ConnectionPool connectionPool) throws DatabaseException {
 
         List<Material> materialList = new ArrayList<>();
         String sql = "SELECT material_id, material_description, material_unit, material_price, material_type, length, material_variant_id " +
@@ -65,7 +65,7 @@ public class MaterialMapper {
         ) {
             getAllMaterialsFromResultSet(materialList, ps);
         } catch (SQLException e) {
-            throw new RuntimeException(e); // for connectionpool.
+            throw new DatabaseException("Failed to connect to the database.");
         }
         return materialList;
     }

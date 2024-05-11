@@ -13,3 +13,9 @@ td, th {
 tr:nth-child(even){
     background-color: #dddddd;
 }
+
+label{
+    width:100px;
+    display: inline-block;
+    margin: 2px;
+}

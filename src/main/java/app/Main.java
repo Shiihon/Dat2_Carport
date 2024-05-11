@@ -29,8 +29,8 @@ public class Main {
 
         // Routing
 
-        AccountController.addRoutes(app, connectionPool);
         app.get("/", ctx -> ctx.render("Frontpage.html"));
+        AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         WarehouseController.addRoutes(app, connectionPool);
     }

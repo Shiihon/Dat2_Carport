@@ -13,10 +13,15 @@
 
 <body>
 <div class="main-container">
-    <div th:replace="~{fragments :: header('Login', ~{::a.nav-bar-button})}">
-        <a class="nav-bar-button" href="/" th:href="@{/}">Tilbage</a>
-        <a class="nav-bar-button" href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
-    </div>
+    <ul th:replace="~{fragments :: header('WarehousePage', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+
+        <li class="nav-bar-button">
+            <a href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
+        </li>
+    </ul>
 
     <div class="main-content">
         <h2>Lager</h2>

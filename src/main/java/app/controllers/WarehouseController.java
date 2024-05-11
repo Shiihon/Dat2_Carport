@@ -17,7 +17,7 @@ public class WarehouseController {
         app.post("/addNewMaterial", ctx -> addNewMaterial(ctx, connectionPool));
     }
 
-    public static void viewWarehouse(Context ctx, ConnectionPool connectionPool) {
+    public static void viewWarehouse(Context ctx, ConnectionPool connectionPool) throws DatabaseException {
 
         List<Material> materialList = MaterialMapper.getAllMaterials(connectionPool);
         ctx.attribute("materialList", materialList);
@@ -25,20 +25,20 @@ public class WarehouseController {
     }
 
     public static void addNewMaterial(Context ctx, ConnectionPool connectionPool) {
-        String description = ctx.formParam("beskrivelse");
-        String unit = ctx.formParam("enhed");
-        String materials = ctx.formParam("materiale");
-        int length = Integer.parseInt(ctx.formParam("længde"));
-        int price = Integer.parseInt(ctx.formParam("pris"));
+        String description = ctx.formParam("description");
+        String unit = ctx.formParam("unit");
+        String materials = ctx.formParam("material");
+        int length = Integer.parseInt(ctx.formParam("length"));
+        int price = Integer.parseInt(ctx.formParam("price"));
 
         try {
             Material material = new Material(description, unit, price, length, Material.MaterialType.valueOf(materials));
             MaterialMapper.createMaterial(material, connectionPool);
-            ctx.redirect("/warehouse.html");
+            ctx.redirect("/warehouse");
 
         } catch (DatabaseException e) {
             ctx.attribute("error", "Kunne ikke registrerer materialet");
-            ctx.render("/registerNewMaterial.html");
+            ctx.render("/addNewMaterial");
         }
     }
 }
