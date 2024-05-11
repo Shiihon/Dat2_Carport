@@ -22,12 +22,7 @@ import java.util.stream.Collectors;
 
 public class AccountMapperTest {
 
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "cupcake_development";
-
-    private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
+    private static final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     @BeforeAll
     public static void setupTables() throws DatabaseException {
