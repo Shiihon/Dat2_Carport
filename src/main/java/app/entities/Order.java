@@ -12,14 +12,16 @@ public class Order {
     }
 
     int orderId;
+    int accountId;
     String title;
     OrderStatus status;
     Integer totalPrice;
     List<OrderBillItem> orderBill;
     LocalDateTime timestamp;
 
-    public Order(int orderId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
+        this.accountId = accountId;
         this.title = title;
         this.status = status;
         this.totalPrice = totalPrice;
@@ -29,6 +31,10 @@ public class Order {
 
     public int getOrderId() {
         return orderId;
+    }
+
+    public int getAccountId() {
+        return accountId;
     }
 
     public String getTitle() {
@@ -55,6 +61,7 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
+                ", accountId=" + accountId +
                 ", title='" + title + '\'' +
                 ", status=" + status +
                 ", totalPrice=" + totalPrice +
