@@ -9,12 +9,47 @@ import java.util.List;
 
 public class MaterialMapper {
 
-    public static Material getMaterial(String description, ConnectionPool connectionPool) {
-        return null;
+    public static Material getMaterial(String description, int length, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT material_id, material_description, material_unit, material_price, material_type, material_variant_id, length " +
+                "FROM materials INNER JOIN material_variants USING (material_id) " +
+                "WHERE material_description = ? AND length = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setString(1, description);
+            ps.setInt(2, length);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return getMaterialFromResultSet(rs);
+            } else {
+                throw new DatabaseException(String.format("Error: Could not find any materials with the description '%s'", description));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("DB Error: " + e.getMessage()); // for connectionpool.
+        }
     }
 
-    public static List<Material> getAllMaterials(String description, ConnectionPool connectionPool) {
-        return null;
+    public static List<Material> getAllMaterials(String description, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT material_id, material_description, material_unit, material_price, material_type, material_variant_id, length " +
+                "FROM materials INNER JOIN material_variants USING (material_id) " +
+                "WHERE material_description = ?";
+        List<Material> materials = new ArrayList<>();
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setString(1, description);
+
+            getAllMaterialsFromResultSet(materials, ps);
+        } catch (SQLException e) {
+            throw new DatabaseException("DB Error: " + e.getMessage()); // for connectionpool.
+        }
+
+        return materials;
     }
 
     public static List<Material> getAllMaterials(ConnectionPool connectionPool) throws DatabaseException {
@@ -28,18 +63,7 @@ public class MaterialMapper {
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql);
         ) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int materialId = rs.getInt("material_id");
-                int materialVariantId = rs.getInt("material_variant_id");
-                String description = rs.getString("material_description");
-                String unit = rs.getString("material_unit");
-                int price = rs.getInt("material_price");
-                int length = rs.getInt("length");
-                String materialType = rs.getString("material_type");
-                materialList.add(new Material(materialId, materialVariantId, description, unit, price, length, Material.MaterialType.valueOf(materialType)));
-            }
-
+            getAllMaterialsFromResultSet(materialList, ps);
         } catch (SQLException e) {
             throw new DatabaseException("Failed to connect to the database.");
         }
@@ -98,5 +122,24 @@ public class MaterialMapper {
         } catch (SQLException e) {
             throw new DatabaseException("Error in DB connection", e.getMessage());
         }
+    }
+
+    private static void getAllMaterialsFromResultSet(List<Material> materialList, PreparedStatement ps) throws SQLException {
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            materialList.add(getMaterialFromResultSet(rs));
+        }
+    }
+
+    private static Material getMaterialFromResultSet(ResultSet rs) throws SQLException {
+        int materialId = rs.getInt("material_id");
+        int materialVariantId = rs.getInt("material_variant_id");
+        String materialDescription = rs.getString("material_description");
+        String unit = rs.getString("material_unit");
+        int price = rs.getInt("material_price");
+        int materialVariantLength = rs.getInt("length");
+        String materialType = rs.getString("material_type");
+
+        return new Material(materialId, materialVariantId, materialDescription, unit, price, materialVariantLength, Material.MaterialType.valueOf(materialType));
     }
 }
