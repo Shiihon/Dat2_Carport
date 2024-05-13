@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Forespørgsler</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Requests', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button active">
+            <a href="/" th:href="@{/}">Foresp.</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Ordrer</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/warehouse}">Lager</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <h1 class="title">Forespørgsler</h1>
+
+        <ul>
+            <li th:each="request: ${requests}">
+                <h3 th:text="${request.getOrderId()}">Order Id</h3>
+
+                <h4 th:text="request.getTitle()">Order Title</h4>
+
+                <form method="get">
+                    <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                    <button type="submit">Se mere</button>
+                    <button type="submit">Godkend</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
