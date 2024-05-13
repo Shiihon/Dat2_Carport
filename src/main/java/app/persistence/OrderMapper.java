@@ -45,7 +45,7 @@ public class OrderMapper {
                     order.setOrderId(generatedKeys.getInt(1));
                     createOrderBill(connection, order.getOrderId(), order.getOrderBill());
                 } else {
-                    throw new SQLException("Creating order failed, no ID obtained.");
+                    throw new SQLException("failed to create order");
                 }
             }
         }
