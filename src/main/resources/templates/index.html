@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/" lang="en">
 
 <head>
     <title>Frontpage</title>
@@ -10,18 +10,43 @@
 
 <body>
 <div class="main-container">
-    <div th:replace="~{fragments :: header('Header fragment', _)}"></div>
+    <ul th:replace="~{fragments :: header('Frontpage', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
 
-<<<<<<<<< Temporary merge branch 1
-<a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
-
-
-=========
     <div class="main-content">
-        <h1>Welcome to the Javalin / Thymeleaf demo</h1>
->>>>>>>>> Temporary merge branch 2
+        <h2>Byg en Carport med fladt tag!</h2>
+        <p>Med et specialudviklet computerprogram kan vi lynhurtigt
+            beregne prisen og give dig et tilbud på din forespørgsel. Ved bestilling medfølger standardbyggevejledning.
 
-        <p>This is your first web application in this world</p>
+            Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
+
+        <form th:action="@{/continuerequest}" method="post">
+            <div class="dropdown">
+
+                <select name="width-option">
+                    <option value="" disabled selected>Carport bredde:</option>
+                    <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                            th:text="${240 + amount * 30}">Amount
+                    </option>
+                </select>
+
+                <select name="length-option">
+                    <option value="" disabled selected>Carport længde:</option>
+                    <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                            th:text="${240 + amount * 30}">Amount
+                    </option>
+                </select>
+            </div>
+
+            <input class="input-large" type="text" name="taskname" placeholder="Evt. bemærkninger.. "/>
+
+            <div class="button-container">
+                <button class="continuerequest" type="submit" formaction="continuerequest">Forsæt</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
