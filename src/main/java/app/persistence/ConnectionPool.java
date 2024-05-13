@@ -24,6 +24,14 @@ public class ConnectionPool {
     }
 
     /***
+     * Getting a singleton instance of a Hikari Connection Pool with environment variables
+     * @return ConnectionPool object
+     */
+    public static ConnectionPool getInstance() {
+        return getInstance(null, null, null, null);
+    }
+
+    /***
      * Getting a singleton instance of a Hikari Connection Pool with specific credentials
      * and connection string. If an environment variable "DEPLOYED" exists then local
      * environment variables will be inserted with user credentials and DB connection string
@@ -55,6 +63,7 @@ public class ConnectionPool {
      * @throws SQLException
      */
     public synchronized Connection getConnection() throws SQLException {
+        Logger.getLogger("web").log(Level.INFO, ": get data connection");
         return ds.getConnection();
     }
 
