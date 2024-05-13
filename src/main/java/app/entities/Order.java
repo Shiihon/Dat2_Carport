@@ -1,6 +1,7 @@
 package app.entities;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,7 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Order order)) return false;
-        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && Objects.equals(getOrderBill(), order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
+        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
     }
 
     @Override
