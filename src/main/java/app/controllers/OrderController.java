@@ -34,7 +34,6 @@ public class OrderController {
         }
     }
 
-
     public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
     }
 
