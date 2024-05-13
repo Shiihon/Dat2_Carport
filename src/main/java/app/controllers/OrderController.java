@@ -16,7 +16,7 @@ public class OrderController {
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
 
-        Customer customer = ctx.sessionAttribute("currentUser");
+        Customer customer = ctx.sessionAttribute("currentAccount");
 
         String carportWidth = ctx.formParam("width-option");
         String carportLength = ctx.formParam("length-option");
@@ -28,7 +28,7 @@ public class OrderController {
         if (customer == null) {
             //gemmer destinationen til når brugeren er logget ind
             ctx.sessionAttribute("loginRedirect", "/order-overview");
-            ctx.redirect("/login.html");
+            ctx.redirect("/login");
         } else {
             ctx.redirect("/order-overview");
         }
