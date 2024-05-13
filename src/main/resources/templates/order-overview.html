@@ -17,8 +17,8 @@
 <p>Længde: <span th:text="${carportLength}">[Længde]</span></p>
 
 <form th:action="@{/sendrequest}" method="post">
-    <input type="hidden" name="width" th:value="${carportWidth}" />
-    <input type="hidden" name="length" th:value="${carportLength}" />
+    <input type="hidden" name="width" th:value="${carportWidth}"/>
+    <input type="hidden" name="length" th:value="${carportLength}"/>
     <button type="submit">Send forespørgsel</button>
 </form>
 

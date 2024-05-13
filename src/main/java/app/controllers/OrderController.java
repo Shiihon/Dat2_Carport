@@ -11,7 +11,6 @@ import app.services.OrderBillGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -62,7 +61,7 @@ public class OrderController {
             ctx.redirect("/request-confirmation");
 
         } catch (DatabaseException e) {
-            ctx.result("Error sending request." + e.getMessage());
+            ctx.attribute("error", e.getMessage());
         }
     }
 

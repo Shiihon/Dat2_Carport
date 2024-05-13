@@ -3,6 +3,7 @@ package app.persistence;
 import app.entities.Invoice;
 import app.entities.Order;
 import app.entities.OrderBillItem;
+import app.exceptions.DatabaseException;
 
 import java.sql.*;
 import java.util.List;
@@ -22,7 +23,7 @@ public class OrderMapper {
         return null;
     }
 
-    public static void createOrder(Order order, int customerId, ConnectionPool connectionPool) throws SQLException {
+    public static void createOrder(Order order, int customerId, ConnectionPool connectionPool) throws DatabaseException {
 
         String sql = "INSERT INTO orders (account_id, order_title, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?) RETURNING order_id;";
 
@@ -38,7 +39,7 @@ public class OrderMapper {
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("failed to create order");
+                throw new DatabaseException("failed to create order");
             }
 
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
@@ -46,13 +47,15 @@ public class OrderMapper {
                     order.setOrderId(generatedKeys.getInt(1));
                     createOrderBill(connectionPool, order.getOrderId(), order.getOrderBill());
                 } else {
-                    throw new SQLException("failed to create order");
+                    throw new DatabaseException("failed to create order");
                 }
             }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
 
-    private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws SQLException {
+    private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws DatabaseException {
         String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
 
         try (
@@ -66,8 +69,11 @@ public class OrderMapper {
                 ps.setInt(4, item.getQuantity());
                 ps.executeUpdate();
             }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
         }
     }
+
     public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) {
     }
 
