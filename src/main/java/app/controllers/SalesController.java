@@ -6,23 +6,27 @@ import io.javalin.http.Context;
 
 public class SalesController {
 
-    public void addRoutes(Javalin app, ConnectionPool connectionPool) {
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
 
     }
 
-    public void approveReview(Context ctx, ConnectionPool connectionPool) {
+    public static void approveReview(Context ctx, ConnectionPool connectionPool) {
 
     }
 
-    public void updatePrice(Context ctx, ConnectionPool connectionPool) {
+    public static void updatePrice(Context ctx, ConnectionPool connectionPool) {
 
     }
 
-    public void viewCostumersOrders(Context ctx, ConnectionPool connectionPool) {
+    public static void viewCostumersOrders(Context ctx, ConnectionPool connectionPool) {
 
     }
 
-    public void viewCarportSchematic(Context ctx) {
+    public static void viewCarportSchematic(Context ctx) {
+
+    }
+
+    public static void viewOrderDetails(Context ctx, ConnectionPool connectionPool) {
 
     }
 }
