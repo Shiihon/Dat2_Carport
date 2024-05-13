@@ -102,12 +102,50 @@ class OrderMapperTest {
                 "Carport med flat tag: bredde=6,0m & længde=7,8m",
                 Order.OrderStatus.WAITING_FOR_REVIEW,
                 0,
-                List.of(new OrderBillItem( // Add more order items
-                        expectedMaterials.get(6),
-                        "Stolper nedgraves 90 cm. i jord",
-                        6
-                )),
+                List.of(new OrderBillItem(
+                                expectedMaterials.get(6),
+                                "Stolper nedgraves 90 cm. i jord",
+                                6
+                        ),
+                        new OrderBillItem(
+                                expectedMaterials.get(3),
+                                "Remme i sider, sadles ned i stolper",
+                                2
+                        ),
+                        new OrderBillItem(
+                                expectedMaterials.get(1),
+                                "Remme i sider, sadles ned i stolper",
+                                2
+                        ),
+                        new OrderBillItem(
+                                expectedMaterials.get(5),
+                                "Spær, monteres på rem",
+                                16
+                        )),
                 LocalDateTime.of(2024, 5, 10, 11, 55)
+        ));
+        expectedOrders.add(new Order(
+                2,
+                2,
+                "Carport med flat tag: bredde=6,0m & længde=7,8m",
+                Order.OrderStatus.REVIEW_APPROVED,
+                0,
+                List.of(new OrderBillItem(
+                                expectedMaterials.get(6),
+                                "Stolper nedgraves 90 cm. i jord",
+                                4
+                        ),
+                        new OrderBillItem(
+                                expectedMaterials.get(0),
+                                "Remme i sider, sadles ned i stolper",
+                                2
+                        ),
+                        new OrderBillItem(
+                                expectedMaterials.get(0),
+                                "Spær, monteres på rem",
+                                6
+                        )),
+                LocalDateTime.of(2024, 5, 8, 14, 27)
         ));
 
         try (Connection connection = connectionPool.getConnection()) {
