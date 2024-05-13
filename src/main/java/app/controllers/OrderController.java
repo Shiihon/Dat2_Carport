@@ -20,13 +20,13 @@ public class OrderController {
 
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
-        app.post("continuerequest", ctx -> continueRequest(ctx, connectionPool));
-        app.post("sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
+        app.post("/continuerequest", ctx -> continueRequest(ctx, connectionPool));
+        app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
 
-        Customer customer = ctx.sessionAttribute("currentUser");
+        Customer customer = ctx.sessionAttribute("currentAccount");
 
         String carportWidth = ctx.formParam("width-option");
         String carportLength = ctx.formParam("length-option");
@@ -38,7 +38,7 @@ public class OrderController {
         if (customer == null) {
             //gemmer destinationen til når brugeren er logget ind
             ctx.sessionAttribute("loginRedirect", "/order-overview");
-            ctx.redirect("/login.html");
+            ctx.redirect("/login");
         } else {
             ctx.redirect("/order-overview");
         }
@@ -66,7 +66,6 @@ public class OrderController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
