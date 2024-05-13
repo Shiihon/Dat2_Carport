@@ -27,6 +27,15 @@ public class Order {
         this.timestamp = timestamp;
     }
 
+    public Order(String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+        this.title = title;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.orderBill = orderBill;
+        this.timestamp = timestamp;
+    }
+
+
     public int getOrderId() {
         return orderId;
     }

@@ -33,7 +33,7 @@ public class OrderMapper {
             ps.setInt(1, customerId);
             ps.setString(2, order.getTitle());
             ps.setString(3, order.getStatus().toString());
-            ps.setInt(4, order.getTotalPrice());  // tjek at totalprisen er sat til at kunne være null
+            ps.setInt(4, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
             ps.setTimestamp(5, Timestamp.valueOf(order.getTimestamp()));
 
             int affectedRows = ps.executeUpdate();
@@ -58,6 +58,7 @@ public class OrderMapper {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)) {
+
             for (OrderBillItem item : orderBillItems) {
                 ps.setInt(1, orderId);
                 ps.setInt(2, item.getMaterial().getMaterialId());
@@ -67,17 +68,13 @@ public class OrderMapper {
             }
         }
     }
-
     public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) {
-
     }
 
     public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
-
     }
 
     public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
-
     }
 
     public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) {

@@ -50,21 +50,19 @@ public class OrderController {
             int width = Integer.parseInt(ctx.formParam("width"));
             int length = Integer.parseInt(ctx.formParam("length"));
 
-            String title = "Carport bredde: " + width + " cm & Carport længde: " + length + "cm";
+            String title = String.format("Carport bredde: %d cm & Carport længde: %d cm", width, length);
 
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
 
-            Order newOrder = new Order(-1, title, Order.OrderStatus.WAITING_FOR_REVIEW, null, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(title, Order.OrderStatus.WAITING_FOR_REVIEW, null, orderBillItemList, LocalDateTime.now());
 
-            Customer customer = ctx.sessionAttribute("currentUser");
+            Customer customer = ctx.sessionAttribute("currentAccount");
             OrderMapper.createOrder(newOrder, customer.getId(), connectionPool);
 
             ctx.redirect("/request-confirmation");
 
         } catch (DatabaseException e) {
             ctx.result("Error sending request." + e.getMessage());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
