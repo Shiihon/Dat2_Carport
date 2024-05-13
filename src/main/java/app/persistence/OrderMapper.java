@@ -21,10 +21,7 @@ public class OrderMapper {
     }
 
     public static List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT order_id, account_id, order_title, order_total_price, order_timestamp, material_variant_id, item_description, item_quantity, length, material_id, material_description, material_unit, material_price, material_type FROM orders " +
-                "INNER JOIN order_bills USING (order_id) " +
-                "INNER JOIN material_variants USING (material_variant_id) " +
-                "INNER JOIN materials USING (material_id) " +
+        String sql = "SELECT order_id, account_id, order_title, order_total_price, order_timestamp FROM orders " +
                 "WHERE order_status = ?";
         List<Order> orders = new ArrayList<>();
 
