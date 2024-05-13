@@ -21,9 +21,7 @@
                 <ul class="nav-bar">
                     <li class="left-nav-bar">
                         <ul class="nav-bar-buttons">
-                            <li class="nav-bar-button" th:each="button: ${buttons}">
-                                <th:block th:replace="${button}"/>
-                            </li>
+                            <th:block th:replace="${buttons}"/>
                         </ul>
                     </li>
 

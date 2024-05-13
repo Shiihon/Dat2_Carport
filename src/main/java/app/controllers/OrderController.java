@@ -9,7 +9,8 @@ import java.util.Locale;
 
 public class OrderController {
 
-    public void addRoutes(Javalin app, ConnectionPool connectionPool) {
+    public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
+        app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
         app.post("continuerequest", ctx -> continueRequest(ctx, connectionPool));
     }
 
@@ -33,20 +34,17 @@ public class OrderController {
         }
     }
 
-    public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
 
+    public void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
     }
 
     public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
-
     }
 
     public void payOrder(Context ctx, ConnectionPool connectionPool) {
-
     }
 
     public void viewInvoice(Context ctx, ConnectionPool connectionPool) {
-
     }
 
     public void cancelOrder(Context ctx, ConnectionPool connectionPool) {
