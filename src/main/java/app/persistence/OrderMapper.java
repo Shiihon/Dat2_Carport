@@ -90,6 +90,32 @@ public class OrderMapper {
         return null;
     }
 
+    public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT account_id, order_title, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String orderTitle = rs.getString("order_title");
+                Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
+                int orderTotalPrice = rs.getInt("order_total_price");
+                LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
+
+                return new Order(orderId, accountId, orderTitle, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+            } else {
+                throw new DatabaseException("Can't find the specific order by its id");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to db");
+        }
+    }
+
     public void createOrder(Order order, ConnectionPool connectionPool) {
 
     }
