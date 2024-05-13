@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controllers.AccountController;
 import app.controllers.OrderController;
 import app.controllers.WarehouseController;
 import app.persistence.ConnectionPool;
@@ -27,9 +28,9 @@ public class Main {
         }).start(7070);
 
         // Routing
-        app.get("/", ctx -> ctx.render("frontpage.html"));
-        app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
 
+        app.get("/", ctx -> ctx.render("Frontpage.html"));
+        AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         WarehouseController.addRoutes(app, connectionPool);
     }
