@@ -7,17 +7,18 @@ import app.entities.OrderBillItem;
 import java.sql.*;
 import java.util.List;
 
+
 public class OrderMapper {
 
-    public List<Order> getAllOrders(ConnectionPool connectionPool){
+    public List<Order> getAllOrders(ConnectionPool connectionPool) {
         return null;
     }
 
-    public List<Order> getAllOrdersByStatus (Order.OrderStatus status, ConnectionPool connectionPool){
+    public List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool) {
         return null;
     }
 
-    public List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool){
+    public List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool) {
         return null;
     }
 
@@ -28,7 +29,7 @@ public class OrderMapper {
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-        ){
+        ) {
             ps.setInt(1, customerId);
             ps.setString(2, order.getTitle());
             ps.setString(3, order.getStatus().toString());
@@ -43,7 +44,7 @@ public class OrderMapper {
             try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     order.setOrderId(generatedKeys.getInt(1));
-                    createOrderBill(connection, order.getOrderId(), order.getOrderBill());
+                    createOrderBill(connectionPool, order.getOrderId(), order.getOrderBill());
                 } else {
                     throw new SQLException("failed to create order");
                 }
@@ -51,10 +52,12 @@ public class OrderMapper {
         }
     }
 
-    private static void createOrderBill(Connection conn, int orderId, List<OrderBillItem> orderBillItems) throws SQLException {
+    private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws SQLException {
         String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
 
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)) {
             for (OrderBillItem item : orderBillItems) {
                 ps.setInt(1, orderId);
                 ps.setInt(2, item.getMaterial().getMaterialId());
@@ -65,19 +68,19 @@ public class OrderMapper {
         }
     }
 
-    public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool){
+    public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) {
 
     }
 
-    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool){
+    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
 
     }
 
-    public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool){
+    public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
 
     }
 
-    public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool){
+    public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) {
         return null;
     }
 }
