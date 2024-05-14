@@ -124,8 +124,23 @@ public class OrderMapper {
 
     }
 
-    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
+    public static void setOrderPrice(int orderId, double newPrice, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_total_price = ? WHERE order_id = ?";
 
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setDouble(1, newPrice);
+            ps.setInt(2, orderId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Failed to update new price for order ID: " + orderId);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error updating new price", e.getMessage());
+        }
     }
 
     public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
