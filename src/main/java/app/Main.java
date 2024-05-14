@@ -33,6 +33,7 @@ public class Main {
         app.get("/", ctx -> ctx.render("index.html"));
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
+        SalesController.addRoutes(app, connectionPool);
         WarehouseController.addRoutes(app, connectionPool);
         SalesController.addRoutes(app, connectionPool);
     }
