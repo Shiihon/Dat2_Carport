@@ -17,11 +17,11 @@ public class Order {
     int accountId;
     String title;
     OrderStatus status;
-    Integer totalPrice;
+    double totalPrice;
     List<OrderBillItem> orderBill;
     LocalDateTime timestamp;
 
-    public Order(int orderId, int accountId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.title = title;
@@ -47,7 +47,11 @@ public class Order {
         return status;
     }
 
-    public Integer getTotalPrice() {
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public double setTotalPrice() {
         return totalPrice;
     }
 
