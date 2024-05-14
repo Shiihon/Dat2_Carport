@@ -21,7 +21,7 @@ public class OrderMapper {
     }
 
     public static List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT order_id, account_id, order_title, order_total_price, order_timestamp FROM orders " +
+        String sql = "SELECT order_id, account_id, order_title, carport_width, carport_length, order_total_price, order_timestamp FROM orders " +
                 "WHERE order_status = ?";
         List<Order> orders = new ArrayList<>();
 
@@ -34,12 +34,14 @@ public class OrderMapper {
                     int orderId = rs.getInt("order_id");
                     int accountId = rs.getInt("account_id");
                     String orderTitle = rs.getString("order_title");
+                    int carportWidth = rs.getInt("carport_width");
+                    int carportLength = rs.getInt("carport_length");
                     int orderTotalPrice = rs.getInt("order_total_price");
                     LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
                     List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
 
-                    orders.add(new Order(orderId, accountId, orderTitle, status, orderTotalPrice, orderBillItems, orderTimestamp));
+                    orders.add(new Order(orderId, accountId, orderTitle, carportWidth, carportLength, status, orderTotalPrice, orderBillItems, orderTimestamp));
                 }
             } catch (SQLException e) {
                 throw new DatabaseException("SQL Error", e.getMessage());

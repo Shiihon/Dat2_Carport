@@ -16,15 +16,19 @@ public class Order {
     int orderId;
     int accountId;
     String title;
+    int carportWidth;
+    int carportLength;
     OrderStatus status;
     Integer totalPrice;
     List<OrderBillItem> orderBill;
     LocalDateTime timestamp;
 
-    public Order(int orderId, int accountId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.title = title;
+        this.carportWidth = carportWidth;
+        this.carportLength = carportLength;
         this.status = status;
         this.totalPrice = totalPrice;
         this.orderBill = orderBill;
@@ -41,6 +45,14 @@ public class Order {
 
     public String getTitle() {
         return title;
+    }
+
+    public int getCarportWidth() {
+        return carportWidth;
+    }
+
+    public int getCarportLength() {
+        return carportLength;
     }
 
     public OrderStatus getStatus() {
@@ -67,12 +79,12 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Order order)) return false;
-        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
+        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && getCarportWidth() == order.getCarportWidth() && getCarportLength() == order.getCarportLength() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getOrderId(), getAccountId(), getTitle(), getStatus(), getTotalPrice(), getOrderBill(), getTimestamp());
+        return Objects.hash(getOrderId(), getAccountId(), getTitle(), getCarportWidth(), getCarportLength(), getStatus(), getTotalPrice(), getOrderBill(), getTimestamp());
     }
 
     @Override
@@ -81,6 +93,8 @@ public class Order {
                 "orderId=" + orderId +
                 ", accountId=" + accountId +
                 ", title='" + title + '\'' +
+                ", carportWidth=" + carportWidth +
+                ", carportLength=" + carportLength +
                 ", status=" + status +
                 ", totalPrice=" + totalPrice +
                 ", orderBill=" + orderBill +
