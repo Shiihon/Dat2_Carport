@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.Objects;
+
 public class OrderBillItem {
     Material material;
     String description;
@@ -21,6 +23,18 @@ public class OrderBillItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderBillItem that)) return false;
+        return getQuantity() == that.getQuantity() && Objects.equals(getMaterial(), that.getMaterial()) && Objects.equals(getDescription(), that.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMaterial(), getDescription(), getQuantity());
     }
 
     @Override
