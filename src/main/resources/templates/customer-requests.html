@@ -6,36 +6,52 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/customer-requests.css" th:href="@{/css/customer-requests.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="main-container">
     <ul th:replace="~{fragments :: header('Requests', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button active">
-            <a href="/" th:href="@{/}">Foresp.</a>
+            <a href="/requests" th:href="@{/requests}">Foresp.</a>
         </li>
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Ordrer</a>
+            <a href="/orders" th:href="@{/orders}">Ordrer</a>
         </li>
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/warehouse}">Lager</a>
+            <a href="/warehouse" th:href="@{/warehouse}">Lager</a>
         </li>
     </ul>
 
     <div class="main-content">
         <h1 class="title">Forespørgsler</h1>
 
-        <ul>
-            <li th:each="request: ${requests}">
-                <h3 th:text="${request.getOrderId()}">Order Id</h3>
+        <ul class="requests-container">
+            <li class="request-container box" th:each="request: ${requests}">
+                <div class="info-container">
+                    <div class="info-header">
+                        <h3 th:text="|Id: ${request.getOrderId()}|">Order Id</h3>
+                        <h3 th:text="${#temporals.format(request.getTimestamp(), 'dd MMMM yyyy')}">
+                            Timestamp</h3>
+                    </div>
 
-                <h4 th:text="request.getTitle()">Order Title</h4>
+                    <div class="info-content">
+                        <h4 th:text="${request.getTitle()}">Order Title</h4>
+                    </div>
+                </div>
 
-                <form method="get">
-                    <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+                <div class="buttons-container">
+                    <form action="/viewOrderDetails" method="get">
+                        <input type="hidden" name="orderId" th:value="${request.getOrderId()}">
 
-                    <button type="submit">Se mere</button>
-                    <button type="submit">Godkend</button>
-                </form>
+                        <button type="submit">Se mere</button>
+                    </form>
+
+                    <form action="/approve-request" method="post">
+                        <input type="hidden" name="orderId" th:value="${request.getOrderId()}">
+
+                        <button type="submit">Godkend</button>
+                    </form>
+                </div>
             </li>
         </ul>
     </div>
