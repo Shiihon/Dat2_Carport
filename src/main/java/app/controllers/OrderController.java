@@ -53,7 +53,7 @@ public class OrderController {
 
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
 
-            Order newOrder = new Order(title, Order.OrderStatus.WAITING_FOR_REVIEW, null, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, null, orderBillItemList, LocalDateTime.now());
 
             Customer customer = ctx.sessionAttribute("currentAccount");
             OrderMapper.createOrder(newOrder, customer.getId(), connectionPool);
