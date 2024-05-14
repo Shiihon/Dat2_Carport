@@ -36,7 +36,7 @@ public class OrderMapper {
                     String orderTitle = rs.getString("order_title");
                     int carportWidth = rs.getInt("carport_width");
                     int carportLength = rs.getInt("carport_length");
-                    int orderTotalPrice = rs.getInt("order_total_price");
+                    double orderTotalPrice = rs.getDouble("order_total_price");
                     LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
                     List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
@@ -107,7 +107,7 @@ public class OrderMapper {
                 int carportWidth = rs.getInt("carport_width");
                 int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
-                int orderTotalPrice = rs.getInt("order_total_price");
+                double orderTotalPrice = rs.getDouble("order_total_price");
                 LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
                 return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
