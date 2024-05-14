@@ -1,7 +1,9 @@
 package app.entities;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class Order {
 
@@ -12,15 +14,21 @@ public class Order {
     }
 
     int orderId;
+    int accountId;
     String title;
+    int carportWidth;
+    int carportLength;
     OrderStatus status;
     Integer totalPrice;
     List<OrderBillItem> orderBill;
     LocalDateTime timestamp;
 
-    public Order(int orderId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
+        this.accountId = accountId;
         this.title = title;
+        this.carportWidth = carportWidth;
+        this.carportLength = carportLength;
         this.status = status;
         this.totalPrice = totalPrice;
         this.orderBill = orderBill;
@@ -40,12 +48,28 @@ public class Order {
         return orderId;
     }
 
+    public int getAccountId() {
+        return accountId;
+    }
+
     public String getTitle() {
         return title;
     }
 
+    public int getCarportWidth() {
+        return carportWidth;
+    }
+
+    public int getCarportLength() {
+        return carportLength;
+    }
+
     public OrderStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public Integer getTotalPrice() {
@@ -65,10 +89,25 @@ public class Order {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order order)) return false;
+        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && getCarportWidth() == order.getCarportWidth() && getCarportLength() == order.getCarportLength() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getOrderId(), getAccountId(), getTitle(), getCarportWidth(), getCarportLength(), getStatus(), getTotalPrice(), getOrderBill(), getTimestamp());
+    }
+
+    @Override
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
+                ", accountId=" + accountId +
                 ", title='" + title + '\'' +
+                ", carportWidth=" + carportWidth +
+                ", carportLength=" + carportLength +
                 ", status=" + status +
                 ", totalPrice=" + totalPrice +
                 ", orderBill=" + orderBill +

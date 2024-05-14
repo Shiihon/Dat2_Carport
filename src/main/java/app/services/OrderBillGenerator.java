@@ -61,7 +61,7 @@ public class OrderBillGenerator {
         List<Double> lengths = new ArrayList<>();
 
         for (int i = 1; i < numPosts; i++) {
-            if (x + distanceBetweenPosts <= 660) {
+            if (x + distanceBetweenPosts <= 600) {
                 x += distanceBetweenPosts;
             } else {
                 lengths.add(x);
