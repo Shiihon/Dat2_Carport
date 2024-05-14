@@ -30,7 +30,7 @@ public class Main {
 
         // Routing
 
-        app.get("/", ctx -> ctx.render("Frontpage.html"));
+        app.get("/", ctx -> ctx.render("index.html"));
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         SalesController.addRoutes(app, connectionPool);
