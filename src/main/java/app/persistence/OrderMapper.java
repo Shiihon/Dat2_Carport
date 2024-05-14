@@ -94,8 +94,25 @@ public class OrderMapper {
 
     }
 
-    public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) {
+    public static void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
 
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, status.name());
+                ps.setInt(2, orderId);
+
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    throw new DatabaseException("Failed to set order status of order = " + orderId);
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException("SQL Error", e.getMessage());
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to the database.");
+        }
     }
 
     public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
