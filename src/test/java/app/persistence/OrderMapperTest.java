@@ -127,9 +127,9 @@ class OrderMapperTest {
         expectedOrders.add(new Order(
                 2,
                 2,
-                "Carport med flat tag: bredde=6,0m & længde=7,8m",
-                Order.OrderStatus.REVIEW_APPROVED,
-                0,
+                "Carport med flat tag: bredde=2,4m & længde=2,4m",
+                Order.OrderStatus.PAID,
+                32800,
                 List.of(new OrderBillItem(
                                 expectedMaterials.get(6),
                                 "Stolper nedgraves 90 cm. i jord",
@@ -227,12 +227,29 @@ class OrderMapperTest {
     }
 
     @Test
-    void getAllOrdersByStatus() {
+    void getAllOrdersByStatusTest() {
         try {
             List<Order> expectedStatusOrders = List.of(expectedOrders.get(0));
             List<Order> actualStatusOrders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
 
             Assertions.assertEquals(expectedStatusOrders, actualStatusOrders);
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void setOrderStatusTest() {
+        try {
+            Order order = expectedOrders.get(0);
+            order.setStatus(Order.OrderStatus.PAID);
+
+            OrderMapper.setOrderStatus(order.getOrderId(), order.getStatus(), connectionPool);
+
+            List<Order> expectedStatusOrders = List.of(expectedOrders.get(1), expectedOrders.get(0));
+            List<Order> actualStatusOrders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.PAID, connectionPool);
+
+            Assertions.assertEquals(true, expectedStatusOrders.containsAll(actualStatusOrders));
         } catch (DatabaseException e) {
             Assertions.fail(e.getMessage());
         }
