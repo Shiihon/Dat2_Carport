@@ -3,16 +3,16 @@ package app.entities;
 import java.util.Objects;
 
 public class Customer implements Account {
-    int customerId;
-    String email;
-    String password;
-    String role;
-    String firstName;
-    String lastName;
-    String address;
-    int zip;
-    String city;
-    String phoneNumber;
+    private int customerId;
+    private String email;
+    private String password;
+    private String role;
+    private String firstName;
+    private String lastName;
+    private String address;
+    private int zip;
+    private String city;
+    private String phoneNumber;
 
     public Customer(int customerId, String email, String password, String role, String firstName, String lastName, String address, int zip, String city, String phoneNumber) {
         this.customerId = customerId;

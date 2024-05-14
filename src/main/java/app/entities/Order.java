@@ -13,13 +13,13 @@ public class Order {
         PAID
     }
 
-    int orderId;
-    int accountId;
-    String title;
-    OrderStatus status;
-    Integer totalPrice;
-    List<OrderBillItem> orderBill;
-    LocalDateTime timestamp;
+    private int orderId;
+    private int accountId;
+    private String title;
+    private OrderStatus status;
+    private Integer totalPrice;
+    private List<OrderBillItem> orderBill;
+    private LocalDateTime timestamp;
 
     public Order(int orderId, int accountId, String title, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
