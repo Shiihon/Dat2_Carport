@@ -4,6 +4,7 @@ import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controllers.AccountController;
 import app.controllers.OrderController;
+import app.controllers.SalesController;
 import app.controllers.WarehouseController;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
@@ -33,5 +34,6 @@ public class Main {
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         WarehouseController.addRoutes(app, connectionPool);
+        SalesController.addRoutes(app, connectionPool);
     }
 }
