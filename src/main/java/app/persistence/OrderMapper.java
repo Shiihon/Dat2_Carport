@@ -93,7 +93,7 @@ public class OrderMapper {
     }
 
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT account_id, order_title, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
+        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -104,11 +104,13 @@ public class OrderMapper {
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String orderTitle = rs.getString("order_title");
+                int carportWidth = rs.getInt("carport_width");
+                int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
                 int orderTotalPrice = rs.getInt("order_total_price");
                 LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
-                return new Order(orderId, accountId, orderTitle, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
             } else {
                 throw new DatabaseException("Can't find the specific order by its id");
             }
