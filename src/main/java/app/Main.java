@@ -16,6 +16,7 @@ public class Main {
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
     private static final String DB = "cupcake_development";
 
+
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
     public static void main(String[] args) {
@@ -29,7 +30,9 @@ public class Main {
 
         // Routing
 
-        app.get("/", ctx -> ctx.render("index.html"));
+
+
+        app.get("/", ctx -> ctx.render("myorders.html"));
         AccountController.addRoutes(app, connectionPool);
         OrderController.addRoutes(app, connectionPool);
         WarehouseController.addRoutes(app, connectionPool);
