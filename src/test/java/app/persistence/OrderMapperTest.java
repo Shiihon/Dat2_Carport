@@ -100,6 +100,8 @@ class OrderMapperTest {
                 1,
                 1,
                 "Carport med flat tag: bredde=6,0m & længde=7,8m",
+                600,
+                780,
                 Order.OrderStatus.WAITING_FOR_REVIEW,
                 0,
                 List.of(new OrderBillItem(
@@ -127,9 +129,11 @@ class OrderMapperTest {
         expectedOrders.add(new Order(
                 2,
                 2,
-                "Carport med flat tag: bredde=6,0m & længde=7,8m",
-                Order.OrderStatus.REVIEW_APPROVED,
-                0,
+                "Carport med flat tag: bredde=2,4m & længde=2,4m",
+                240,
+                240,
+                Order.OrderStatus.PAID,
+                32800,
                 List.of(new OrderBillItem(
                                 expectedMaterials.get(6),
                                 "Stolper nedgraves 90 cm. i jord",
@@ -190,12 +194,14 @@ class OrderMapperTest {
                 stmt.execute("SELECT setval('orders_order_id_seq', 1)");
                 stmt.execute("SELECT setval('material_variants_material_variant_id_seq', COALESCE((SELECT MAX(material_variant_id)+1 FROM material_variants), 1), false)");
 
-                String orderSql = "INSERT INTO test.orders (order_id, account_id, order_title, order_status, order_total_price, order_timestamp) VALUES" + expectedOrders.stream()
+                String orderSql = "INSERT INTO test.orders (order_id, account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES" + expectedOrders.stream()
                         .map(order -> String.format(
-                                        "(%d, %d, '%s', '%s', %d, '%s')",
+                                        "(%d, %d, '%s', %d, %d, '%s', %d, '%s')",
                                         order.getOrderId(),
                                         order.getAccountId(),
                                         order.getTitle(),
+                                        order.getCarportWidth(),
+                                        order.getCarportLength(),
                                         order.getStatus(),
                                         order.getTotalPrice(),
                                         order.getTimestamp()
@@ -227,12 +233,29 @@ class OrderMapperTest {
     }
 
     @Test
-    void getAllOrdersByStatus() {
+    void getAllOrdersByStatusTest() {
         try {
             List<Order> expectedStatusOrders = List.of(expectedOrders.get(0));
             List<Order> actualStatusOrders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
 
             Assertions.assertEquals(expectedStatusOrders, actualStatusOrders);
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void setOrderStatusTest() {
+        try {
+            Order order = expectedOrders.get(0);
+            order.setStatus(Order.OrderStatus.PAID);
+
+            OrderMapper.setOrderStatus(order.getOrderId(), order.getStatus(), connectionPool);
+
+            List<Order> expectedStatusOrders = List.of(expectedOrders.get(1), expectedOrders.get(0));
+            List<Order> actualStatusOrders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.PAID, connectionPool);
+
+            Assertions.assertEquals(true, expectedStatusOrders.containsAll(actualStatusOrders));
         } catch (DatabaseException e) {
             Assertions.fail(e.getMessage());
         }

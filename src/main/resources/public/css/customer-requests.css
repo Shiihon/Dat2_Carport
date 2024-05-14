@@ -1,0 +1,45 @@
+.requests-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.request-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    width: 90%;
+    gap: 0.8rem;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 80%;
+    gap: 0.4rem;
+}
+
+.info-container h3, .info-container h4 {
+    margin: 0;
+}
+
+.info-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-basis: 20%;
+}
+
+.buttons-container button {
+    width: 100%;
+}
