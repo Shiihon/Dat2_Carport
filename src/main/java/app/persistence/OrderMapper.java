@@ -91,7 +91,7 @@ public class OrderMapper {
     }
 
     public static void createOrder(Order order, int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO orders (account_id, order_title, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?) RETURNING order_id;";
+        String sql = "INSERT INTO orders (account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -99,9 +99,11 @@ public class OrderMapper {
         ) {
             ps.setInt(1, customerId);
             ps.setString(2, order.getTitle());
-            ps.setString(3, order.getStatus().toString());
-            ps.setInt(4, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
-            ps.setTimestamp(5, Timestamp.valueOf(order.getTimestamp()));
+            ps.setInt(3, order.getCarportWidth());
+            ps.setInt(4, order.getCarportLength());
+            ps.setString(5, order.getStatus().toString());
+            ps.setInt(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
+            ps.setTimestamp(7, Timestamp.valueOf(order.getTimestamp()));
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
