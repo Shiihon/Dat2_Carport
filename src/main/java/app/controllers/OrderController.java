@@ -59,8 +59,7 @@ public class OrderController {
 
             Order newOrder = new Order(customer.getId(), title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
 
-            Customer customer = ctx.sessionAttribute("currentAccount");
-            OrderMapper.createOrder(newOrder, customer.getId(), connectionPool);
+            OrderMapper.createOrder(newOrder, connectionPool);
 
             ctx.redirect("/request-confirmation");
 

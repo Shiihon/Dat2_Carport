@@ -89,14 +89,14 @@ public class OrderMapper {
         return null;
     }
 
-    public static void createOrder(Order order, int customerId, ConnectionPool connectionPool) throws DatabaseException {
+    public static void createOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {
         String sql = "INSERT INTO orders (account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
-            ps.setInt(1, customerId);
+            ps.setInt(1, order.getAccountId());
             ps.setString(2, order.getTitle());
             ps.setInt(3, order.getCarportWidth());
             ps.setInt(4, order.getCarportLength());
