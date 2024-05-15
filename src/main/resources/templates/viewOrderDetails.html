@@ -40,7 +40,9 @@
             </tr>
             </thead>
             <tbody>
-            <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
+            <tr>
+                <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
+            </tr>
             </tbody>
         </table>
         <br>
@@ -70,7 +72,7 @@
             <tr>
                 <th>Samlet pris:</th>
             </tr>
-            <tr>
+            <tr th:unless="${order.getStatus().toString() == 'PAID'}">
                 <td>
                     <form action="/updatePrice" method="post">
                         <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
