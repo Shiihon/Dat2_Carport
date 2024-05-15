@@ -9,13 +9,13 @@ public class Material {
         SCREWS
     }
 
-    int materialId;
-    int materialVariantId;
-    String description;
-    String unit;
-    int price;
-    Integer length;
-    MaterialType materialType;
+    private int materialId;
+    private int materialVariantId;
+    private String description;
+    private String unit;
+    private int price;
+    private Integer length;
+    private MaterialType materialType;
 
     public Material(int materialId, int materialVariantId, String description, String unit, int price, Integer length, MaterialType materialType) {
         this.materialId = materialId;
