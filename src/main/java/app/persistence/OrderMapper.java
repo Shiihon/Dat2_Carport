@@ -21,7 +21,7 @@ public class OrderMapper {
     }
 
     public static List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT order_id, account_id, order_title, order_total_price, order_timestamp FROM orders " +
+        String sql = "SELECT order_id, account_id, order_title, carport_width, carport_length, order_total_price, order_timestamp FROM orders " +
                 "WHERE order_status = ?";
         List<Order> orders = new ArrayList<>();
 
@@ -34,12 +34,14 @@ public class OrderMapper {
                     int orderId = rs.getInt("order_id");
                     int accountId = rs.getInt("account_id");
                     String orderTitle = rs.getString("order_title");
-                    int orderTotalPrice = rs.getInt("order_total_price");
+                    int carportWidth = rs.getInt("carport_width");
+                    int carportLength = rs.getInt("carport_length");
+                    double orderTotalPrice = rs.getDouble("order_total_price");
                     LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
                     List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
 
-                    orders.add(new Order(orderId, accountId, orderTitle, status, orderTotalPrice, orderBillItems, orderTimestamp));
+                    orders.add(new Order(orderId, accountId, orderTitle, carportWidth, carportLength, status, orderTotalPrice, orderBillItems, orderTimestamp));
                 }
             } catch (SQLException e) {
                 throw new DatabaseException("SQL Error", e.getMessage());
@@ -91,7 +93,7 @@ public class OrderMapper {
     }
 
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT account_id, order_title, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
+        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -102,11 +104,13 @@ public class OrderMapper {
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String orderTitle = rs.getString("order_title");
+                int carportWidth = rs.getInt("carport_width");
+                int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
-                int orderTotalPrice = rs.getInt("order_total_price");
+                double orderTotalPrice = rs.getDouble("order_total_price");
                 LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
-                return new Order(orderId, accountId, orderTitle, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
             } else {
                 throw new DatabaseException("Can't find the specific order by its id");
             }
@@ -120,8 +124,25 @@ public class OrderMapper {
 
     }
 
-    public void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) {
+    public static void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_status = ? WHERE order_id = ?";
 
+        try (Connection connection = connectionPool.getConnection()) {
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, status.name());
+                ps.setInt(2, orderId);
+
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    throw new DatabaseException("Failed to set order status of order = " + orderId);
+                }
+            } catch (SQLException e) {
+                throw new DatabaseException("SQL Error", e.getMessage());
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to the database.");
+        }
     }
 
     public static void setOrderPrice(int orderId, double newPrice, ConnectionPool connectionPool) throws DatabaseException {
