@@ -19,11 +19,11 @@ public class Order {
     int carportWidth;
     int carportLength;
     OrderStatus status;
-    Integer totalPrice;
+    double totalPrice;
     List<OrderBillItem> orderBill;
     LocalDateTime timestamp;
 
-    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.title = title;
@@ -73,7 +73,11 @@ public class Order {
         this.status = status;
     }
 
-    public Integer getTotalPrice() {
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public double setTotalPrice() {
         return totalPrice;
     }
 

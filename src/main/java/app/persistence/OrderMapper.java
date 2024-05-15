@@ -38,7 +38,7 @@ public class OrderMapper {
                     String orderTitle = rs.getString("order_title");
                     int carportWidth = rs.getInt("carport_width");
                     int carportLength = rs.getInt("carport_length");
-                    int orderTotalPrice = rs.getInt("order_total_price");
+                    double orderTotalPrice = rs.getDouble("order_total_price");
                     LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
                     List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
@@ -127,6 +127,34 @@ public class OrderMapper {
         }
     }
 
+    public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String orderTitle = rs.getString("order_title");
+                int carportWidth = rs.getInt("carport_width");
+                int carportLength = rs.getInt("carport_length");
+                Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
+                double orderTotalPrice = rs.getDouble("order_total_price");
+                LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
+
+                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+            } else {
+                throw new DatabaseException("Can't find the specific order by its id");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to db");
+        }
+    }
+
     private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws DatabaseException {
         String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
 
@@ -167,7 +195,23 @@ public class OrderMapper {
         }
     }
 
-    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
+    public static void setOrderPrice(int orderId, double newPrice, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "UPDATE orders SET order_total_price = ? WHERE order_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setDouble(1, newPrice);
+            ps.setInt(2, orderId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected != 1) {
+                throw new DatabaseException("Failed to update new price for order ID: " + orderId);
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error updating new price", e.getMessage());
+        }
     }
 
     public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
