@@ -6,10 +6,7 @@ import app.entities.Order;
 import app.entities.OrderBillItem;
 import app.exceptions.DatabaseException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,36 +89,61 @@ public class OrderMapper {
         return null;
     }
 
-    public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
+    public static void createOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO orders (account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql);
+                PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
-            ps.setInt(1, orderId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int accountId = rs.getInt("account_id");
-                String orderTitle = rs.getString("order_title");
-                int carportWidth = rs.getInt("carport_width");
-                int carportLength = rs.getInt("carport_length");
-                Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
-                double orderTotalPrice = rs.getDouble("order_total_price");
-                LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
+            ps.setInt(1, order.getAccountId());
+            ps.setString(2, order.getTitle());
+            ps.setInt(3, order.getCarportWidth());
+            ps.setInt(4, order.getCarportLength());
+            ps.setString(5, order.getStatus().toString());
+            ps.setDouble(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
+            ps.setTimestamp(7, Timestamp.valueOf(order.getTimestamp()));
 
-                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
-            } else {
-                throw new DatabaseException("Can't find the specific order by its id");
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0) {
+                throw new DatabaseException("failed to create order");
             }
 
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    order.setOrderId(generatedKeys.getInt(1));
+                    createOrderBill(order.getOrderId(), order.getOrderBill(), connectionPool);
+                } else {
+                    throw new DatabaseException("failed to create order");
+                }
+            }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to connect to db");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
-    public void createOrder(Order order, ConnectionPool connectionPool) {
+    private static void createOrderBill(int orderId, List<OrderBillItem> orderBillItems, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
 
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            for (OrderBillItem item : orderBillItems) {
+                ps.setInt(1, orderId);
+                ps.setInt(2, item.getMaterial().getMaterialId());
+                ps.setString(3, item.getDescription());
+                ps.setInt(4, item.getQuantity());
+
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    throw new DatabaseException("Failed insert order bill for order = " + orderId);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException(e.getMessage());
+        }
     }
 
     public static void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool) throws DatabaseException {
@@ -164,8 +186,35 @@ public class OrderMapper {
         }
     }
 
-    public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
+    public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
 
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int accountId = rs.getInt("account_id");
+                String orderTitle = rs.getString("order_title");
+                int carportWidth = rs.getInt("carport_width");
+                int carportLength = rs.getInt("carport_length");
+                Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
+                double orderTotalPrice = rs.getDouble("order_total_price");
+                LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
+
+                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+            } else {
+                throw new DatabaseException("Can't find the specific order by its id");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to db");
+        }
+    }
+
+    public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
     }
 
     public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) {
