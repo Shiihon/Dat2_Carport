@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +25,8 @@ class OrderMapperTest {
 
     @BeforeAll
     public static void setupTables() {
+        Locale.setDefault(Locale.US);
+
         try (Connection connection = connectionPool.getConnection()) {
             try (Statement stmt = connection.createStatement()) {
                 // Drop existing test tables
@@ -196,7 +199,7 @@ class OrderMapperTest {
 
                 String orderSql = "INSERT INTO test.orders (order_id, account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES" + expectedOrders.stream()
                         .map(order -> String.format(
-                                        "(%d, %d, '%s', %d, %d, '%s', %d, '%s')",
+                                        "(%d, %d, '%s', %d, %d, '%s', %f, '%s')",
                                         order.getOrderId(),
                                         order.getAccountId(),
                                         order.getTitle(),

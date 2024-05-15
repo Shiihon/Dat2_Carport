@@ -25,6 +25,15 @@ public class OrderBillItem {
         return quantity;
     }
 
+    public double getItemPrice() {
+        if (material.getMaterialType() == Material.MaterialType.WOOD) {
+            double lengthInMeters = material.getLength() / 100D;
+            return lengthInMeters * material.getPrice();
+        } else {
+            return material.getPrice();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
