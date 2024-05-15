@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Order-overview</title>
-</head>
-<body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
+<head>
+    <title>Order-overview</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Order-overview', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+
+        <a th:href="@{/carportSchematic(width=${#ctx.session.width}, length=${#ctx.session.length})}"
+           href="carportSchematic.html">Vis Carport Schematic</a>
+
+        <h2>Dine valg:</h2>
+        <p>Bredde: <span th:text="${#ctx.session.width}">[Bredde]</span></p>
+        <p>Længde: <span th:text="${#ctx.session.length}">[Længde]</span></p>
+
+        <form th:action="@{/sendrequest}" method="post">
+            <button type="submit">Send forespørgsel</button>
+        </form>
+
+        <div th:replace="~{fragments :: error}"></div>
+    </div>
+</div>
 </body>
 </html>
