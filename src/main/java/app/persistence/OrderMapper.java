@@ -14,8 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
 import java.util.List;
+
 
 public class OrderMapper {
 
@@ -128,7 +128,6 @@ public class OrderMapper {
         }
     }
 
-
     private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws DatabaseException {
         String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
 
@@ -169,11 +168,10 @@ public class OrderMapper {
         }
     }
 
-    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) throws DatabaseException {
+    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
     }
 
     public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
-
     }
 
     public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) {
