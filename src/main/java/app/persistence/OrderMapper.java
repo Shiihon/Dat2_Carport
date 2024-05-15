@@ -91,7 +91,7 @@ public class OrderMapper {
     }
 
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT account_id, order_title, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
+        String sql = "SELECT account_id, order_title, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
