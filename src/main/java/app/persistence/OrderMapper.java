@@ -7,12 +7,14 @@ import app.entities.OrderBillItem;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.List;
 
 public class OrderMapper {
@@ -94,8 +96,7 @@ public class OrderMapper {
     }
 
     public static void createOrder(Order order, int customerId, ConnectionPool connectionPool) throws DatabaseException {
-
-        String sql = "INSERT INTO orders (account_id, order_title, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?) RETURNING order_id;";
+        String sql = "INSERT INTO orders (account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -103,9 +104,11 @@ public class OrderMapper {
         ) {
             ps.setInt(1, customerId);
             ps.setString(2, order.getTitle());
-            ps.setString(3, order.getStatus().toString());
-            ps.setInt(4, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
-            ps.setTimestamp(5, Timestamp.valueOf(order.getTimestamp()));
+            ps.setInt(3, order.getCarportWidth());
+            ps.setInt(4, order.getCarportLength());
+            ps.setString(5, order.getStatus().toString());
+            ps.setInt(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
+            ps.setTimestamp(7, Timestamp.valueOf(order.getTimestamp()));
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -124,6 +127,7 @@ public class OrderMapper {
             throw new DatabaseException(e.getMessage());
         }
     }
+
 
     private static void createOrderBill(ConnectionPool connectionPool, int orderId, List<OrderBillItem> orderBillItems) throws DatabaseException {
         String sql = "INSERT INTO order_bills (order_id, material_variant_id, item_description, item_quantity) VALUES (?, ?, ?, ?);";
@@ -165,8 +169,7 @@ public class OrderMapper {
         }
     }
 
-    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) {
-
+    public void setOrderPrice(int orderId, int price, ConnectionPool connectionPool) throws DatabaseException {
     }
 
     public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
