@@ -14,6 +14,8 @@ public class SalesController {
     public static void addRoutes(Javalin app, ConnectionPool connectionPool) {
         app.get("/requests", ctx -> viewRequests(ctx, connectionPool));
         app.post("/approve-request", ctx -> approveRequest(ctx, connectionPool));
+
+        app.get("/orders", ctx -> viewCostumersOrders(ctx, connectionPool));
     }
 
     public static void viewRequests(Context ctx, ConnectionPool connectionPool) {
@@ -46,8 +48,16 @@ public class SalesController {
 
     }
 
-    public void viewCostumersOrders(Context ctx, ConnectionPool connectionPool) {
+    public static void viewCostumersOrders(Context ctx, ConnectionPool connectionPool) {
+        try {
+            List<Order> orders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.PAID, connectionPool);
 
+            ctx.attribute("orders", orders);
+            ctx.render("customer-orders.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("customer-orders.html");
+        }
     }
 
     public void viewCarportSchematic(Context ctx) {
