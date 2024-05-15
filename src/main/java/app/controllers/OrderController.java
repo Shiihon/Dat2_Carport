@@ -21,18 +21,23 @@ public class OrderController {
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
         app.post("/continuerequest", ctx -> continueRequest(ctx, connectionPool));
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
+        app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
+        app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
+
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
 
         Customer customer = ctx.sessionAttribute("currentAccount");
 
-        String carportWidth = ctx.formParam("width-option");
-        String carportLength = ctx.formParam("length-option");
+        int width = Integer.parseInt(ctx.formParam("width-option"));
+        int length = Integer.parseInt(ctx.formParam("length-option"));
+
+        System.out.println("Width: " + width + " Length: " + length);
 
         //gemmer attributer i nuværende session
-        ctx.sessionAttribute("carportWidth", carportWidth);
-        ctx.sessionAttribute("carportLength", carportLength);
+        ctx.sessionAttribute("width", width);
+        ctx.sessionAttribute("length", length);
 
         if (customer == null) {
             //gemmer destinationen til når brugeren er logget ind
@@ -46,8 +51,8 @@ public class OrderController {
     public static void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
 
         try {
-            int width = Integer.parseInt(ctx.formParam("width"));
-            int length = Integer.parseInt(ctx.formParam("length"));
+            int width = ctx.sessionAttribute("width");
+            int length = ctx.sessionAttribute("length");
 
             String title = String.format("Carport bredde: %d cm & Carport længde: %d cm", width, length);
 
