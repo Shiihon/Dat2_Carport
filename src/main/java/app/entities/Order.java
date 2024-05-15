@@ -67,8 +67,8 @@ public class Order {
         return totalPrice;
     }
 
-    public double setTotalPrice() {
-        return totalPrice;
+    public void setTotalPrice(double newPrice) {
+       totalPrice = newPrice;
     }
 
     public List<OrderBillItem> getOrderBill() {
