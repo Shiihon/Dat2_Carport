@@ -35,6 +35,17 @@ public class Order {
         this.timestamp = timestamp;
     }
 
+    public Order(int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+        this.accountId = accountId;
+        this.title = title;
+        this.carportWidth = carportWidth;
+        this.carportLength = carportLength;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.orderBill = orderBill;
+        this.timestamp = timestamp;
+    }
+
     public int getOrderId() {
         return orderId;
     }
@@ -77,6 +88,10 @@ public class Order {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     @Override
