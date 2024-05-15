@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class OrderMapper {
 
     public List<Order> getAllOrders(ConnectionPool connectionPool) {
