@@ -23,7 +23,6 @@ public class OrderController {
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
         app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
-
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
@@ -32,8 +31,6 @@ public class OrderController {
 
         int width = Integer.parseInt(ctx.formParam("width-option"));
         int length = Integer.parseInt(ctx.formParam("length-option"));
-
-        System.out.println("Width: " + width + " Length: " + length);
 
         //gemmer attributer i nuværende session
         ctx.sessionAttribute("width", width);
@@ -57,8 +54,9 @@ public class OrderController {
             String title = String.format("Carport bredde: %d cm & Carport længde: %d cm", width, length);
 
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
+            double orderBillPrice = calculateOrderBillPrice(orderBillItemList);
 
-            Order newOrder = new Order(title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, 0, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
 
             Customer customer = ctx.sessionAttribute("currentAccount");
             OrderMapper.createOrder(newOrder, customer.getId(), connectionPool);
@@ -68,6 +66,16 @@ public class OrderController {
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
         }
+    }
+
+    private static double calculateOrderBillPrice(List<OrderBillItem> orderBillItemList) {
+        double totalPrice = 0;
+
+        for (OrderBillItem orderBillItem : orderBillItemList) {
+            totalPrice += orderBillItem.getItemPrice();
+        }
+
+        return totalPrice;
     }
 
     public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
