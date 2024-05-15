@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
+<head>
 <title>Order-overview</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,13 @@
 </head>
 
 <body>
-<div th:replace="~{fragments :: header('Header fragment')}"></div>
+<div>
+    <ul th:replace="~{fragments :: header('Order-overview', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
+</div>
 
 <a th:href="@{/carportSchematic}" href="carportSchematic.html">Vis Carport Schematic</a>
 

@@ -8,7 +8,6 @@ import app.exceptions.DatabaseException;
 import java.sql.*;
 import java.util.List;
 
-
 public class OrderMapper {
 
     public List<Order> getAllOrders(ConnectionPool connectionPool) {
