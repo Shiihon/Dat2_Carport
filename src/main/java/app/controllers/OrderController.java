@@ -65,6 +65,7 @@ public class OrderController {
 
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
+            ctx.render("order-overview.html");
         }
     }
 
