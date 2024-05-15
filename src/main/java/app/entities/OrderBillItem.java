@@ -3,9 +3,9 @@ package app.entities;
 import java.util.Objects;
 
 public class OrderBillItem {
-    Material material;
-    String description;
-    int quantity;
+    private Material material;
+    private String description;
+    private int quantity;
 
     public OrderBillItem(Material material, String description, int quantity) {
         this.material = material;
@@ -23,6 +23,15 @@ public class OrderBillItem {
 
     public int getQuantity() {
         return quantity;
+    }
+
+    public double getItemPrice() {
+        if (material.getMaterialType() == Material.MaterialType.WOOD) {
+            double lengthInMeters = material.getLength() / 100D;
+            return lengthInMeters * material.getPrice();
+        } else {
+            return material.getPrice();
+        }
     }
 
     @Override

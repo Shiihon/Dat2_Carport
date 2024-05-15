@@ -13,18 +13,29 @@ public class Order {
         PAID
     }
 
-    int orderId;
-    int accountId;
-    String title;
-    int carportWidth;
-    int carportLength;
-    OrderStatus status;
-    Integer totalPrice;
-    List<OrderBillItem> orderBill;
-    LocalDateTime timestamp;
+    private int orderId;
+    private int accountId;
+    private String title;
+    private int carportWidth;
+    private int carportLength;
+    private OrderStatus status;
+    private double totalPrice;
+    private List<OrderBillItem> orderBill;
+    private LocalDateTime timestamp;
 
-    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, Integer totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
+        this.accountId = accountId;
+        this.title = title;
+        this.carportWidth = carportWidth;
+        this.carportLength = carportLength;
+        this.status = status;
+        this.totalPrice = totalPrice;
+        this.orderBill = orderBill;
+        this.timestamp = timestamp;
+    }
+
+    public Order(int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.accountId = accountId;
         this.title = title;
         this.carportWidth = carportWidth;
@@ -63,7 +74,11 @@ public class Order {
         this.status = status;
     }
 
-    public Integer getTotalPrice() {
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public double setTotalPrice() {
         return totalPrice;
     }
 
@@ -73,6 +88,10 @@ public class Order {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     @Override

@@ -3,10 +3,10 @@ package app.entities;
 import java.util.Objects;
 
 public class Seller implements Account {
-    int sellerId;
-    String email;
-    String password;
-    String role;
+    private int sellerId;
+    private String email;
+    private String password;
+    private String role;
 
     public Seller(int sellerId, String email, String password, String role) {
         this.sellerId = sellerId;
