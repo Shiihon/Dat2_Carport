@@ -20,7 +20,7 @@
 
 
     <div class="main-content">
-        <table>
+        <table style="width: 25%">
             <thead>
             <tr>
                 <th>Ordre id:</th>
@@ -33,7 +33,7 @@
             </tbody>
         </table>
         <br>
-        <table>
+        <table style="width: 25%">
             <thead>
             <tr>
                 <th>Kunde :</th>
@@ -72,13 +72,15 @@
             <tr>
                 <th>Samlet pris:</th>
             </tr>
-            <tr th:unless="${order.getStatus().toString() == 'PAID'}">
+            <tr>
                 <td>
                     <form action="/updatePrice" method="post">
                         <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-                        <input type="number" name="price" min="0" th:value="${order.getTotalPrice()}">
+                        <input th:disabled="${order.getStatus().toString() == 'PAID'}" type="number" name="price"
+                               min="0" th:value="${order.getTotalPrice()}">
                         <p th:text="${#ctx.session.message}"></p>
-                        <button type="submit">Godkend pris</button>
+                        <button th:unless="${order.getStatus().toString() == 'PAID'}" type="submit">Godkend pris
+                        </button>
                     </form>
                 </td>
             </tr>
