@@ -263,4 +263,32 @@ class OrderMapperTest {
             Assertions.fail(e.getMessage());
         }
     }
+
+    @Test
+    void getOrderByIdTest() {
+        try {
+            Order expectedOrder = expectedOrders.get(0);
+            Order actualOrder = OrderMapper.getOrderById(expectedOrder.getOrderId(), connectionPool);
+
+            Assertions.assertEquals(expectedOrder, actualOrder);
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void setOrderPriceTest() {
+        try {
+            Order expectedOrder = expectedOrders.get(0);
+            expectedOrder.setTotalPrice(30000);
+
+            OrderMapper.setOrderPrice(expectedOrder.getOrderId(), expectedOrder.getTotalPrice(), connectionPool);
+            Order actualOrder = OrderMapper.getOrderById(expectedOrder.getOrderId(), connectionPool);
+
+            Assertions.assertEquals(expectedOrder, actualOrder);
+
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
 }
