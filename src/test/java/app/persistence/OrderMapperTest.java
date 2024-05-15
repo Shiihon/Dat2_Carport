@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -259,6 +260,34 @@ class OrderMapperTest {
             List<Order> actualStatusOrders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.PAID, connectionPool);
 
             Assertions.assertEquals(true, expectedStatusOrders.containsAll(actualStatusOrders));
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void getOrderById() {
+        try {
+            Order expectedOrder = expectedOrders.get(0);
+            Order actualOrder = OrderMapper.getOrderById(expectedOrder.getOrderId(), connectionPool);
+
+            Assertions.assertEquals(expectedOrder, actualOrder);
+        } catch (DatabaseException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    void setOrderPrice() {
+        try {
+            Order expectedOrder = expectedOrders.get(0);
+            expectedOrder.setTotalPrice(30000);
+
+            OrderMapper.setOrderPrice(expectedOrder.getOrderId(), expectedOrder.getTotalPrice(), connectionPool);
+            Order actualOrder = OrderMapper.getOrderById(expectedOrder.getOrderId(), connectionPool);
+
+            Assertions.assertEquals(expectedOrder, actualOrder);
+
         } catch (DatabaseException e) {
             Assertions.fail(e.getMessage());
         }
