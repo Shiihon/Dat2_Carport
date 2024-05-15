@@ -18,6 +18,8 @@ public class SalesController {
         app.get("/requests", ctx -> viewRequests(ctx, connectionPool));
         app.post("/approve-request", ctx -> approveRequest(ctx, connectionPool));
 
+        app.get("/orders", ctx -> viewCostumersOrders(ctx, connectionPool));
+
         app.get("/viewOrderDetails", ctx -> viewOrderDetails(ctx, connectionPool));
         app.post("/updatePrice", ctx -> updatePrice(ctx, connectionPool));
     }
@@ -65,10 +67,18 @@ public class SalesController {
     }
 
     public static void viewCostumersOrders(Context ctx, ConnectionPool connectionPool) {
+        try {
+            List<Order> orders = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.PAID, connectionPool);
 
+            ctx.attribute("orders", orders);
+            ctx.render("customer-orders.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("customer-orders.html");
+        }
     }
 
-    public static void viewCarportSchematic(Context ctx) {
+    public void viewCarportSchematic(Context ctx) {
 
     }
 
