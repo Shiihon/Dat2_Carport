@@ -48,6 +48,7 @@ public class OrderController {
     public static void sendOrderRequest(Context ctx, ConnectionPool connectionPool) {
 
         try {
+            Customer customer = ctx.sessionAttribute("currentAccount");
             int width = ctx.sessionAttribute("width");
             int length = ctx.sessionAttribute("length");
 
@@ -56,7 +57,7 @@ public class OrderController {
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
             double orderBillPrice = calculateOrderBillPrice(orderBillItemList);
 
-            Order newOrder = new Order(title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(customer.getId(), title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
 
             Customer customer = ctx.sessionAttribute("currentAccount");
             OrderMapper.createOrder(newOrder, customer.getId(), connectionPool);

@@ -35,7 +35,8 @@ public class Order {
         this.timestamp = timestamp;
     }
 
-    public Order(String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+        this.accountId = accountId;
         this.title = title;
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
