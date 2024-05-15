@@ -87,8 +87,11 @@ public class OrderController {
     }
 
     public static void viewCarportSchematic(Context ctx) {
-        Locale.setDefault(new Locale("US"));
-        CarportSvg svg = new CarportSvg(600, 780);
+        int width = Integer.parseInt(ctx.queryParam("width"));
+        int length = Integer.parseInt(ctx.queryParam("length"));
+
+        Locale.setDefault(Locale.US);
+        CarportSvg svg = new CarportSvg(width, length);
         ctx.attribute("svg", svg.toString());
         ctx.render("carportSchematic.html");
     }
