@@ -53,6 +53,7 @@ public class SalesController {
         double newPrice = Double.parseDouble(ctx.formParam("price"));
 
         try {
+
             OrderMapper.setOrderPrice(orderId, newPrice, connectionPool);
             ctx.sessionAttribute("message", "Prisen er nu opdateret");
             ctx.redirect(String.format("/viewOrderDetails?orderId=%d", orderId));
