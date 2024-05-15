@@ -23,6 +23,8 @@ public class OrderController {
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
         app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
+        app.get("gotomyorders", ctx -> ctx.render("my-orders.html"));
+        app.get("backtofrontpage", ctx -> ctx.render("index.html"));
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
