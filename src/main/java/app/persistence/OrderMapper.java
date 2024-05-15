@@ -106,7 +106,7 @@ public class OrderMapper {
             ps.setInt(3, order.getCarportWidth());
             ps.setInt(4, order.getCarportLength());
             ps.setString(5, order.getStatus().toString());
-            ps.setInt(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
+            ps.setDouble(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
             ps.setTimestamp(7, Timestamp.valueOf(order.getTimestamp()));
 
             int affectedRows = ps.executeUpdate();
