@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da-dk">
 
-<head th:fragment="head(title)">
-    <title th:text="${title}">viewOrderDetailsPage</title>
+<head>
+    <title>viewOrderDetailsPage</title>
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,72 +17,77 @@
             <a href="/requests" th:href="@{/requests}">Tilbage</a>
         </li>
     </ul>
-    <table>
-        <thead>
-        <tr>
-            <th>Ordre id:</th>
-        </tr>
-        </thead>
-        <tbody>
-        <td th:text="${order.getOrderId()}"></td>
-        <td th:text="${account}"></td>
-        </tbody>
-    </table>
-    <br>
-    <table>
-        <thead>
-        <tr>
-            <th>Kunde :</th>
-        </tr>
-        </thead>
-        <tbody>
-        <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
-        </tbody>
-    </table>
-    <br>
-    <table>
-        <thead>
-        <tr>
-            <th>Beskrivelse</th>
-            <th>Længde</th>
-            <th>Antal</th>
-            <th>Enhed</th>
-            <th>Beskrivelse</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="orderBillItem: ${order.getOrderBill}">
-            <td th:text="${orderBillItem.getMaterial().getDescription()}"></td>
-            <td th:text="|${orderBillItem.getMaterial().getLength()} cm.|"></td>
-            <td th:text="${orderBillItem.getQuantity()}"></td>
-            <td th:text="${orderBillItem.getMaterial().getUnit()}"></td>
-            <td th:text="${orderBillItem.getDescription()}"></td>
-        </tr>
-        </tbody>
-    </table>
-    <br>
-    <table style="width: 25%">
-        <thead>
-        <tr>
-            <th>Samlet pris:</th>
-        </tr>
-        <tr>
-            <td>
-                <form action="/updatePrice" method="post">
-                    <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-                    <input type="number" name="price" min="0" th:value="${order.getTotalPrice()}">
-                    <p th:text="${#ctx.session.message}"></p>
-                    <button type="submit">Godkend pris</button>
-                </form>
-            </td>
-        </tr>
-        </thead>
-    </table>
-    <br>
-    <form action="/approve-request" method="post">
-        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-        <button type="submit">Godkend Forspørgsel</button>
-    </form>
+
+
+    <div class="main-content">
+        <table>
+            <thead>
+            <tr>
+                <th>Ordre id:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${order.getOrderId()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th>Kunde :</th>
+            </tr>
+            </thead>
+            <tbody>
+            <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
+            </tbody>
+        </table>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th>Beskrivelse</th>
+                <th>Længde</th>
+                <th>Antal</th>
+                <th>Enhed</th>
+                <th>Beskrivelse</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderBillItem: ${order.getOrderBill}">
+                <td th:text="${orderBillItem.getMaterial().getDescription()}"></td>
+                <td th:text="|${orderBillItem.getMaterial().getLength()} cm.|"></td>
+                <td th:text="${orderBillItem.getQuantity()}"></td>
+                <td th:text="${orderBillItem.getMaterial().getUnit()}"></td>
+                <td th:text="${orderBillItem.getDescription()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Samlet pris:</th>
+            </tr>
+            <tr>
+                <td>
+                    <form action="/updatePrice" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+                        <input type="number" name="price" min="0" th:value="${order.getTotalPrice()}">
+                        <p th:text="${#ctx.session.message}"></p>
+                        <button type="submit">Godkend pris</button>
+                    </form>
+                </td>
+            </tr>
+            </thead>
+        </table>
+        <br>
+        <form action="/approve-request" method="post">
+            <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+            <button type="submit">Godkend Forespørgsel</button>
+        </form>
+    </div>
 </div>
 
 </body>
