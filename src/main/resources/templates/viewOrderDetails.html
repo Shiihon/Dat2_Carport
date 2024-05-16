@@ -88,7 +88,7 @@
         <br>
         <form action="/approve-request" method="post">
             <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-            <button type="submit">Godkend Forespørgsel</button>
+            <button type="submit" th:disabled="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}">Godkend Forespørgsel</button>
         </form>
     </div>
 </div>

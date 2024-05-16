@@ -15,9 +15,14 @@
 <div class="main-container">
     <ul th:replace="~{fragments :: header('WarehousePage', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Tilbage</a>
+            <a href="/requests" th:href="@{/requests}">Foresp.</a>
         </li>
-
+        <li class="nav-bar-button">
+            <a href="/orders" th:href="@{/orders}">Ordrer</a>
+        </li>
+        <li class="nav-bar-button active">
+            <a href="/warehouse" th:href="@{/warehouse}">Lager</a>
+        </li>
         <li class="nav-bar-button">
             <a href="/registerNewMaterial" th:href="@{/registerNewMaterial}">Registrer ny vare</a>
         </li>

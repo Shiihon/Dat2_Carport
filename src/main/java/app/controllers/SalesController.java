@@ -63,6 +63,8 @@ public class SalesController {
         try {
 
             OrderMapper.setOrderPrice(orderId, newPrice, connectionPool);
+            OrderMapper.setOrderStatus(orderId, Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
+
             ctx.sessionAttribute("message", "Prisen er nu opdateret");
             ctx.redirect(String.format("/viewOrderDetails?orderId=%d", orderId));
 
