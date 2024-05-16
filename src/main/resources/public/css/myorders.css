@@ -49,6 +49,10 @@
     border-color: #007200;
 }
 
+h2.blueText, h2.orangeText, h2.redText {
+    margin-top: 0;
+}
+
 .blueText {
     color: #369;
 }
