@@ -28,6 +28,10 @@
                     <li class="right-nav-bar">
                         <ul class="nav-bar-buttons">
                             <li class="nav-bar-button" th:unless="${#strings.equals(title, 'Login')}">
+                                <span th:if="${#ctx.session.currentAccount != null}"
+                                      th:text="${#ctx.session.currentAccount.getEmail()}">Email</span>
+                            </li>
+                            <li class="nav-bar-button" th:unless="${#strings.equals(title, 'Login')}">
                                 <a th:if="${#ctx.session.currentAccount == null}" href="/login">Log ind</a>
                                 <a th:if="${#ctx.session.currentAccount != null}" href="/logout">Log ud</a>
                             </li>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Request-confirmation</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/request-confirmation.css" th:href="@{/css/request-confirmation.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Request-confirmation', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Tilbage</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <h1>Forespørgsel sendt</h1>
+        <p>Hold øje med status under “Mine ordrer”</p>
+
+        <div class="button-container">
+            <form method="get">
+                <button class="orders-button" type="submit" formaction="gotomyorders">Gå til mine ordrer</button>
+            </form>
+            <form method="get">
+                <button class="frontpage-button" type="submit" formaction="backtofrontpage">Gå til forsiden</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
