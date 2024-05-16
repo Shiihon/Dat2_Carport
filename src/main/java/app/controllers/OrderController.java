@@ -24,7 +24,6 @@ public class OrderController {
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
         app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
-        app.get("gotomyorders", ctx -> ctx.render("myorders.html"));
         app.get("backtofrontpage", ctx -> ctx.render("index.html"));
         app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
         app.post("/payOrder", ctx -> payOrder(ctx, connectionPool));
@@ -114,7 +113,7 @@ public class OrderController {
             ctx.redirect("myorders");
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("customer-orders.html");
+            ctx.render("myorders.html");
         }
     }
 

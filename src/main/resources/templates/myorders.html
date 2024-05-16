@@ -13,7 +13,10 @@
 <div class="main-container">
     <ul th:replace="~{fragments :: header('Orders Page', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Tilbage</a>
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button active">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
 
@@ -24,8 +27,12 @@
             <li class="request-container box" th:each="order: ${myorders}">
                 <div class="info-container">
                     <div class="info-header">
+                        <h2 class="blueText" th:if="${order.getStatus().toString() == 'PAID'}">BETALT</h2>
+                        <h2 class="orangeText" th:if="${order.getStatus().toString() == 'WAITING_FOR_REVIEW'}">VENTER PÅ GODKENDELSE</h2>
+                        <h2 class="redText" th:if="${order.getStatus().toString() == 'REVIEW_APPROVED'}">MANGLER BETAILING</h2>
+                    </div>
+                    <div class="info-header">
                         <h3 th:text="|Id: ${order.getOrderId()}|">Order Id</h3>
-                        <h3 class="blueText" th:if="${order.getStatus().toString() == 'PAID'}">BETALT</h3>
                         <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
                             Timestamp</h3>
                     </div>
@@ -36,7 +43,7 @@
                 </div>
 
                 <div class="buttons-container">
-                    <form th:if="${order.getStatus().toString() != 'PAID'}" action="/payOrder" method="post">
+                    <form th:if="${order.getStatus().toString() == 'REVIEW_APPROVED'}" action="/payOrder" method="post">
                         <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
 
                         <button type="submit" class="green">Betal</button>
