@@ -26,8 +26,7 @@ public class SalesController {
 
     public static void viewRequests(Context ctx, ConnectionPool connectionPool) {
         try {
-            List<Order> requests = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
-            requests.addAll(OrderMapper.getAllOrdersByStatus(Order.OrderStatus.REVIEW_APPROVED, connectionPool));
+            List<Order> requests = OrderMapper.getAllOrdersByStatus(List.of(Order.OrderStatus.WAITING_FOR_REVIEW, Order.OrderStatus.REVIEW_APPROVED), connectionPool);
 
             ctx.attribute("requests", requests);
             ctx.render("customer-requests.html");
