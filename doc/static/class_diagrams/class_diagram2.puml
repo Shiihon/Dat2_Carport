@@ -80,7 +80,6 @@ class PostalCodeMapper {
 }
 
 class ConnectionPool {
-    - ConnectionPool()
     + {static} ConnectionPool getInstance()
     + {static} ConnectionPool getInstance(String user, String password, String url, String db)
     + synchronized Connection getConnection()
@@ -99,12 +98,9 @@ class CarportSvg {
     - {static} final double postDistanceFromBack
     - {static} final double maxPostDistance
     - {static} final double postSize
-
     - {static} final double maxRafterDistance
     - {static} final double rafterWidth
-
     - {static} final double beamWidth
-
     - {static} final int frameSize
 
     - final int frameWidth;
@@ -113,7 +109,6 @@ class CarportSvg {
     - final int carportSchematicHeight;
     - Svg carportSvg;
 
-    + CarportSvg(int carportWidth, int carportLength)
     - void createSchematicFrame()
     - void createInnerCarportSchematic()
     - void addPosts(Svg svg)
@@ -134,7 +129,6 @@ class Seller implements Account {
     - String email
     - String password
     - String role
-    + Seller(int sellerId, String email, String password, String role)
 
     + int getId()
     + void setId()
@@ -199,8 +193,6 @@ class Svg {
     - {static} final String SVG_TEXT_TEMPLATE
     - final StringBuilder svg
 
-    + Svg(int x, int y, String viewBox, String width)
-
     + void addRectangle(double x, double y, double width, double height, String style)
     + void addLine(double x1, double y1, double x2, double y2, String style)
     + void addText(double x, double y, double rotation, String text)
@@ -217,9 +209,6 @@ class Order {
     - Integer totalPrice
     - List<OrderBillItem> orderBill
     - LocalDateTime timestamp
-
-    + Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp)
-    + Order(int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp)
 
     + int getOrderId()
     + int getAccountId()
@@ -249,7 +238,6 @@ class OrderBillItem {
     - String description
     - int quantity
 
-    + OrderBillItem(Material material, String description, int quantity)
     + Material getMaterial()
     + String getDescription()
     + int getQuantity()
@@ -275,8 +263,6 @@ class Invoice {
 class PostalCode {
     - int zip
     - String city
-
-    + PostalCode(int zip, String city)
 
     + int getZip()
     + String getCity()
@@ -326,7 +312,6 @@ AccountController *-- PostalCodeMapper
 OrderController *-- CarportSvg
 OrderController *-- OrderBillGenerator
 OrderController *-- Customer
-SalesController *-- CarportSvg
 WarehouseController *-- OrderMapper
 
 AccountMapper *-- Account
@@ -336,7 +321,7 @@ OrderMapper *-- MaterialMapper
 MaterialMapper *-- Material
 PostalCodeMapper *-- Customer
 
-Customer *-- PostalCode
+PostalCodeMapper *-- PostalCode
 Order *-- OrderBillItem
 Order +-- Order.Status
 
