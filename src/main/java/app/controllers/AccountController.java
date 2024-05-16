@@ -2,10 +2,12 @@ package app.controllers;
 
 import app.entities.Account;
 import app.entities.Customer;
+import app.entities.PostalCode;
 import app.entities.Seller;
 import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
+import app.persistence.PostalCodeMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -19,6 +21,19 @@ public class AccountController {
         app.get("/create-account", ctx -> ctx.render("create-account.html"));
         app.post("/create-account", ctx -> createAccount(ctx, connectionPool));
         app.get("/logout", ctx -> logout(ctx));
+
+        app.get("/get-city", ctx -> getCityByZip(ctx, connectionPool));
+    }
+
+    public static void getCityByZip(Context ctx, ConnectionPool connectionPool) {
+        int zip = Integer.parseInt(Objects.requireNonNull(ctx.queryParam("zip")));
+
+        try {
+            PostalCode postalCode = PostalCodeMapper.getPostalCodeByZip(zip, connectionPool);
+
+            ctx.json(postalCode);
+        } catch (DatabaseException ignored) {
+        }
     }
 
     public static void createAccount(Context ctx, ConnectionPool connectionPool) {
