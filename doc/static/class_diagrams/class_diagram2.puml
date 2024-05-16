@@ -52,6 +52,7 @@ class AccountMapper {
 class OrderMapper {
     + {static} List<Order> getAllOrders(ConnectionPool connectionPool)
     + {static} List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool)
+    + {static} List<Order> getAllOrdersByStatus(List<Order.OrderStatus> statusList, ConnectionPool connectionPool)
     + {static} List<OrderBillItem> getOrderBillItems(int orderId, Connection connection)
     + {static} List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool)
     + {static} void createOrder(Order order, ConnectionPool connectionPool)
@@ -74,6 +75,10 @@ class MaterialMapper {
     + {static} Material getMaterialFromResultSet(ResultSet rs)
 }
 
+class PostalCodeMapper {
+    + {static} PostalCode getPostalCodeByZip(int zip, ConnectionPool connectionPool)
+}
+
 class ConnectionPool {
     - ConnectionPool()
     + {static} ConnectionPool getInstance()
@@ -86,6 +91,34 @@ class ConnectionPool {
 class DatabaseException {
     + DatabaseException(String userMessage)
     + DatabaseException(String userMessage, String systemMessage)
+}
+
+class CarportSvg {
+    - {static} final int postDistanceFromSide
+    - {static} final double postDistanceFromFront
+    - {static} final double postDistanceFromBack
+    - {static} final double maxPostDistance
+    - {static} final double postSize
+
+    - {static} final double maxRafterDistance
+    - {static} final double rafterWidth
+
+    - {static} final double beamWidth
+
+    - {static} final int frameSize
+
+    - final int frameWidth;
+    - final int frameHeight;
+    - final int carportSchematicWidth;
+    - final int carportSchematicHeight;
+    - Svg carportSvg;
+
+    + CarportSvg(int carportWidth, int carportLength)
+    - void createSchematicFrame()
+    - void createInnerCarportSchematic()
+    - void addPosts(Svg svg)
+    - void addBeams(Svg svg)
+    - void addRafters(Svg svg)
 }
 
 interface Account {
@@ -141,12 +174,37 @@ class Customer implements Account {
     + String toString()
 }
 
-class CarportSchematicGenerator {
-    + {static} generateSchematic(int width, int length)
+class OrderBillGenerator {
+    - {static} final double postDistanceFromFront
+    - {static} final double postDistanceFromBack
+    - {static} final double maxPostDistance
+    - {static} final double maxRafterDistance
+    - {static} final double rafterWidth
+
+    + {static} List<OrderBillItem> generateOrderBill(int width, int length, ConnectionPool connectionPool)
+    - {static} OrderBillItem calculatePosts(int length, ConnectionPool connectionPool)
+    + {static} int calculatePostsQuantity(int length)
+    - {static} List<OrderBillItem> calculateBeams(int length, ConnectionPool connectionPool)
+    + {static} List<Double> calculateBeamLengths(int length)
+    - {static} OrderBillItem calculateRafters(int width, int length, ConnectionPool connectionPool)
+    + {static} int calculateRaftersQuantity(int length)
+    + {static} Material getBestMaterialMatch(List<Material> materials, double length)
 }
 
-class OrderBillGenerator {
-    + {static} List<OrderBillItem> generateOrderBill(int width, int length)
+class Svg {
+    - {static} final String SVG_TEMPLATE
+    - {static} final String SVG_ARROW_DEFS
+    - {static} final String SVG_RECT_TEMPLATE
+    - {static} final String SVG_LINE_TEMPLATE
+    - {static} final String SVG_TEXT_TEMPLATE
+    - final StringBuilder svg
+
+    + Svg(int x, int y, String viewBox, String width)
+
+    + void addRectangle(double x, double y, double width, double height, String style)
+    + void addLine(double x1, double y1, double x2, double y2, String style)
+    + void addText(double x, double y, double rotation, String text)
+    + void addSvg(Svg innerSvg)
 }
 
 class Order {
@@ -214,6 +272,19 @@ class Invoice {
     + String toString()
 }
 
+class PostalCode {
+    - int zip
+    - String city
+
+    + PostalCode(int zip, String city)
+
+    + int getZip()
+    + String getCity()
+    + boolean equals(Object o)
+    + int hashCode()
+    + String toString()
+}
+
 class Material {
     - int materialId
     - int materialVariantId
@@ -243,25 +314,34 @@ enum Material.Type {
 Main *-- AccountController
 Main *-- OrderController
 Main *-- SalesController
+Main *-- WarehouseController
+Main *-- DatabaseException
+Main *-- ConnectionPool
 
 AccountController *-- AccountMapper
 OrderController *-- OrderMapper
 SalesController *-- OrderMapper
 
-OrderController *-- CarportSchematicGenerator
+AccountController *-- PostalCodeMapper
+OrderController *-- CarportSvg
 OrderController *-- OrderBillGenerator
 OrderController *-- Customer
-SalesController *-- CarportSchematicGenerator
+SalesController *-- CarportSvg
+WarehouseController *-- OrderMapper
 
 AccountMapper *-- Account
 OrderMapper *-- Order
 OrderMapper *-- Invoice
 OrderMapper *-- MaterialMapper
 MaterialMapper *-- Material
+PostalCodeMapper *-- Customer
 
+Customer *-- PostalCode
 Order *-- OrderBillItem
 Order +-- Order.Status
 
 Material +-- Material.Type
+
+CarportSvg *-- Svg
 
 @enduml
