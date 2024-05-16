@@ -27,14 +27,14 @@
         <form th:action="@{/continuerequest}" method="post">
             <div class="dropdown">
 
-                <select name="width-option">
+                <select name="width-option" required>
                     <option value="" disabled selected>Carport bredde:</option>
                     <option th:each="amount: ${#numbers.sequence(0, 12)}" th:value="${240 + amount * 30}"
                             th:text="${240 + amount * 30}">Amount
                     </option>
                 </select>
 
-                <select name="length-option">
+                <select name="length-option" required>
                     <option value="" disabled selected>Carport længde:</option>
                     <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
                             th:text="${240 + amount * 30}">Amount
