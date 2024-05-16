@@ -25,6 +25,7 @@
                 <div class="info-container">
                     <div class="info-header">
                         <h3 th:text="|Id: ${order.getOrderId()}|">Order Id</h3>
+                        <h3 class="blueText" th:if="${order.getStatus().toString() == 'PAID'}">BETALT</h3>
                         <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
                             Timestamp</h3>
                     </div>
@@ -35,13 +36,7 @@
                 </div>
 
                 <div class="buttons-container">
-                    <!--
-                    <form action="/viewOrderDetails" method="get">
-                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-                        <button type="submit">Se mere</button>
-                    </form>
-                    -->
-                    <form action="/payOrder" method="post">
+                    <form th:if="${order.getStatus().toString() != 'PAID'}" action="/payOrder" method="post">
                         <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
 
                         <button type="submit" class="green">Betal</button>
@@ -57,27 +52,6 @@
             </li>
         </ul>
     </div>
-
-    <!--
-    <div class="main-content">
-        <h1>Mine Ordrer</h1>
-        <ul class="orderbox">
-            <h2>[Ordre Id]</h2>
-            <p>[Ordredetaljier.... ]</p>
-            <ul class="orderbox-buttons">
-                <li class="orderbox-button">
-                    <a href="">Betal</a>
-                    <a href="">Hent stykliste</a>
-                    <a href="">Hent Faktura</a>
-                    <a th:href="@{/carportSchematic}" href="carportSchematic.html">Se tegning</a>
-                </li>
-            </ul>
-
-        </ul>
-
-
-    </div>
-    -->
 </div>
 
 </body>
