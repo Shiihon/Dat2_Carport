@@ -42,12 +42,11 @@
                             </label>
                             <label>
                                 <input type="number" min="0" max="9999" autocomplete="postal_code"
-                                       placeholder="Postnummer" name="postal_code"
-                                       th:value="${createAccountZip}" required>
+                                       placeholder="Postnummer" name="postal_code" id="postal_code"
+                                       onkeyup="detectCity(this)" th:value="${createAccountZip}" required>
                             </label>
                             <label>
-                                <input type="number" maxlength="4" autocomplete="city" placeholder="By"
-                                       name="city" readonly disabled>
+                                <input type="text" placeholder="By" name="city" id="city" readonly disabled>
                             </label>
                             <label>
                                 <input type="tel" minlength="11" maxlength="11" autocomplete="phone"
@@ -83,6 +82,37 @@
 </div>
 
 <script type="text/javascript">
+    // Get the postal code and city fields for later use
+    let postalCodeElement = document.getElementById('postal_code');
+    let cityElement = document.getElementById('city');
+    // At a variable to keep track of the last detected postal code to only update when it has actually changed
+    let oldPostalCode = postalCodeElement.value;
+
+    async function detectCity(e) {
+        // Match the current value of the postal code field to a regex that looks for a 4-digit number
+        let match = e.value.match(/(\d{4})/);
+
+        // If a match was found, continue
+        if (match) {
+            // Extract the postal code from the regex match
+            let newPostalCode = match[0];
+
+            // Check if the new detected postal code is different from the last detected postal code
+            if (newPostalCode !== oldPostalCode) {
+                // Update the old postal code to the new
+                oldPostalCode = newPostalCode;
+
+                // Make a get request to the backend that sends the detected postal code as a query parameter
+                fetch('/get-city?zip=' + newPostalCode)
+                    .then(response => response.json()) // Get the response from the backend and turn it into json
+                    .then(response => cityElement.value = response.city); // Get the city name from the response and set it as the value to the city html field
+            }
+        } else {
+            // If no digit match was found from the postal code then set the city field to be empty
+            cityElement.value = '';
+        }
+    }
+
     // This function is called whenever the user types in the phone number field
     function validatePhoneNumber(e) {
         let phoneNumber = e.value;
