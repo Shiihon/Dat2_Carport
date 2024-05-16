@@ -50,7 +50,6 @@ h1.title {
     object-position: center; /* Center the image within the element */
     height: 200px;
     width: 100%;
-
 }
 
 .main-container {
@@ -116,4 +115,12 @@ p.error {
     color: #eb212e;
     padding: 4px;
     margin: 0;
+}
+
+
+/**** Content Styling ****/
+
+.box {
+    border: 1px solid black;
+    border-radius: 2px;
 }

@@ -2,12 +2,12 @@ package app.controllers;
 
 import app.entities.Account;
 import app.entities.Customer;
+import app.entities.Seller;
 import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-
 
 public class AccountController {
 
@@ -74,13 +74,18 @@ public class AccountController {
             Account account = AccountMapper.login(email, password, connectionPool);
 
             ctx.sessionAttribute("currentAccount", account);
-            String loginRedirect = ctx.sessionAttribute("loginRedirect");
 
-            if (loginRedirect != null) {
-                ctx.redirect(loginRedirect);
-                ctx.sessionAttribute("loginRedirect", null);
+            if (account instanceof Seller) {
+                ctx.redirect("/requests");
             } else {
-                ctx.redirect("/");
+                String loginRedirect = ctx.sessionAttribute("loginRedirect");
+
+                if (loginRedirect != null) {
+                    ctx.redirect(loginRedirect);
+                    ctx.sessionAttribute("loginRedirect", null);
+                } else {
+                    ctx.redirect("/");
+                }
             }
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());

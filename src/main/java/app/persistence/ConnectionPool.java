@@ -63,7 +63,6 @@ public class ConnectionPool {
      * @throws SQLException
      */
     public synchronized Connection getConnection() throws SQLException {
-        Logger.getLogger("web").log(Level.INFO, ": get data connection");
         return ds.getConnection();
     }
 

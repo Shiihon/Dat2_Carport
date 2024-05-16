@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Invoice {
-    int invoiceId;
-    int orderId;
-    int accountId;
-    LocalDate date;
+    private int invoiceId;
+    private int orderId;
+    private int accountId;
+    private LocalDate date;
 
     public Invoice(int invoiceId, int orderId, int accountId, LocalDate date) {
         this.invoiceId = invoiceId;

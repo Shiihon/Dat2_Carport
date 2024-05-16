@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.Objects;
+
 public class Material {
 
     public enum MaterialType {
@@ -7,13 +9,13 @@ public class Material {
         SCREWS
     }
 
-    int materialId;
-    int materialVariantId;
-    String description;
-    String unit;
-    int price;
-    Integer length;
-    MaterialType materialType;
+    private int materialId;
+    private int materialVariantId;
+    private String description;
+    private String unit;
+    private int price;
+    private Integer length;
+    private MaterialType materialType;
 
     public Material(int materialId, int materialVariantId, String description, String unit, int price, Integer length, MaterialType materialType) {
         this.materialId = materialId;
@@ -67,6 +69,18 @@ public class Material {
 
     public MaterialType getMaterialType() {
         return materialType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Material material)) return false;
+        return getMaterialId() == material.getMaterialId() && getMaterialVariantId() == material.getMaterialVariantId() && getPrice() == material.getPrice() && Objects.equals(getDescription(), material.getDescription()) && Objects.equals(getUnit(), material.getUnit()) && Objects.equals(getLength(), material.getLength()) && getMaterialType() == material.getMaterialType();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getMaterialId(), getMaterialVariantId(), getDescription(), getUnit(), getPrice(), getLength(), getMaterialType());
     }
 
     @Override
