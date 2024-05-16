@@ -30,22 +30,25 @@ public class OrderController {
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
+        try {
+            int width = Integer.parseInt(Objects.requireNonNull(ctx.formParam("width-option")));
+            int length = Integer.parseInt(Objects.requireNonNull(ctx.formParam("length-option")));
 
-        Customer customer = ctx.sessionAttribute("currentAccount");
+            Customer customer = ctx.sessionAttribute("currentAccount");
 
-        int width = Integer.parseInt(ctx.formParam("width-option"));
-        int length = Integer.parseInt(ctx.formParam("length-option"));
+            //gemmer attributer i nuværende session
+            ctx.sessionAttribute("width", width);
+            ctx.sessionAttribute("length", length);
 
-        //gemmer attributer i nuværende session
-        ctx.sessionAttribute("width", width);
-        ctx.sessionAttribute("length", length);
-
-        if (customer == null) {
-            //gemmer destinationen til når brugeren er logget ind
-            ctx.sessionAttribute("loginRedirect", "/order-overview");
-            ctx.redirect("/login");
-        } else {
-            ctx.redirect("/order-overview");
+            if (customer == null) {
+                //gemmer destinationen til når brugeren er logget ind
+                ctx.sessionAttribute("loginRedirect", "/order-overview");
+                ctx.redirect("/login");
+            } else {
+                ctx.redirect("/order-overview");
+            }
+        } catch (NullPointerException ignored) {
+            ctx.redirect("/");
         }
     }
 
@@ -108,7 +111,7 @@ public class OrderController {
         int orderId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("orderId")));
 
         try {
-           OrderMapper.setOrderStatus(orderId, Order.OrderStatus.PAID, connectionPool);
+            OrderMapper.setOrderStatus(orderId, Order.OrderStatus.PAID, connectionPool);
 
             ctx.redirect("myorders");
         } catch (DatabaseException e) {
