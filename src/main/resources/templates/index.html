@@ -13,7 +13,7 @@
 <div class="main-container">
     <ul th:replace="~{fragments :: header('Frontpage', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Tilbage</a>
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
 
@@ -29,14 +29,14 @@
 
                 <select name="width-option">
                     <option value="" disabled selected>Carport bredde:</option>
-                    <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                    <option th:each="amount: ${#numbers.sequence(0, 12)}" th:value="${240 + amount * 30}"
                             th:text="${240 + amount * 30}">Amount
                     </option>
                 </select>
 
                 <select name="length-option">
                     <option value="" disabled selected>Carport længde:</option>
-                    <option th:each="amount: ${#numbers.sequence(0, 10)}" th:value="${240 + amount * 30}"
+                    <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
                             th:text="${240 + amount * 30}">Amount
                     </option>
                 </select>

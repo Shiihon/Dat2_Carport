@@ -93,8 +93,34 @@ public class OrderMapper {
         return items;
     }
 
-    public List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool) {
-        return null;
+    public static List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT order_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
+        List<Order> myorders = new ArrayList<>();
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, customerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int orderId = rs.getInt("order_id");
+                String orderTitle = rs.getString("order_title");
+                int carportWidth = rs.getInt("carport_width");
+                int carportLength = rs.getInt("carport_length");
+                Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
+                double orderTotalPrice = rs.getDouble("order_total_price");
+                LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
+
+                List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
+
+                myorders.add(new Order(orderId, customerId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to db");
+        }
+
+        return myorders;
     }
 
     public static void createOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {

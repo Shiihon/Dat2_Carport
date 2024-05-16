@@ -12,7 +12,10 @@
 <div class="main-container">
     <ul th:replace="~{fragments :: header('Order-overview', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Tilbage</a>
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
 

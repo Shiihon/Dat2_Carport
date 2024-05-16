@@ -14,6 +14,7 @@ import io.javalin.http.Context;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class OrderController {
 
@@ -23,8 +24,9 @@ public class OrderController {
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
         app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
-        app.get("gotomyorders", ctx -> ctx.render("my-orders.html"));
         app.get("backtofrontpage", ctx -> ctx.render("index.html"));
+        app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
+        app.post("/payOrder", ctx -> payOrder(ctx, connectionPool));
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
@@ -81,12 +83,38 @@ public class OrderController {
         return totalPrice;
     }
 
-    public void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
+    public static void viewMyOrders(Context ctx, ConnectionPool connectionPool) {
 
+        try {
+            Customer customer = ctx.sessionAttribute("currentAccount");
+
+            if (customer == null) {
+                //gemmer destinationen til når brugeren er logget ind
+                ctx.sessionAttribute("loginRedirect", "/myorders");
+                ctx.redirect("/login");
+            } else {
+                int customerId = customer.getId();
+                List<Order> myorders = OrderMapper.getAllCustomerOrders(customerId, connectionPool);
+                ctx.attribute("myorders", myorders);
+                ctx.render("myorders.html");
+            }
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("order-overview.html");
+        }
     }
 
-    public void payOrder(Context ctx, ConnectionPool connectionPool) {
+    public static void payOrder(Context ctx, ConnectionPool connectionPool) {
+        int orderId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("orderId")));
 
+        try {
+           OrderMapper.setOrderStatus(orderId, Order.OrderStatus.PAID, connectionPool);
+
+            ctx.redirect("myorders");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("myorders.html");
+        }
     }
 
     public void viewInvoice(Context ctx, ConnectionPool connectionPool) {

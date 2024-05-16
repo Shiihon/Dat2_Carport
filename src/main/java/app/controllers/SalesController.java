@@ -6,8 +6,15 @@ import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import app.exceptions.DatabaseException;
+
+import java.util.Locale;
+import java.util.Objects;
+import app.entities.Order;
+import app.persistence.OrderMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -80,7 +87,6 @@ public class SalesController {
     }
 
     public void viewCarportSchematic(Context ctx) {
-
     }
 
     public static void viewOrderDetails(Context ctx, ConnectionPool connectionPool) {
