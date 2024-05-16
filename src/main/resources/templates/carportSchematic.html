@@ -13,14 +13,15 @@
 <div class="main-container">
     <ul th:replace="~{fragments :: header('Schematic Page', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/" th:href="@{/}">Tilbage</a>
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li th:if="${#ctx.session.currentAccount.getRole() == 'CUSTOMER'}" class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
 
     <div class="main-content">
         <h1>Carport Schematic</h1>
-        <h2>Ordre nr: 1248</h2>
-
         <div class="carport-svg-topview" th:utext="${svg}"></div>
     </div>
 

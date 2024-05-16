@@ -1,0 +1,25 @@
+.button-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 40%;
+}
+
+.orders-button, .frontpage-button{
+    color: black;
+    background-color: white;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 150px;
+}
+
+button:hover{
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.15);
+}
+
+.orders-button{
+    margin-bottom: 20px;
+}

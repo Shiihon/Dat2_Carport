@@ -6,8 +6,15 @@ import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
+import app.services.CarportSvg;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import app.exceptions.DatabaseException;
+
+import java.util.Locale;
+import java.util.Objects;
+import app.entities.Order;
+import app.persistence.OrderMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,8 +33,7 @@ public class SalesController {
 
     public static void viewRequests(Context ctx, ConnectionPool connectionPool) {
         try {
-            List<Order> requests = OrderMapper.getAllOrdersByStatus(Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
-            requests.addAll(OrderMapper.getAllOrdersByStatus(Order.OrderStatus.REVIEW_APPROVED, connectionPool));
+            List<Order> requests = OrderMapper.getAllOrdersByStatus(List.of(Order.OrderStatus.WAITING_FOR_REVIEW, Order.OrderStatus.REVIEW_APPROVED), connectionPool);
 
             ctx.attribute("requests", requests);
             ctx.render("customer-requests.html");
@@ -57,6 +63,8 @@ public class SalesController {
         try {
 
             OrderMapper.setOrderPrice(orderId, newPrice, connectionPool);
+            OrderMapper.setOrderStatus(orderId, Order.OrderStatus.WAITING_FOR_REVIEW, connectionPool);
+
             ctx.sessionAttribute("message", "Prisen er nu opdateret");
             ctx.redirect(String.format("/viewOrderDetails?orderId=%d", orderId));
 
@@ -79,7 +87,6 @@ public class SalesController {
     }
 
     public void viewCarportSchematic(Context ctx) {
-
     }
 
     public static void viewOrderDetails(Context ctx, ConnectionPool connectionPool) {
