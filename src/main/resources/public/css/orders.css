@@ -1,25 +1,50 @@
-ul.orderbox {
-    overflow: hidden;
-    border: 1px solid black;
-    margin: 0.5rem 0.25rem;
-    padding: 0.5rem;
-}
-
-ul.orderbox, ul.orderbox-buttons {
+.requests-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-    font-size: 0.8rem;
+    gap: 1rem;
+}
+
+.request-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    width: 90%;
+    gap: 0.8rem;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 80%;
     gap: 0.4rem;
 }
 
-li.orderbox-button > a {
+.info-container h3, .info-container h4 {
+    margin: 0;
+}
+
+.info-header {
     display: flex;
-    text-align: center;
-    text-decoration: none;
-    border: 1px solid black;
-    padding: 0.1rem 0.5rem;
-    margin: 0.2rem;
-    color: black;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.buttons-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-basis: 20%;
+}
+
+.buttons-container button {
+    width: 100%;
+}
+
+.green {
+    background: #007200;
+    border-color: #007200;
 }

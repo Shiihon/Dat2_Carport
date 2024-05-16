@@ -18,6 +18,48 @@
     </ul>
 
     <div class="main-content">
+        <h1 class="title">Mine ordrer</h1>
+
+        <ul class="requests-container">
+            <li class="request-container box" th:each="order: ${myorders}">
+                <div class="info-container">
+                    <div class="info-header">
+                        <h3 th:text="|Id: ${order.getOrderId()}|">Order Id</h3>
+                        <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
+                            Timestamp</h3>
+                    </div>
+
+                    <div class="info-content">
+                        <h4 th:text="${order.getTitle()}">Order Title</h4>
+                    </div>
+                </div>
+
+                <div class="buttons-container">
+                    <!--
+                    <form action="/viewOrderDetails" method="get">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+                        <button type="submit">Se mere</button>
+                    </form>
+                    -->
+                    <form action="/payOrder" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit" class="green">Betal</button>
+                    </form>
+                    <form action="/carportSchematic" method="get">
+                        <input type="hidden" name="width" th:value="${order.getCarportWidth()}">
+                        <input type="hidden" name="length" th:value="${order.getCarportLength()}">
+
+                        <button type="submit">Se Tegning</button>
+                    </form>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <!--
+    <div class="main-content">
         <h1>Mine Ordrer</h1>
         <ul class="orderbox">
             <h2>[Ordre Id]</h2>
@@ -30,11 +72,12 @@
                     <a th:href="@{/carportSchematic}" href="carportSchematic.html">Se tegning</a>
                 </li>
             </ul>
+
         </ul>
 
 
     </div>
-
+    -->
 </div>
 
 </body>
