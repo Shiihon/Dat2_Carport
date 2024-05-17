@@ -32,11 +32,11 @@
                             GODKENDELSE</h2>
                         <h2 class="redText" th:if="${order.getStatus().toString() == 'REVIEW_APPROVED'}">MANGLER
                             BETAILING</h2>
+                        <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
+                            Timestamp</h3>
                     </div>
                     <div class="info-header">
                         <h3 th:text="|Id: ${order.getOrderId()}|">Order Id</h3>
-                        <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
-                            Timestamp</h3>
                     </div>
 
                     <div class="info-content">
@@ -49,6 +49,11 @@
                         <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
 
                         <button type="submit" class="green">Betal</button>
+                    </form>
+                    <form th:if="${order.getStatus().toString() == 'PAID'}" action="/viewInvoice" method="get">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit">Se faktura</button>
                     </form>
                     <form action="/carportSchematic" method="get">
                         <input type="hidden" name="width" th:value="${order.getCarportWidth()}">

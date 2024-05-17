@@ -16,6 +16,12 @@ public class Invoice {
         this.date = date;
     }
 
+    public Invoice(int orderId, int accountId, LocalDate date) {
+        this.orderId = orderId;
+        this.accountId = accountId;
+        this.date = date;
+    }
+
     public int getInvoiceId() {
         return invoiceId;
     }
