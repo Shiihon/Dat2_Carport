@@ -166,7 +166,7 @@ public class OrderMapper {
 
             for (OrderBillItem item : orderBillItems) {
                 ps.setInt(1, orderId);
-                ps.setInt(2, item.getMaterial().getMaterialId());
+                ps.setInt(2, item.getMaterial().getMaterialVariantId());
                 ps.setString(3, item.getDescription());
                 ps.setInt(4, item.getQuantity());
 
