@@ -15,7 +15,7 @@
         <li class="nav-bar-button">
             <a href="/" th:href="@{/}">Forside</a>
         </li>
-        <li th:if="${#ctx.session.currentAccount.getRole() == 'CUSTOMER'}" class="nav-bar-button">
+        <li th:if="${#ctx.session.currentAccount != null && #ctx.session.currentAccount.getRole() == 'CUSTOMER'}" class="nav-bar-button">
             <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
