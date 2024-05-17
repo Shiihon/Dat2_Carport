@@ -46,7 +46,8 @@
                                        onkeyup="detectCity(this)" th:value="${createAccountZip}" required>
                             </label>
                             <label>
-                                <input type="text" placeholder="By" name="city" id="city" readonly disabled>
+                                <input type="text" placeholder="By" name="city" id="city" readonly disabled
+                                       th:value="${createAccountCity}">
                             </label>
                             <label>
                                 <input type="tel" minlength="11" maxlength="11" autocomplete="phone"
