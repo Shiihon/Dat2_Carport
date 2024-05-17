@@ -29,15 +29,14 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
 }
 
 .buttons-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: stretch;
     flex-basis: 20%;
+    gap: 0.5rem;
 }
 
 .buttons-container button {
