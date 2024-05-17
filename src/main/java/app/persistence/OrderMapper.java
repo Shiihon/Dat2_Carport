@@ -7,6 +7,7 @@ import app.entities.OrderBillItem;
 import app.exceptions.DatabaseException;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -248,10 +249,48 @@ public class OrderMapper {
         }
     }
 
-    public void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool) {
+    public static void createOrderInvoice(Invoice invoice, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "INSERT INTO invoices (order_id, account_id, invoice_date) VALUES (?, ?, ?)";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, invoice.getOrderId());
+            ps.setInt(2, invoice.getAccountId());
+            ps.setTimestamp(3, Timestamp.valueOf(invoice.getDate().atStartOfDay()));
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Error Invoice could not be created");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("SQL Error: " + e.getMessage());
+        }
     }
 
-    public Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) {
-        return null;
+    public static Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "SELECT invoice_id, account_id, invoice_date FROM invoices WHERE order_id=?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql);
+        ) {
+            ps.setInt(1, orderId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                int invoiceId = rs.getInt("invoice_id");
+                int accountId = rs.getInt("account_id");
+                LocalDate invoiceDate = rs.getTimestamp("invoice_date").toLocalDateTime().toLocalDate();
+
+                return new Invoice(invoiceId, orderId, accountId, invoiceDate);
+            } else {
+                throw new DatabaseException("Can't find the specific invoice by its id");
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to connect to db");
+        }
     }
 }
