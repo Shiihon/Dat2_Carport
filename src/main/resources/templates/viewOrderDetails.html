@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/schematic.css" th:href="@{/css/schematic.css}" rel="stylesheet"/>
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link href="../public/css/warehouse.css" th:href="@{/css/warehouse.css}" rel="stylesheet"/>
 </head>
@@ -19,6 +20,8 @@
     </ul>
 
     <div class="main-content">
+        <div class="carport-svg-topview" th:utext="${svg}"></div>
+
         <table style="width: 25%">
             <thead>
             <tr>
@@ -88,7 +91,9 @@
         <br>
         <form action="/approve-request" method="post">
             <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-            <button type="submit" th:disabled="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}">Godkend Forespørgsel</button>
+            <button type="submit" th:disabled="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}">Godkend
+                Forespørgsel
+            </button>
         </form>
     </div>
 </div>

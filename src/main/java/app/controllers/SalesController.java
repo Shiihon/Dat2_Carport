@@ -13,6 +13,7 @@ import app.exceptions.DatabaseException;
 
 import java.util.Locale;
 import java.util.Objects;
+
 import app.entities.Order;
 import app.persistence.OrderMapper;
 
@@ -97,6 +98,11 @@ public class SalesController {
             ctx.attribute("order", order);
             Account customer = AccountMapper.getAccountById(order.getAccountId(), connectionPool);
             ctx.attribute("customer", customer);
+
+            Locale.setDefault(Locale.US);
+            CarportSvg svg = new CarportSvg(order.getCarportWidth(), order.getCarportLength());
+            ctx.attribute("svg", svg.toString());
+
             ctx.render("viewOrderDetails.html");
             ctx.sessionAttribute("message", null);
 

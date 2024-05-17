@@ -21,7 +21,7 @@ public class OrderController {
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
         app.post("/continuerequest", ctx -> continueRequest(ctx, connectionPool));
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
-        app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
+        app.get("/order-overview", ctx -> orderOverview(ctx));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
         app.get("backtofrontpage", ctx -> ctx.render("index.html"));
         app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
@@ -154,5 +154,15 @@ public class OrderController {
         CarportSvg svg = new CarportSvg(width, length);
         ctx.attribute("svg", svg.toString());
         ctx.render("carportSchematic.html");
+    }
+
+    public static void orderOverview(Context ctx) {
+        int width = ctx.sessionAttribute("width");
+        int length = ctx.sessionAttribute("length");
+
+        Locale.setDefault(Locale.US);
+        CarportSvg svg = new CarportSvg(width, length);
+        ctx.attribute("svg", svg.toString());
+        ctx.render("order-overview.html");
     }
 }
