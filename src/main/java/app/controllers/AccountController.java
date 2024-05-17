@@ -4,10 +4,12 @@ import app.entities.Account;
 import app.entities.Customer;
 import app.entities.PostalCode;
 import app.entities.Seller;
+import app.exceptions.AccountValidationException;
 import app.exceptions.DatabaseException;
 import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.PostalCodeMapper;
+import app.services.AccountValidator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
@@ -38,28 +40,28 @@ public class AccountController {
 
     public static void createAccount(Context ctx, ConnectionPool connectionPool) {
         try {
-            String[] name = Objects.requireNonNull(ctx.formParam("name")).split(" ");
+            String name = Objects.requireNonNull(ctx.formParam("name"));
             String address = Objects.requireNonNull(ctx.formParam("address"));
-            int zip = Integer.parseInt(Objects.requireNonNull(ctx.formParam("postal_code")));
+            String zip = Objects.requireNonNull(ctx.formParam("postal_code"));
             String phoneNumber = Objects.requireNonNull(ctx.formParam("phone_number"));
             String email = Objects.requireNonNull(ctx.formParam("email"));
             String password1 = Objects.requireNonNull(ctx.formParam("password1"));
             String password2 = Objects.requireNonNull(ctx.formParam("password2"));
-
-            if (!password1.equals(password2)) {
-                ctx.attribute("createAccountName", String.join(" ", name));
-                ctx.attribute("createAccountAddress", address);
-                ctx.attribute("createAccountZip", zip);
-                ctx.attribute("createAccountPhoneNumber", phoneNumber);
-                ctx.attribute("createAccountEmail", email);
-
-                ctx.attribute("error", "Passwords don't match");
-                ctx.render("create-account.html");
-                return;
-            }
+            String city = null;
 
             try {
-                Account account = new Customer(email, password1, "CUSTOMER", name[0], name[1], address, zip, "City", phoneNumber);
+                String[] validatedFullName = AccountValidator.validateFullName(name);
+                String validatedAddress = AccountValidator.validateAddress(address);
+                int validatedZip = AccountValidator.validateZip(zip);
+
+                PostalCode postalCode = PostalCodeMapper.getPostalCodeByZip(validatedZip, connectionPool);
+                city = postalCode.getCity();
+
+                String validatedPhoneNumber = AccountValidator.validatePhoneNumber(phoneNumber);
+                String validatedEmail = AccountValidator.validateEmail(email);
+                String validatedPassword = AccountValidator.validatePassword(password1, password2);
+
+                Account account = new Customer(validatedEmail, validatedPassword, "CUSTOMER", validatedFullName[0], validatedFullName[1], validatedAddress, postalCode.getZip(), postalCode.getCity(), validatedPhoneNumber);
 
                 AccountMapper.createAccount(account, connectionPool);
 
@@ -72,10 +74,11 @@ public class AccountController {
                 } else {
                     ctx.redirect("/");
                 }
-            } catch (DatabaseException e) {
-                ctx.attribute("createAccountName", String.join(" ", name));
+            } catch (DatabaseException | AccountValidationException e) {
+                ctx.attribute("createAccountName", name);
                 ctx.attribute("createAccountAddress", address);
                 ctx.attribute("createAccountZip", zip);
+                ctx.attribute("createAccountCity", city);
                 ctx.attribute("createAccountPhoneNumber", phoneNumber);
                 ctx.attribute("createAccountEmail", email);
 
@@ -88,29 +91,37 @@ public class AccountController {
     }
 
     public static void login(Context ctx, ConnectionPool connectionPool) {
-        String email = ctx.formParam("email");
-        String password = ctx.formParam("password");
-
         try {
-            Account account = AccountMapper.login(email, password, connectionPool);
+            String email = Objects.requireNonNull(ctx.formParam("email"));
+            String password = Objects.requireNonNull(ctx.formParam("password"));
 
-            ctx.sessionAttribute("currentAccount", account);
+            try {
+                String validatedEmail = AccountValidator.validateEmail(email);
 
-            if (account instanceof Seller) {
-                ctx.redirect("/requests");
-            } else {
-                String loginRedirect = ctx.sessionAttribute("loginRedirect");
+                Account account = AccountMapper.login(validatedEmail, password, connectionPool);
 
-                if (loginRedirect != null) {
-                    ctx.redirect(loginRedirect);
-                    ctx.sessionAttribute("loginRedirect", null);
+                ctx.sessionAttribute("currentAccount", account);
+
+                if (account instanceof Seller) {
+                    ctx.redirect("/requests");
                 } else {
-                    ctx.redirect("/");
+                    String loginRedirect = ctx.sessionAttribute("loginRedirect");
+
+                    if (loginRedirect != null) {
+                        ctx.redirect(loginRedirect);
+                        ctx.sessionAttribute("loginRedirect", null);
+                    } else {
+                        ctx.redirect("/");
+                    }
                 }
+            } catch (DatabaseException | AccountValidationException e) {
+                ctx.attribute("loginEmail", email);
+
+                ctx.attribute("error", e.getMessage());
+                ctx.render("login.html");
             }
-        } catch (DatabaseException e) {
-            ctx.attribute("error", e.getMessage());
-            ctx.render("login.html");
+        } catch (NullPointerException ignored) {
+            ctx.redirect("/login");
         }
     }
 
