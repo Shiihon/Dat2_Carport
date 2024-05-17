@@ -13,7 +13,8 @@ public class CarportSvg {
 
     private static final double beamWidth = 4.5; // The width (slim side) of the beam
 
-    private static final int frameSize = 100; // The extra frame size where other things like arrows can be drawn
+    private static final int frameSizeWidth = 100; // The extra frame width where other things like arrows can be drawn
+    private static final int frameSizeHeight = 60; // The extra frame height where other things like arrows can be drawn
 
     private final int frameWidth;
     private final int frameHeight;
@@ -22,8 +23,8 @@ public class CarportSvg {
     private Svg carportSvg;
 
     public CarportSvg(int carportWidth, int carportLength) {
-        this.frameWidth = carportLength + frameSize;
-        this.frameHeight = carportWidth + frameSize * 2;
+        this.frameWidth = carportLength + frameSizeWidth;
+        this.frameHeight = carportWidth + frameSizeHeight;
         this.carportSchematicWidth = carportLength;
         this.carportSchematicHeight = carportWidth;
 
@@ -34,37 +35,35 @@ public class CarportSvg {
     private void createSchematicFrame() {
         carportSvg = new Svg(0, 0, String.format("0 0 %d %d", frameWidth, frameHeight), "100%");
 
-        //carportSvg.addRectangle(0, 0, frameWidth, frameHeight, "stroke-width:2px; stroke:#000000; fill: #ffffff");
-
         // Total carport width
-        carportSvg.addLine(20, frameSize, 20, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
+        carportSvg.addLine(20, 0, 20, frameHeight - frameSizeHeight, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
 
-        carportSvg.addLine(20, frameSize, 90, frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(20, frameHeight - frameSize, 90, frameHeight - frameSize, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(20, 0, 90, 0, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(20, frameHeight - frameSizeHeight, 90, frameHeight - frameSizeHeight, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
 
         carportSvg.addText(10, frameHeight * 0.5, -90, String.format("%d cm", carportSchematicHeight));
 
 
         // Inner carport width
-        carportSvg.addLine(60, frameSize + postDistanceFromSide - rafterWidth * 0.5, 60, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
+        carportSvg.addLine(60, postDistanceFromSide - rafterWidth * 0.5, 60, frameHeight - frameSizeHeight - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
 
-        carportSvg.addLine(60, frameSize + postDistanceFromSide - rafterWidth * 0.5, 90, frameSize + postDistanceFromSide - rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(60, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, 90, frameHeight - frameSize - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(60, postDistanceFromSide - rafterWidth * 0.5, 90, postDistanceFromSide - rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(60, frameHeight - frameSizeHeight - postDistanceFromSide + rafterWidth * 0.5, 90, frameHeight - frameSizeHeight - postDistanceFromSide + rafterWidth * 0.5, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
 
         carportSvg.addText(50, frameHeight * 0.5, -90, String.format("%d cm", carportSchematicHeight - postDistanceFromSide * 2));
 
 
         // Carport length
-        carportSvg.addLine(frameSize, frameHeight - frameSize * 0.5, frameWidth, frameHeight - frameSize * 0.5, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
+        carportSvg.addLine(frameSizeWidth, frameHeight - 20, frameWidth, frameHeight - 20, "stroke-width:1px; stroke:#000000; marker-start: url(#beginArrow); marker-end: url(#endArrow);");
 
-        carportSvg.addLine(frameSize, frameHeight - frameSize * 0.5, frameSize, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
-        carportSvg.addLine(frameWidth - 1, frameHeight - frameSize * 0.5, frameWidth - 1, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(frameSizeWidth, frameHeight - 20, frameSizeWidth, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
+        carportSvg.addLine(frameWidth - 1, frameHeight - 20, frameWidth - 1, frameHeight - 90, "stroke-width:1px; stroke:#000000; stroke-dasharray: 5 5;");
 
-        carportSvg.addText(frameSize + (frameWidth - frameSize) * 0.5, frameHeight - frameSize * 0.5 + 20, 0, String.format("%d cm", carportSchematicWidth));
+        carportSvg.addText(frameSizeWidth + (frameWidth - frameSizeWidth) * 0.5, frameHeight - 30, 0, String.format("%d cm", carportSchematicWidth));
     }
 
     private void createInnerCarportSchematic() {
-        Svg innerSvg = new Svg(frameWidth - carportSchematicWidth, (frameHeight - carportSchematicHeight) / 2, String.format("%d %d", carportSchematicWidth, carportSchematicHeight), String.valueOf(carportSchematicWidth));
+        Svg innerSvg = new Svg(frameWidth - carportSchematicWidth, 0, String.format("%d %d", carportSchematicWidth, carportSchematicHeight), String.valueOf(carportSchematicWidth));
 
         innerSvg.addRectangle(0, 0, carportSchematicWidth, carportSchematicHeight, "stroke-width:2px; stroke:#000000; fill: #ffffff");
 
