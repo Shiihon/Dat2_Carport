@@ -48,6 +48,11 @@
     border-color: #007200;
 }
 
+.red {
+    background: #930000;
+    border-color: #930000;
+}
+
 h2.blueText, h2.orangeText, h2.redText {
     margin-top: 0;
 }

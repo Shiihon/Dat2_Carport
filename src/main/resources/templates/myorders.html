@@ -61,6 +61,11 @@
 
                         <button type="submit">Se Tegning</button>
                     </form>
+                    <form th:if="${order.getStatus().toString() != 'PAID'}" action="/cancelOrder" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit" class="red">Annuller ordre</button>
+                    </form>
 
                 </div>
             </li>
