@@ -9,6 +9,10 @@ import app.services.CarportSvg;
 import app.services.OrderBillGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +31,7 @@ public class OrderController {
         app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
         app.post("/payOrder", ctx -> payOrder(ctx, connectionPool));
         app.get("/viewInvoice", ctx -> viewInvoice(ctx, connectionPool));
+        app.post("/cancelOrder", ctx -> cancelOrder(ctx, connectionPool));
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
@@ -142,8 +147,21 @@ public class OrderController {
         }
     }
 
-    public void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+    public static void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+        try {
+            int orderId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("orderId")));
+            Customer customer = ctx.sessionAttribute("currentAccount");
 
+            OrderMapper.removeOrder(orderId, connectionPool);
+            int customerId = customer.getId();
+            List<Order> myorders = OrderMapper.getAllCustomerOrders(customerId, connectionPool);
+            ctx.attribute("myorders", myorders);
+            ctx.redirect("myorders");
+
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("myorders");
+        }
     }
 
     public static void viewCarportSchematic(Context ctx) {

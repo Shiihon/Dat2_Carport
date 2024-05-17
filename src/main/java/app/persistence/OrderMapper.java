@@ -293,4 +293,40 @@ public class OrderMapper {
             throw new DatabaseException("Failed to connect to db");
         }
     }
+
+    public static void removeOrder(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM orders WHERE order_id = ?";
+
+        removeOrderBills(orderId, connectionPool);
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, orderId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Error trying to removing order");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error in removing order", e.getMessage());
+        }
+    }
+
+    public static void removeOrderBills(int orderId, ConnectionPool connectionPool) throws DatabaseException {
+        String sql = "DELETE FROM order_bills WHERE order_id = ?";
+
+        try (
+                Connection connection = connectionPool.getConnection();
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            ps.setInt(1, orderId);
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new DatabaseException("Error trying to removing order");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Error in removing order", e.getMessage());
+        }
+    }
 }
