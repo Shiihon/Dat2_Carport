@@ -35,8 +35,11 @@
                         <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
                             Timestamp</h3>
                     </div>
+                    <div th:if="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}" class="info-header">
+                        <h3 class="blueText" th:text="|Pris: ${order.getTotalPrice()} kr.|">Total pris</h3>
+                    </div>
                     <div class="info-header">
-                        <h3 th:text="|Id: ${order.getOrderId()}|">Order Id</h3>
+                        <h4 th:text="|Id: ${order.getOrderId()}|">Order Id</h4>
                     </div>
 
                     <div class="info-content">
