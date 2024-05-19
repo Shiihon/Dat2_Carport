@@ -25,6 +25,9 @@ public class OrderBillGenerator {
         orderBillItems.addAll(calculateBeams(length, connectionPool));
         orderBillItems.add(calculateRafters(width, length, connectionPool));
 
+        Material screws = MaterialMapper.getMaterial("4,5 x 60 mm. skruer 200 stk.", 1, connectionPool);
+        orderBillItems.add(new OrderBillItem(screws, "Til montering", 1));
+
         return orderBillItems;
     }
 
