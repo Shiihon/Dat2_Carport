@@ -26,7 +26,7 @@ public class PostalCodeMapper {
                     throw new DatabaseException("Failed to get postal code with zip = " + zip);
                 }
             } catch (SQLException e) {
-                throw new DatabaseException("SQL Error", e.getMessage());
+                throw new DatabaseException("Failed to get postal code by zip", e.getMessage());
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to connect to the database.");

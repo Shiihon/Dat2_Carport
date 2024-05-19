@@ -39,7 +39,7 @@ public class OrderMapper {
                 orders.add(new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to connect to db");
+            throw new DatabaseException("Failed to get all orders." + e.getMessage());
         }
 
         return orders;
@@ -144,7 +144,7 @@ public class OrderMapper {
                 myorders.add(new Order(orderId, customerId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to connect to db");
+            throw new DatabaseException("Failed to get customer orders.", e.getMessage());
         }
 
         return myorders;
@@ -179,7 +179,7 @@ public class OrderMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Failed to create order.", e.getMessage());
         }
     }
 
@@ -188,7 +188,8 @@ public class OrderMapper {
 
         try (
                 Connection connection = connectionPool.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)) {
+                PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
 
             for (OrderBillItem item : orderBillItems) {
                 ps.setInt(1, orderId);
@@ -203,7 +204,7 @@ public class OrderMapper {
                 }
             }
         } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Failed to insert order bill.", e.getMessage());
         }
     }
 
@@ -316,7 +317,7 @@ public class OrderMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to connect to db");
+            throw new DatabaseException("Failed to get order invoice by order id.", e.getMessage());
         }
     }
 
