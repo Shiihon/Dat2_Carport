@@ -10,9 +10,6 @@ import app.services.OrderBillGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +24,6 @@ public class OrderController {
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
         app.get("/order-overview", ctx -> orderOverview(ctx));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
-        app.get("backtofrontpage", ctx -> ctx.render("index.html"));
         app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
         app.post("/payOrder", ctx -> payOrder(ctx, connectionPool));
         app.get("/viewInvoice", ctx -> viewInvoice(ctx, connectionPool));
@@ -108,7 +104,7 @@ public class OrderController {
             }
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("order-overview.html");
+            ctx.render("myorders.html");
         }
     }
 
