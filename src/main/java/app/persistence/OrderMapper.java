@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class OrderMapper {
 
     public static List<Order> getAllOrders(ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT order_id, account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp FROM orders";
+        String sql = "SELECT order_id, account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp FROM orders";
         List<Order> orders = new ArrayList<>();
 
         try (
@@ -28,6 +28,7 @@ public class OrderMapper {
                 int orderId = rs.getInt("order_id");
                 int accountId = rs.getInt("account_id");
                 String orderTitle = rs.getString("order_title");
+                String orderComment = rs.getString("order_comment");
                 int carportWidth = rs.getInt("carport_width");
                 int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
@@ -36,7 +37,7 @@ public class OrderMapper {
 
                 List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
 
-                orders.add(new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
+                orders.add(new Order(orderId, accountId, orderTitle, orderComment, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to get all orders." + e.getMessage());
@@ -50,7 +51,7 @@ public class OrderMapper {
     }
 
     public static List<Order> getAllOrdersByStatus(List<Order.OrderStatus> statusList, ConnectionPool connectionPool) throws DatabaseException {
-        StringBuilder sql = new StringBuilder("SELECT order_id, account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp FROM orders");
+        StringBuilder sql = new StringBuilder("SELECT order_id, account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp FROM orders");
 
         sql.append(" WHERE order_status IN (");
         sql.append(statusList.stream().map(status -> String.format("'%s'", status.toString())).collect(Collectors.joining(", ")));
@@ -65,6 +66,7 @@ public class OrderMapper {
                     int orderId = rs.getInt("order_id");
                     int accountId = rs.getInt("account_id");
                     String orderTitle = rs.getString("order_title");
+                    String orderComment = rs.getString("order_comment");
                     int carportWidth = rs.getInt("carport_width");
                     int carportLength = rs.getInt("carport_length");
                     Order.OrderStatus status = Order.OrderStatus.valueOf(rs.getString("order_status"));
@@ -73,7 +75,7 @@ public class OrderMapper {
 
                     List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
 
-                    orders.add(new Order(orderId, accountId, orderTitle, carportWidth, carportLength, status, orderTotalPrice, orderBillItems, orderTimestamp));
+                    orders.add(new Order(orderId, accountId, orderTitle, orderComment, carportWidth, carportLength, status, orderTotalPrice, orderBillItems, orderTimestamp));
                 }
             } catch (SQLException e) {
                 throw new DatabaseException("SQL Error", e.getMessage());
@@ -121,7 +123,7 @@ public class OrderMapper {
     }
 
     public static List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT order_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
+        String sql = "SELECT order_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE account_id=?";
         List<Order> myorders = new ArrayList<>();
 
         try (
@@ -133,6 +135,7 @@ public class OrderMapper {
             while (rs.next()) {
                 int orderId = rs.getInt("order_id");
                 String orderTitle = rs.getString("order_title");
+                String orderComment = rs.getString("order_comment");
                 int carportWidth = rs.getInt("carport_width");
                 int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
@@ -141,7 +144,7 @@ public class OrderMapper {
 
                 List<OrderBillItem> orderBillItems = getOrderBillItems(orderId, connection);
 
-                myorders.add(new Order(orderId, customerId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
+                myorders.add(new Order(orderId, customerId, orderTitle, orderComment, carportWidth, carportLength, orderStatus, orderTotalPrice, orderBillItems, orderTimestamp));
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to get customer orders.", e.getMessage());
@@ -151,7 +154,7 @@ public class OrderMapper {
     }
 
     public static void createOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO orders (account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
+        String sql = "INSERT INTO orders (account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -159,11 +162,12 @@ public class OrderMapper {
         ) {
             ps.setInt(1, order.getAccountId());
             ps.setString(2, order.getTitle());
-            ps.setInt(3, order.getCarportWidth());
-            ps.setInt(4, order.getCarportLength());
-            ps.setString(5, order.getStatus().toString());
-            ps.setDouble(6, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
-            ps.setTimestamp(7, Timestamp.valueOf(order.getTimestamp()));
+            ps.setString(3, order.getComment());
+            ps.setInt(4, order.getCarportWidth());
+            ps.setInt(5, order.getCarportLength());
+            ps.setString(6, order.getStatus().toString());
+            ps.setDouble(7, order.getTotalPrice());  //tjek at totalprisen er sat til at kunne være null
+            ps.setTimestamp(8, Timestamp.valueOf(order.getTimestamp()));
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0) {
@@ -249,7 +253,7 @@ public class OrderMapper {
     }
 
     public static Order getOrderById(int orderId, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "SELECT account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
+        String sql = "SELECT account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp  FROM orders WHERE order_id=?";
 
         try (
                 Connection connection = connectionPool.getConnection();
@@ -260,13 +264,14 @@ public class OrderMapper {
             if (rs.next()) {
                 int accountId = rs.getInt("account_id");
                 String orderTitle = rs.getString("order_title");
+                String orderComment = rs.getString("order_comment");
                 int carportWidth = rs.getInt("carport_width");
                 int carportLength = rs.getInt("carport_length");
                 Order.OrderStatus orderStatus = Order.OrderStatus.valueOf(rs.getString("order_status"));
                 double orderTotalPrice = rs.getDouble("order_total_price");
                 LocalDateTime orderTimestamp = rs.getTimestamp("order_timestamp").toLocalDateTime();
 
-                return new Order(orderId, accountId, orderTitle, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
+                return new Order(orderId, accountId, orderTitle, orderComment, carportWidth, carportLength, orderStatus, orderTotalPrice, getOrderBillItems(orderId, connection), orderTimestamp);
             } else {
                 throw new DatabaseException("Can't find the specific order by its id");
             }

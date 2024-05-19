@@ -32,12 +32,14 @@ public class OrderController {
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
         try {
+            String comment = Objects.requireNonNull(ctx.formParam("comment"));
             int width = Integer.parseInt(Objects.requireNonNull(ctx.formParam("width-option")));
             int length = Integer.parseInt(Objects.requireNonNull(ctx.formParam("length-option")));
 
             Customer customer = ctx.sessionAttribute("currentAccount");
 
             //gemmer attributer i nuværende session
+            ctx.sessionAttribute("comment", comment);
             ctx.sessionAttribute("width", width);
             ctx.sessionAttribute("length", length);
 
@@ -57,6 +59,7 @@ public class OrderController {
 
         try {
             Customer customer = ctx.sessionAttribute("currentAccount");
+            String comment = ctx.sessionAttribute("comment");
             int width = ctx.sessionAttribute("width");
             int length = ctx.sessionAttribute("length");
 
@@ -65,7 +68,7 @@ public class OrderController {
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
             double orderBillPrice = calculateOrderBillPrice(orderBillItemList);
 
-            Order newOrder = new Order(customer.getId(), title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(customer.getId(), title, comment, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
 
             OrderMapper.createOrder(newOrder, connectionPool);
 

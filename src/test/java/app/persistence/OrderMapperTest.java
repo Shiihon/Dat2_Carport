@@ -103,6 +103,7 @@ class OrderMapperTest {
                 1,
                 1,
                 "Carport med flat tag: bredde=6,0m & længde=7,8m",
+                "",
                 600,
                 780,
                 Order.OrderStatus.WAITING_FOR_REVIEW,
@@ -133,6 +134,7 @@ class OrderMapperTest {
                 2,
                 2,
                 "Carport med flat tag: bredde=2,4m & længde=2,4m",
+                "The ground is a little sloped",
                 240,
                 240,
                 Order.OrderStatus.PAID,
@@ -197,12 +199,13 @@ class OrderMapperTest {
                 stmt.execute("SELECT setval('orders_order_id_seq', 1)");
                 stmt.execute("SELECT setval('material_variants_material_variant_id_seq', COALESCE((SELECT MAX(material_variant_id)+1 FROM material_variants), 1), false)");
 
-                String orderSql = "INSERT INTO test.orders (order_id, account_id, order_title, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES" + expectedOrders.stream()
+                String orderSql = "INSERT INTO test.orders (order_id, account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES" + expectedOrders.stream()
                         .map(order -> String.format(
-                                        "(%d, %d, '%s', %d, %d, '%s', %f, '%s')",
+                                        "(%d, %d, '%s', '%s', %d, %d, '%s', %f, '%s')",
                                         order.getOrderId(),
                                         order.getAccountId(),
                                         order.getTitle(),
+                                        order.getComment(),
                                         order.getCarportWidth(),
                                         order.getCarportLength(),
                                         order.getStatus(),
