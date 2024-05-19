@@ -154,7 +154,7 @@ public class OrderMapper {
     }
 
     public static void createOrder(Order order, ConnectionPool connectionPool) throws DatabaseException {
-        String sql = "INSERT INTO orders (account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?) RETURNING order_id;";
+        String sql = "INSERT INTO orders (account_id, order_title, order_comment, carport_width, carport_length, order_status, order_total_price, order_timestamp) VALUES (?,?,?,?,?,?,?,?) RETURNING order_id;";
 
         try (
                 Connection connection = connectionPool.getConnection();
