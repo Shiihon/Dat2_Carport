@@ -28,7 +28,7 @@ public class MaterialMapper {
                 throw new DatabaseException(String.format("Error: Could not find any materials with the description '%s'", description));
             }
         } catch (SQLException e) {
-            throw new DatabaseException("DB Error: " + e.getMessage()); // for connectionpool.
+            throw new DatabaseException("DB Error", e.getMessage()); // for connectionpool.
         }
     }
 
@@ -46,7 +46,7 @@ public class MaterialMapper {
 
             getAllMaterialsFromResultSet(materials, ps);
         } catch (SQLException e) {
-            throw new DatabaseException("DB Error: " + e.getMessage()); // for connectionpool.
+            throw new DatabaseException("DB Error", e.getMessage()); // for connectionpool.
         }
 
         return materials;
@@ -65,7 +65,7 @@ public class MaterialMapper {
         ) {
             getAllMaterialsFromResultSet(materialList, ps);
         } catch (SQLException e) {
-            throw new DatabaseException("Failed to connect to the database.");
+            throw new DatabaseException("Failed to get all materials.", e.getMessage());
         }
         return materialList;
     }
@@ -95,7 +95,7 @@ public class MaterialMapper {
                 throw new DatabaseException("Error could not insert new material");
             }
         } catch (SQLException e) {
-            throw new DatabaseException("Error in DB connection", e.getMessage());
+            throw new DatabaseException("Failed to create new material.", e.getMessage());
         }
     }
 
@@ -120,7 +120,7 @@ public class MaterialMapper {
             }
 
         } catch (SQLException e) {
-            throw new DatabaseException("Error in DB connection", e.getMessage());
+            throw new DatabaseException("Error trying to create new material variant.", e.getMessage());
         }
     }
 
