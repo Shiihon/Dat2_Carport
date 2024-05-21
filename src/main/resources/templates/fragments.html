@@ -13,9 +13,14 @@
 <div class="main-container">
     <div class="main-content">
         <header th:fragment="header(title, buttons)">
-            <div class="header-image">
+            <a class="header-image" href="/" th:href="@{/}"
+               th:if="${#ctx.session.currentAccount == null || #ctx.session.currentAccount.getRole() == 'CUSTOMER'}">
                 <img src="../public/images/FOGHeader.png" th:src="@{/images/FOGHeader.png}" alt="FOG"/>
-            </div>
+            </a>
+            <a class="header-image" href="/requests" th:href="@{/requests}"
+               th:if="${#ctx.session.currentAccount != null && #ctx.session.currentAccount.getRole() == 'SELLER'}">
+                <img src="../public/images/FOGHeader.png" th:src="@{/images/FOGHeader.png}" alt="FOG"/>
+            </a>
 
             <nav class="navigation-bar">
                 <ul class="nav-bar">
