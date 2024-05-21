@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+[*] --> FrontPage : Admin
+
+
+state Info
+Info : Admin can log out from all pages
+
+state FrontPage {
+FrontPage : FOG Logo
+}
+
+state LogInPage
+FrontPage --> LogInPage
+LogInPage : Customer enters E-mail and Password
+LogInPage --> LogInPage : Failed Logging in
+LogInPage --> AdminPage : Logged in successfully
+
+state AdminPage {
+
+state RequestsPage
+RequestsPage : OrdersPage waiting for approval
+
+state OrdersPage
+OrdersPage : Approved orders
+OrdersPage --> SeeMoreApprovedOrdersPage
+
+state SeeMoreApprovedOrdersPage
+SeeMoreApprovedOrdersPage : Drawing of carport
+SeeMoreApprovedOrdersPage : Order id
+SeeMoreApprovedOrdersPage : Customer name
+SeeMoreApprovedOrdersPage : Billing/material list
+SeeMoreApprovedOrdersPage : Total price
+
+state WarehousePage
+WarehousePage : All in-house materials,
+WarehousePage : available
+
+state NewMaterialPage
+WarehousePage --> NewMaterialPage
+NewMaterialPage : Material info
+NewMaterialPage : Unit
+NewMaterialPage : Material type
+NewMaterialPage : Length (If wood)
+NewMaterialPage : Price
+
+State AddNewMaterial
+NewMaterialPage --> AddNewMaterial
+AddNewMaterial --> WarehousePage : material added to warehouse
+
+state SeeMorePage
+RequestsPage --> SeeMorePage
+SeeMorePage : Drawing of carport
+SeeMorePage : Order id
+SeeMorePage : Customer name
+SeeMorePage : Billing/material list
+SeeMorePage : Total price
+
+state ApproveOrder
+SeeMorePage --> ApproveOrder : price approved
+ApproveOrder : Request for payment sent to customer
+
+state ChangePrice
+SeeMorePage --> ChangePrice
+ChangePrice --> ApproveOrder : price approved
+
+}
+
+state LogOut
+AdminPage --> LogOut
+
+LogOut --> [*]
+
+
+
+@enduml
