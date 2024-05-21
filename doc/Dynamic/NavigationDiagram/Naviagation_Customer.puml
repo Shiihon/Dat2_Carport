@@ -9,8 +9,9 @@ FrontPage : FOG Logo
 }
 
 state Info
-Info : You can log out from all pages,
+Info : Customer can log out from all pages,
 Info : and enter the front page from the other pages as well.
+
 state BuildACarportPage
 FrontPage --> BuildACarportPage
 BuildACarportPage : Customer enters details for their carport
@@ -27,7 +28,7 @@ CreateAccountPage : PhoneNumber
 CreateAccountPage : E-mail
 CreateAccountPage : Password
 CreateAccountPage : Repeat password
-CreateAccountPage --> OrderOverview : Account created successfully
+CreateAccountPage --> OrderOverviewPage : Account created successfully
 
 state LogInPage
 FrontPage --> LogInPage
@@ -35,17 +36,17 @@ LogInPage : Customer enters E-mail and Password
 LogInPage --> LogInPage : Failed Logging in
 LogInPage --> CreateAccountPage
 
-state OrderOverview
-LogInPage --> OrderOverview : Logged in successfully
-OrderOverview : View of customers chosen measurements
-OrderOverview : view of the drawing of the carport
-OrderOverview : Send request
-OrderOverview --> RequestPageConf : Request sent
+state OrderOverviewPage
+LogInPage --> OrderOverviewPage : Logged in successfully
+OrderOverviewPage : View of customers chosen measurements
+OrderOverviewPage : view of the drawing of the carport
+OrderOverviewPage : Send request
+OrderOverviewPage --> RequestConfirmPage : Request sent
 
-state RequestPageConf
-RequestPageConf --> MyOrdersPage
-RequestPageConf : Request has been sent, waiting for approval.
-RequestPageConf : You can now see your order under "My orders"
+state RequestConfirmPage
+RequestConfirmPage --> MyOrdersPage
+RequestConfirmPage : Request has been sent, waiting for approval.
+RequestConfirmPage : You can now see your order under "My orders"
 
 state MyOrdersPage {
 
@@ -80,8 +81,8 @@ SeeDrawing --> CarportDrawing
 
 }
 
- state LogOut
- MyOrdersPage --> LogOut
+state LogOut
+MyOrdersPage --> LogOut
 
 LogOut --> [*]
 
