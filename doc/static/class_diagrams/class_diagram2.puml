@@ -319,7 +319,6 @@ OrderMapper *-- Order
 OrderMapper *-- Invoice
 OrderMapper *-- MaterialMapper
 MaterialMapper *-- Material
-PostalCodeMapper *-- Customer
 
 PostalCodeMapper *-- PostalCode
 Order *-- OrderBillItem

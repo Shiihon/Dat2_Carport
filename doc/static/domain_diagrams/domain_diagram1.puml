@@ -41,5 +41,4 @@ Seller "M" --* "M" Order
 Order "1" *-- "M" Invoice
 Invoice "M" *-- "M" Material
 
-
 @enduml
