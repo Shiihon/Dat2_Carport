@@ -2,35 +2,37 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da-dk">
 
 <head>
-    <title>viewOrderDetailsPage</title>
+    <title>invoice</title>
     <meta charset="UTF-8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../public/css/schematic.css" th:href="@{/css/schematic.css}" rel="stylesheet"/>
     <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
     <link href="../public/css/warehouse.css" th:href="@{/css/warehouse.css}" rel="stylesheet"/>
 </head>
 
 <body>
 <div class="main-container">
-    <ul th:replace="~{fragments :: header('viewOrderDetailsPage', ~{::li.nav-bar-button})}">
+    <ul th:replace="~{fragments :: header('invoice', ~{::li.nav-bar-button})}">
         <li class="nav-bar-button">
-            <a href="/requests" th:href="@{/requests}">Tilbage</a>
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
         </li>
     </ul>
 
     <div class="main-content">
-        <div class="carport-svg-topview" th:utext="${svg}"></div>
-
         <table style="width: 25%">
             <thead>
             <tr>
                 <th>Ordre id:</th>
+                <th>Fakturanummer:</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td th:text="${order.getOrderId()}"></td>
+                <td th:text="${invoice.getInvoiceId()}"></td>
             </tr>
             </tbody>
         </table>
@@ -38,12 +40,25 @@
         <table style="width: 25%">
             <thead>
             <tr>
-                <th>Kunde :</th>
+                <th>Navn :</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Betalingsdato :</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="|${invoice.getDate()}|"></td>
             </tr>
             </tbody>
         </table>
@@ -75,26 +90,11 @@
                 <th>Samlet pris:</th>
             </tr>
             <tr>
-                <td>
-                    <form action="/updatePrice" method="post">
-                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-                        <input th:disabled="${order.getStatus().toString() == 'PAID'}" type="number" name="price"
-                               min="0" th:value="${order.getTotalPrice()}">
-                        <p th:text="${#ctx.session.message}"></p>
-                        <button th:unless="${order.getStatus().toString() == 'PAID'}" type="submit">Godkend pris
-                        </button>
-                    </form>
-                </td>
+                <td th:text="|${order.getTotalPrice()} kr|"></td>
             </tr>
             </thead>
         </table>
         <br>
-        <form action="/approve-request" method="post">
-            <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
-            <button type="submit" th:disabled="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}">Godkend
-                Forespørgsel
-            </button>
-        </form>
     </div>
 </div>
 

@@ -24,30 +24,33 @@
 
             Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
 
-        <form th:action="@{/continuerequest}" method="post">
-            <div class="dropdown">
+        <div class="index-form-container">
+            <form th:action="@{/continuerequest}" method="post">
+                <div class="index-fields-container">
 
-                <select name="width-option">
-                    <option value="" disabled selected>Carport bredde:</option>
-                    <option th:each="amount: ${#numbers.sequence(0, 12)}" th:value="${240 + amount * 30}"
-                            th:text="${240 + amount * 30}">Amount
-                    </option>
-                </select>
+                    <select class="index-input" name="width-option" required>
+                        <option value="" disabled selected>Carport bredde:</option>
+                        <option th:each="amount: ${#numbers.sequence(0, 12)}" th:value="${240 + amount * 30}"
+                                th:text="${240 + amount * 30}">Amount
+                        </option>
+                    </select>
 
-                <select name="length-option">
-                    <option value="" disabled selected>Carport længde:</option>
-                    <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
-                            th:text="${240 + amount * 30}">Amount
-                    </option>
-                </select>
-            </div>
+                    <select class="index-input" name="length-option" required>
+                        <option value="" disabled selected>Carport længde:</option>
+                        <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
+                                th:text="${240 + amount * 30}">Amount
+                        </option>
+                    </select>
 
-            <input class="input-large" type="text" name="taskname" placeholder="Evt. bemærkninger.. "/>
+                    <input class="index-input" type="text" name="comment" maxlength="80"
+                           placeholder="Evt. bemærkninger.. "/>
 
-            <div class="button-container">
-                <button type="submit" formaction="continuerequest">Forsæt</button>
-            </div>
-        </form>
+                </div>
+                <div class="button-container">
+                    <button type="submit" formaction="continuerequest">Forsæt</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>

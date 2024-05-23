@@ -1,9 +1,8 @@
 package app.controllers;
 
-import app.entities.Customer;
-import app.entities.Order;
-import app.entities.OrderBillItem;
+import app.entities.*;
 import app.exceptions.DatabaseException;
+import app.persistence.AccountMapper;
 import app.persistence.ConnectionPool;
 import app.persistence.OrderMapper;
 import app.services.CarportSvg;
@@ -11,6 +10,7 @@ import app.services.OrderBillGenerator;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
@@ -22,30 +22,36 @@ public class OrderController {
         app.get("/carportSchematic", ctx -> OrderController.viewCarportSchematic(ctx));
         app.post("/continuerequest", ctx -> continueRequest(ctx, connectionPool));
         app.post("/sendrequest", ctx -> sendOrderRequest(ctx, connectionPool));
-        app.get("/order-overview", ctx -> ctx.render("order-overview.html"));
+        app.get("/order-overview", ctx -> orderOverview(ctx));
         app.get("/request-confirmation", ctx -> ctx.render("request-confirmation.html"));
-        app.get("backtofrontpage", ctx -> ctx.render("index.html"));
         app.get("/myorders", ctx -> viewMyOrders(ctx, connectionPool));
         app.post("/payOrder", ctx -> payOrder(ctx, connectionPool));
+        app.get("/viewInvoice", ctx -> viewInvoice(ctx, connectionPool));
+        app.post("/cancelOrder", ctx -> cancelOrder(ctx, connectionPool));
     }
 
     private static void continueRequest(Context ctx, ConnectionPool connectionPool) {
+        try {
+            String comment = Objects.requireNonNull(ctx.formParam("comment"));
+            int width = Integer.parseInt(Objects.requireNonNull(ctx.formParam("width-option")));
+            int length = Integer.parseInt(Objects.requireNonNull(ctx.formParam("length-option")));
 
-        Customer customer = ctx.sessionAttribute("currentAccount");
+            Customer customer = ctx.sessionAttribute("currentAccount");
 
-        int width = Integer.parseInt(ctx.formParam("width-option"));
-        int length = Integer.parseInt(ctx.formParam("length-option"));
+            //gemmer attributer i nuværende session
+            ctx.sessionAttribute("comment", comment);
+            ctx.sessionAttribute("width", width);
+            ctx.sessionAttribute("length", length);
 
-        //gemmer attributer i nuværende session
-        ctx.sessionAttribute("width", width);
-        ctx.sessionAttribute("length", length);
-
-        if (customer == null) {
-            //gemmer destinationen til når brugeren er logget ind
-            ctx.sessionAttribute("loginRedirect", "/order-overview");
-            ctx.redirect("/login");
-        } else {
-            ctx.redirect("/order-overview");
+            if (customer == null) {
+                //gemmer destinationen til når brugeren er logget ind
+                ctx.sessionAttribute("loginRedirect", "/order-overview");
+                ctx.redirect("/login");
+            } else {
+                ctx.redirect("/order-overview");
+            }
+        } catch (NullPointerException ignored) {
+            ctx.redirect("/");
         }
     }
 
@@ -53,6 +59,7 @@ public class OrderController {
 
         try {
             Customer customer = ctx.sessionAttribute("currentAccount");
+            String comment = ctx.sessionAttribute("comment");
             int width = ctx.sessionAttribute("width");
             int length = ctx.sessionAttribute("length");
 
@@ -61,7 +68,7 @@ public class OrderController {
             List<OrderBillItem> orderBillItemList = OrderBillGenerator.generateOrderBill(width, length, connectionPool);
             double orderBillPrice = calculateOrderBillPrice(orderBillItemList);
 
-            Order newOrder = new Order(customer.getId(), title, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
+            Order newOrder = new Order(customer.getId(), title, comment, width, length, Order.OrderStatus.WAITING_FOR_REVIEW, orderBillPrice, orderBillItemList, LocalDateTime.now());
 
             OrderMapper.createOrder(newOrder, connectionPool);
 
@@ -100,15 +107,19 @@ public class OrderController {
             }
         } catch (DatabaseException e) {
             ctx.attribute("error", e.getMessage());
-            ctx.render("order-overview.html");
+            ctx.render("myorders.html");
         }
     }
 
     public static void payOrder(Context ctx, ConnectionPool connectionPool) {
         int orderId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("orderId")));
+        Customer customer = ctx.sessionAttribute("currentAccount");
 
         try {
-           OrderMapper.setOrderStatus(orderId, Order.OrderStatus.PAID, connectionPool);
+            OrderMapper.setOrderStatus(orderId, Order.OrderStatus.PAID, connectionPool);
+
+            Invoice newInvoice = new Invoice(orderId, customer.getId(), LocalDate.now());
+            OrderMapper.createOrderInvoice(newInvoice, connectionPool);
 
             ctx.redirect("myorders");
         } catch (DatabaseException e) {
@@ -117,12 +128,39 @@ public class OrderController {
         }
     }
 
-    public void viewInvoice(Context ctx, ConnectionPool connectionPool) {
+    public static void viewInvoice(Context ctx, ConnectionPool connectionPool) {
 
+        int orderId = Integer.parseInt(Objects.requireNonNull(ctx.queryParam("orderId")));
+
+        try {
+            Order order = OrderMapper.getOrderById(orderId, connectionPool);
+            Invoice invoice = OrderMapper.getOrderInvoice(orderId, connectionPool);
+            ctx.attribute("order", order);
+            ctx.attribute("invoice", invoice);
+            Account customer = AccountMapper.getAccountById(order.getAccountId(), connectionPool);
+            ctx.attribute("customer", customer);
+            ctx.render("invoice.html");
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("invoice.html");
+        }
     }
 
-    public void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+    public static void cancelOrder(Context ctx, ConnectionPool connectionPool) {
+        try {
+            int orderId = Integer.parseInt(Objects.requireNonNull(ctx.formParam("orderId")));
+            Customer customer = ctx.sessionAttribute("currentAccount");
 
+            OrderMapper.removeOrder(orderId, connectionPool);
+            int customerId = customer.getId();
+            List<Order> myorders = OrderMapper.getAllCustomerOrders(customerId, connectionPool);
+            ctx.attribute("myorders", myorders);
+            ctx.redirect("myorders");
+
+        } catch (DatabaseException e) {
+            ctx.attribute("error", e.getMessage());
+            ctx.render("myorders");
+        }
     }
 
     public static void viewCarportSchematic(Context ctx) {
@@ -133,5 +171,15 @@ public class OrderController {
         CarportSvg svg = new CarportSvg(width, length);
         ctx.attribute("svg", svg.toString());
         ctx.render("carportSchematic.html");
+    }
+
+    public static void orderOverview(Context ctx) {
+        int width = ctx.sessionAttribute("width");
+        int length = ctx.sessionAttribute("length");
+
+        Locale.setDefault(Locale.US);
+        CarportSvg svg = new CarportSvg(width, length);
+        ctx.attribute("svg", svg.toString());
+        ctx.render("order-overview.html");
     }
 }

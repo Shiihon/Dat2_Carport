@@ -16,6 +16,7 @@ public class Order {
     private int orderId;
     private int accountId;
     private String title;
+    private String comment;
     private int carportWidth;
     private int carportLength;
     private OrderStatus status;
@@ -23,10 +24,11 @@ public class Order {
     private List<OrderBillItem> orderBill;
     private LocalDateTime timestamp;
 
-    public Order(int orderId, int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int orderId, int accountId, String title, String comment, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.accountId = accountId;
         this.title = title;
+        this.comment = comment;
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.status = status;
@@ -35,9 +37,10 @@ public class Order {
         this.timestamp = timestamp;
     }
 
-    public Order(int accountId, String title, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
+    public Order(int accountId, String title, String comment, int carportWidth, int carportLength, OrderStatus status, double totalPrice, List<OrderBillItem> orderBill, LocalDateTime timestamp) {
         this.accountId = accountId;
         this.title = title;
+        this.comment = comment;
         this.carportWidth = carportWidth;
         this.carportLength = carportLength;
         this.status = status;
@@ -56,6 +59,10 @@ public class Order {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public int getCarportWidth() {
@@ -79,7 +86,7 @@ public class Order {
     }
 
     public void setTotalPrice(double newPrice) {
-       totalPrice = newPrice;
+        totalPrice = newPrice;
     }
 
     public List<OrderBillItem> getOrderBill() {
@@ -98,12 +105,12 @@ public class Order {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Order order)) return false;
-        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && getCarportWidth() == order.getCarportWidth() && getCarportLength() == order.getCarportLength() && Objects.equals(getTitle(), order.getTitle()) && getStatus() == order.getStatus() && Objects.equals(getTotalPrice(), order.getTotalPrice()) && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
+        return getOrderId() == order.getOrderId() && getAccountId() == order.getAccountId() && getCarportWidth() == order.getCarportWidth() && getCarportLength() == order.getCarportLength() && Double.compare(getTotalPrice(), order.getTotalPrice()) == 0 && Objects.equals(getTitle(), order.getTitle()) && Objects.equals(getComment(), order.getComment()) && getStatus() == order.getStatus() && new HashSet<>(getOrderBill()).containsAll(order.getOrderBill()) && Objects.equals(getTimestamp(), order.getTimestamp());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getOrderId(), getAccountId(), getTitle(), getCarportWidth(), getCarportLength(), getStatus(), getTotalPrice(), getOrderBill(), getTimestamp());
+        return Objects.hash(getOrderId(), getAccountId(), getTitle(), getComment(), getCarportWidth(), getCarportLength(), getStatus(), getTotalPrice(), getOrderBill(), getTimestamp());
     }
 
     @Override
@@ -112,6 +119,7 @@ public class Order {
                 "orderId=" + orderId +
                 ", accountId=" + accountId +
                 ", title='" + title + '\'' +
+                ", comment='" + comment + '\'' +
                 ", carportWidth=" + carportWidth +
                 ", carportLength=" + carportLength +
                 ", status=" + status +
