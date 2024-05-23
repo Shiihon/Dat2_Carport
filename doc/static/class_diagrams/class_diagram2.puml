@@ -8,88 +8,89 @@ class Main {
 }
 
 class AccountController {
-    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
-    - {static} void createAccount(Context ctx, ConnectionPool connectionPool)
-    - {static} void login(Context ctx, ConnectionPool connectionPool)
+    + {static} void addRoutes(Javalin app, AccountValidator connectionPool)
+    - {static} void createAccount(Context ctx, AccountValidator connectionPool)
+    - {static} void login(Context ctx, AccountValidator connectionPool)
     - {static} void logout(Context ctx)
 }
 
 class SalesController {
-    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
-    - {static} void viewRequests(Context ctx, ConnectionPool connectionPool)
-    - {static} void approveReview(Context ctx, ConnectionPool connectionPool)
-    - {static} void updatePrice(Context ctx, ConnectionPool connectionPool)
-    - {static} void viewCostumersOrders(Context ctx, ConnectionPool connectionPool)
+    + {static} void addRoutes(Javalin app, AccountValidator connectionPool)
+    - {static} void viewRequests(Context ctx, AccountValidator connectionPool)
+    - {static} void approveReview(Context ctx, AccountValidator connectionPool)
+    - {static} void updatePrice(Context ctx, AccountValidator connectionPool)
+    - {static} void viewCostumersOrders(Context ctx, AccountValidator connectionPool)
     - {static} void viewCarportSchematic(Context ctx)
-    - {static} void viewOrderDetails(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewOrderDetails(Context ctx, AccountValidator connectionPool)
 }
 
 class OrderController {
-    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
-    - {static} void continueRequest(Context ctx, ConnectionPool connectionPool)
-    - {static} void sendOrderRequest(Context ctx, ConnectionPool connectionPool)
+    + {static} void addRoutes(Javalin app, AccountValidator connectionPool)
+    - {static} void continueRequest(Context ctx, AccountValidator connectionPool)
+    - {static} void sendOrderRequest(Context ctx, AccountValidator connectionPool)
     - {static} double calculateOrderBillPrice(List<OrderBillItem> orderBillItemList)
-    - {static} void viewMyOrders(Context ctx, ConnectionPool connectionPool)
-    - {static} void payOrder(Context ctx, ConnectionPool connectionPool)
-    - {static} void viewInvoice(Context ctx, ConnectionPool connectionPool)
-    - {static} void cancelOrder(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewMyOrders(Context ctx, AccountValidator connectionPool)
+    - {static} void payOrder(Context ctx, AccountValidator connectionPool)
+    - {static} void viewInvoice(Context ctx, AccountValidator connectionPool)
+    - {static} void cancelOrder(Context ctx, AccountValidator connectionPool)
     - {static} void viewCarportSchematic(Context ctx)
 }
 
 class WarehouseController {
-    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
-    - {static} void viewWarehouse(Context ctx, ConnectionPool connectionPool)
-    - {static} void addNewMaterial(Context ctx, ConnectionPool connectionPool)
+    + {static} void addRoutes(Javalin app, AccountValidator connectionPool)
+    - {static} void viewWarehouse(Context ctx, AccountValidator connectionPool)
+    - {static} void addNewMaterial(Context ctx, AccountValidator connectionPool)
 }
 
 class AccountMapper {
-    + {static} Account login(String email, String password, ConnectionPool connectionPool)
-    + {static} void createAccount(Account account, ConnectionPool connectionPool)
-    + {static} Account getAccountById(int accountId, ConnectionPool connectionPool)
+    + {static} Account login(String email, String password, AccountValidator connectionPool)
+    + {static} void createAccount(Account account, AccountValidator connectionPool)
+    + {static} Account getAccountById(int accountId, AccountValidator connectionPool)
     - {static} Account getAccount(int accountId, String email, String password, ResultSet rs)
 }
 
 class OrderMapper {
     + {static} List<Order> getAllOrders(ConnectionPool connectionPool)
-    + {static} List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool)
-    + {static} List<Order> getAllOrdersByStatus(List<Order.OrderStatus> statusList, ConnectionPool connectionPool)
+    + {static} List<Order> getAllOrdersByStatus(Order.OrderStatus status, AccountValidator connectionPool)
+    + {static} List<Order> getAllOrdersByStatus(List<Order.OrderStatus> statusList, AccountValidator connectionPool)
     + {static} List<OrderBillItem> getOrderBillItems(int orderId, Connection connection)
-    + {static} List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool)
-    + {static} void createOrder(Order order, ConnectionPool connectionPool)
-    + {static} void createOrderBill(int orderId, List<OrderBillItem> orderBillItems, ConnectionPool connectionPool)
-    + {static} void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool)
-    + {static} void setOrderPrice(int orderId, int price, ConnectionPool connectionPool)
-    + {static} Order getOrderById(int orderId, ConnectionPool connectionPool)
-    + {static} void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool)
-    + {static} Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool)
+    + {static} List<Order> getAllCustomerOrders(int customerId, AccountValidator connectionPool)
+    + {static} void createOrder(Order order, AccountValidator connectionPool)
+    + {static} void createOrderBill(int orderId, List<OrderBillItem> orderBillItems, AccountValidator connectionPool)
+    + {static} void setOrderStatus(int orderId, Order.OrderStatus status, AccountValidator connectionPool)
+    + {static} void setOrderPrice(int orderId, int price, AccountValidator connectionPool)
+    + {static} Order getOrderById(int orderId, AccountValidator connectionPool)
+    + {static} void createOrderInvoice(int orderId, Invoice invoice, AccountValidator connectionPool)
+    + {static} Invoice getOrderInvoice(int orderId, AccountValidator connectionPool)
 }
 
 class MaterialMapper {
-    + {static} Material getMaterial(String description, ConnectionPool connectionPool)
-    + {static} List<Material> getAllMaterials(String description, ConnectionPool connectionPool)
+    + {static} Material getMaterial(String description, AccountValidator connectionPool)
+    + {static} List<Material> getAllMaterials(String description, AccountValidator connectionPool)
     + {static} List<Material> getAllMaterials(ConnectionPool connectionPool)
-    + {static} Material getMaterialById(int materialVariantId, ConnectionPool connectionPool)
-    + {static} void createMaterial(Material material, ConnectionPool connectionPool)
-    + {static} void createMaterialVariant(Material material, ConnectionPool connectionPool)
+    + {static} Material getMaterialById(int materialVariantId, AccountValidator connectionPool)
+    + {static} void createMaterial(Material material, AccountValidator connectionPool)
+    + {static} void createMaterialVariant(Material material, AccountValidator connectionPool)
     + {static} void getAllMaterialsFromResultSet(List<Material> materialList, PreparedStatement ps)
     + {static} Material getMaterialFromResultSet(ResultSet rs)
 }
 
 class PostalCodeMapper {
-    + {static} PostalCode getPostalCodeByZip(int zip, ConnectionPool connectionPool)
+    + {static} PostalCode getPostalCodeByZip(int zip, AccountValidator connectionPool)
 }
 
-class ConnectionPool {
-    + {static} ConnectionPool getInstance()
-    + {static} ConnectionPool getInstance(String user, String password, String url, String db)
-    + synchronized Connection getConnection()
-    + synchronized void close()
-    - {static} HikariDataSource createHikariConnectionPool(String user, String password, String url, String db)
+class AccountValidator {
+    + {static} String validateFullName(String fullName)
+    + {static} String validateAddress(String address)
+    + {static} int validateZip(String zipStr)
+    + {static} String validatePhoneNumber(String phoneNumber)
+    + {static} String validateEmail(String email)
+    + {static} String validatePhoneNumber(String password)
+    + {static} String validatePassword(String password1, String password2)
 }
 
-class DatabaseException {
-    + DatabaseException(String userMessage)
-    + DatabaseException(String userMessage, String systemMessage)
+class AccountValidationException {
+    + AccountValidationException(String message)
 }
 
 class CarportSvg {
@@ -175,12 +176,12 @@ class OrderBillGenerator {
     - {static} final double maxRafterDistance
     - {static} final double rafterWidth
 
-    + {static} List<OrderBillItem> generateOrderBill(int width, int length, ConnectionPool connectionPool)
-    - {static} OrderBillItem calculatePosts(int length, ConnectionPool connectionPool)
+    + {static} List<OrderBillItem> generateOrderBill(int width, int length, AccountValidator connectionPool)
+    - {static} OrderBillItem calculatePosts(int length, AccountValidator connectionPool)
     + {static} int calculatePostsQuantity(int length)
-    - {static} List<OrderBillItem> calculateBeams(int length, ConnectionPool connectionPool)
+    - {static} List<OrderBillItem> calculateBeams(int length, AccountValidator connectionPool)
     + {static} List<Double> calculateBeamLengths(int length)
-    - {static} OrderBillItem calculateRafters(int width, int length, ConnectionPool connectionPool)
+    - {static} OrderBillItem calculateRafters(int width, int length, AccountValidator connectionPool)
     + {static} int calculateRaftersQuantity(int length)
     + {static} Material getBestMaterialMatch(List<Material> materials, double length)
 }
@@ -301,23 +302,23 @@ Main *-- AccountController
 Main *-- OrderController
 Main *-- SalesController
 Main *-- WarehouseController
-Main *-- DatabaseException
-Main *-- ConnectionPool
 
 AccountController *-- AccountMapper
 OrderController *-- OrderMapper
 SalesController *-- OrderMapper
+WarehouseController *-- MaterialMapper
 
 AccountController *-- PostalCodeMapper
+AccountController *-- AccountValidator
 OrderController *-- CarportSvg
 OrderController *-- OrderBillGenerator
 OrderController *-- Customer
-WarehouseController *-- OrderMapper
+
+AccountValidator *-- AccountValidationException
 
 AccountMapper *-- Account
 OrderMapper *-- Order
 OrderMapper *-- Invoice
-OrderMapper *-- MaterialMapper
 MaterialMapper *-- Material
 
 PostalCodeMapper *-- PostalCode
