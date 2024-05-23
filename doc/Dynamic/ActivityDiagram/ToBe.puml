@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+Title Carport
+
+|Kunde|
+start
+:Indtast;
+:Indsend forespørgsel;
+|Mailsystem|
+|Sælger|
+:Forespørgsel]
+|Beregningsystem|
+:Beregner stykliste;
+|Lager|
+:Henter matrialer;
+|Beregningsystem|
+:Stykliste]
+:Beregner pris;
+|Sælger|
+:Stykliste + pris]
+:Indsend prisoverslag;
+|Mailsystem|
+|Kunde|
+:Prisoverslag]
+
+if (Godkend pris?) then (ja)
+:Betal;
+
+|Sælger|
+if (Betaling gennemført?) then (ja)
+|Sælger|
+:Modtager notifikation;
+|Sælger|
+else (nej)
+        |Sælger|
+        :Kontakt kunden;
+
+        endif
+|Sælger|
+:Indsender faktura, stykliste + pris;
+|Mailsystem|
+:Sender faktura og stykliste;
+|Kunde|
+:Faktura + Stykliste]
+
+else (nej)
+
+        endif
+
+
+
+stop
+
+@enduml
