@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da-dk">
+
+<head th:fragment="head(title)">
+    <title th:text="${title}">Frontpage</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <div class="main-content">
+        <header th:fragment="header(title, buttons)">
+            <a class="header-image" href="/" th:href="@{/}"
+               th:if="${#ctx.session.currentAccount == null || #ctx.session.currentAccount.getRole() == 'CUSTOMER'}">
+                <img src="../public/images/FOGHeader.png" th:src="@{/images/FOGHeader.png}" alt="FOG"/>
+            </a>
+            <a class="header-image" href="/requests" th:href="@{/requests}"
+               th:if="${#ctx.session.currentAccount != null && #ctx.session.currentAccount.getRole() == 'SELLER'}">
+                <img src="../public/images/FOGHeader.png" th:src="@{/images/FOGHeader.png}" alt="FOG"/>
+            </a>
+
+            <nav class="navigation-bar">
+                <ul class="nav-bar">
+                    <li class="left-nav-bar">
+                        <ul class="nav-bar-buttons">
+                            <th:block th:replace="${buttons}"/>
+                        </ul>
+                    </li>
+
+                    <li class="right-nav-bar">
+                        <ul class="nav-bar-buttons">
+                            <li class="nav-bar-button" th:unless="${#strings.equals(title, 'Login')}">
+                                <span th:if="${#ctx.session.currentAccount != null}"
+                                      th:text="${#ctx.session.currentAccount.getEmail()}">Email</span>
+                            </li>
+                            <li class="nav-bar-button" th:unless="${#strings.equals(title, 'Login')}">
+                                <a th:if="${#ctx.session.currentAccount == null}" href="/login">Log ind</a>
+                                <a th:if="${#ctx.session.currentAccount != null}" href="/logout">Log ud</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <div th:fragment="error" class="error-container" th:unless="${#strings.isEmpty(error)}">
+            <p class="error" th:text="${error}">
+                Error message
+            </p>
+        </div>
+
+        <footer th:fragment="footer" class="footer-container">
+            <a th:if="${#ctx.session.currentUser} == null" th:href="@{/createuser}">Create account</a>
+            <a th:if="${#ctx.session.currentUser} != null" th:href="@{/logout}">Logout</a>
+            <a href="/public" class="footer-item">Home</a>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+/**** Login Form Container ****/
+
+.login-form-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.login-form-content {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 200px;
+    gap: 1.5rem;
+}
+
+
+/**** Login Fields Container ****/
+
+.fields-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.create-account-prompt {
+    margin: 0;
+}
+
+.create-account-prompt > a {
+    color: rgb(var(--secondary), 0.95);
+}
+
+.create-account-prompt > a:visited{
+    color: rgb(var(--secondary), 0.95);
+}
+
+.fields-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.fields-content input {
+    padding: 0.5rem 1rem;
+    width: 100%;
+}
+
+
+/**** Buttons Container ****/
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

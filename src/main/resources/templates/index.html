@@ -1,17 +1,57 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/" lang="en">
 
-<title>Frontpage</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+<head>
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/index.css" th:href="@{/css/index.css}" rel="stylesheet"/>
 </head>
 
 <body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Frontpage', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
+        </li>
+    </ul>
 
-<h1>Welcome to the Javalin / Thymeleaf demo</h1>
+    <div class="main-content">
+        <h2>Byg en Carport med fladt tag!</h2>
+        <p>Med et specialudviklet computerprogram kan vi lynhurtigt
+            beregne prisen og give dig et tilbud på din forespørgsel. Ved bestilling medfølger standardbyggevejledning.
 
-<p>This is your first web application in this world</p>
+            Udfyld formularen omhyggeligt og klik på "Bestil tilbud".</p>
 
+        <div class="index-form-container">
+            <form th:action="@{/continuerequest}" method="post">
+                <div class="index-fields-container">
+
+                    <select class="index-input" name="width-option" required>
+                        <option value="" disabled selected>Carport bredde:</option>
+                        <option th:each="amount: ${#numbers.sequence(0, 12)}" th:value="${240 + amount * 30}"
+                                th:text="${240 + amount * 30}">Amount
+                        </option>
+                    </select>
+
+                    <select class="index-input" name="length-option" required>
+                        <option value="" disabled selected>Carport længde:</option>
+                        <option th:each="amount: ${#numbers.sequence(0, 18)}" th:value="${240 + amount * 30}"
+                                th:text="${240 + amount * 30}">Amount
+                        </option>
+                    </select>
+
+                    <input class="index-input" type="text" name="comment" maxlength="80"
+                           placeholder="Evt. bemærkninger.. "/>
+
+                </div>
+                <div class="button-container">
+                    <button type="submit" formaction="continuerequest">Forsæt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

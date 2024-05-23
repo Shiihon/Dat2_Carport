@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Order-overview</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/schematic.css" th:href="@{/css/schematic.css}" rel="stylesheet"/>
+    <link href="../public/css/styles.css" th:href="@{/css/order-overview.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Order-overview', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <div class="centerText">
+            <h2>Dine valg:</h2>
+            <table class="centerTable">
+                <thead>
+                <tr>
+                    <th>Bredde</th>
+                    <th>Længde</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><span th:text="${#ctx.session.width}">[Bredde]</span></td>
+                    <td><span th:text="${#ctx.session.length}">[Længde]</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="carport-svg-topview" th:utext="${svg}"></div>
+
+        <div class="centerText">
+            <form th:action="@{/sendrequest}" method="post">
+                <button type="submit">Send forespørgsel</button>
+            </form>
+        </div>
+
+        <div th:replace="~{fragments :: error}"></div>
+    </div>
+</div>
+</body>
+</html>

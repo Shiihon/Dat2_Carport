@@ -1,0 +1,187 @@
+@startuml
+'https://plantuml.com/class-diagram
+!pragma layout smetana
+set separator none
+
+class Main {
+    + {static} void main(String[] args)
+}
+
+class AccountController {
+    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
+    - {static} void createAccount(Context ctx, ConnectionPool connectionPool)
+    - {static} void login(Context ctx, ConnectionPool connectionPool)
+    - {static} void logout(Context ctx)
+}
+
+class SalesController {
+    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
+    - {static} void approveReview(Context ctx, ConnectionPool connectionPool)
+    - {static} void updatePrice(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewCostumersOrders(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewCarportSchematic(Context ctx)
+}
+
+class OrderController {
+    + {static} void addRoutes(Javalin app, ConnectionPool connectionPool)
+    - {static} void sendOrderRequest(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewMyOrders(Context ctx, ConnectionPool connectionPool)
+    - {static} void payOrder(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewInvoice(Context ctx, ConnectionPool connectionPool)
+    - {static} void cancelOrder(Context ctx, ConnectionPool connectionPool)
+    - {static} void viewCarportSchematic(Context ctx)
+}
+
+class AccountMapper {
+    + {static} Account login(String email, String password, ConnectionPool connectionPool)
+    + {static} void createAccount(Account account, ConnectionPool connectionPool)
+    + {static} Account getAccountById(int accountId, ConnectionPool connectionPool)
+    - {static} Account getAccount(int accountId, String email, String password, ResultSet rs)
+}
+
+class OrderMapper {
+    + {static} List<Order> getAllOrders(ConnectionPool connectionPool)
+    + {static} List<Order> getAllOrdersByStatus(Order.OrderStatus status, ConnectionPool connectionPool)
+    + {static} List<Order> getAllCustomerOrders(int customerId, ConnectionPool connectionPool)
+    + {static} void createOrder(Order order, ConnectionPool connectionPool)
+    + {static} void setOrderStatus(int orderId, Order.OrderStatus status, ConnectionPool connectionPool)
+    + {static} void setOrderPrice(int orderId, int price, ConnectionPool connectionPool)
+    + {static} void createOrderInvoice(int orderId, Invoice invoice, ConnectionPool connectionPool)
+    + {static} Invoice getOrderInvoice(int orderId, ConnectionPool connectionPool)
+}
+
+class MaterialMapper {
+    + {static} Material getMaterial(String description, ConnectionPool connectionPool)
+    + {static} List<Material> getAllMaterials(String description, ConnectionPool connectionPool)
+    + {static} Material getMaterialById(int materialVariantId, ConnectionPool connectionPool)
+    + {static} void createMaterial(Material material, ConnectionPool connectionPool)
+}
+
+interface Account {
+    + int getId()
+    + void setId(int id)
+    + String getEmail()
+    + String getPassword()
+    + String getRole()
+}
+
+class Seller implements Account {
+    - int sellerId
+    - String email
+    - String password
+    - String role
+}
+
+class Customer implements Account {
+    - int customerId
+    - String email
+    - String password
+    - String role
+    - String firstName
+    - String lastName
+    - String address
+    - int zip
+    - String city
+    - String phoneNumber
+}
+
+class CarportSchematicGenerator {
+    + {static} generateSchematic(int width, int length)
+}
+
+class OrderBillGenerator {
+    + {static} List<OrderBillItem> generateOrderBill(int width, int length)
+}
+
+class Order {
+    - int orderId
+    - String title
+    - Order.Status status
+    - Integer totalPrice
+    - List<OrderBillItem> orderBill
+    - LocalDateTime timestamp
+
+    + int getOrderId()
+    + String getTitle()
+    + Order.Status getStatus()
+    + Integer getTotalPrice()
+    + List<OrderBillItem> getOrderBill()
+    + LocalDateTime getTimestamp()
+}
+
+enum Order.Status {
+    WAITING_FOR_REVIEW
+    REVIEW_APPROVED
+    PAID
+}
+
+class OrderBillItem {
+    - Material material
+    - String description
+    - int quantity
+
+    + Material getMaterial()
+    + String getDescription()
+    + int getQuantity()
+}
+
+class Invoice {
+    - int invoiceId
+    - int orderId
+    - int accountId
+    - LocalDate date
+
+    + int getInvoiceId()
+    + int getOrderId()
+    + int getAccountId()
+    + LocalDate getLocalDate()
+}
+
+class Material {
+    - int materialId
+    - int materialVariantId
+    - String description
+    - String unit
+    - int price
+    - Integer length
+    - Material.Type
+
+    + int getMaterialId()
+    + getMaterialVariantId()
+    + String getDescription()
+    + String getUnit()
+    + int getPrice()
+    + Integer getLength()
+    + Material.Type getType()
+}
+
+enum Material.Type {
+    WOOD
+    SCREWS
+}
+
+Main *-- AccountController
+Main *-- OrderController
+Main *-- SalesController
+
+AccountController *-- AccountMapper
+OrderController *-- OrderMapper
+SalesController *-- OrderMapper
+
+OrderController *-- CarportSchematicGenerator
+OrderController *-- OrderBillGenerator
+OrderController *-- Customer
+SalesController *-- CarportSchematicGenerator
+
+AccountMapper *-- Account
+OrderMapper *-- Order
+OrderMapper *-- Invoice
+OrderMapper *-- MaterialMapper
+MaterialMapper *-- Material
+
+Order *-- OrderBillItem
+Order +-- Order.Status
+
+Material +-- Material.Type
+
+@enduml

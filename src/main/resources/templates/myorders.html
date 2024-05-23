@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Frontpage</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/myorders.css" th:href="@{/css/myorders.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('Orders Page', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button active">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <h1 class="title">Mine ordrer</h1>
+
+        <ul class="requests-container">
+            <li class="request-container box" th:each="order: ${myorders}">
+                <div class="info-container">
+                    <div class="info-header">
+                        <h2 class="blueText" th:if="${order.getStatus().toString() == 'PAID'}">BETALT</h2>
+                        <h2 class="orangeText" th:if="${order.getStatus().toString() == 'WAITING_FOR_REVIEW'}">VENTER PÅ
+                            GODKENDELSE</h2>
+                        <h2 class="redText" th:if="${order.getStatus().toString() == 'REVIEW_APPROVED'}">MANGLER
+                            BETAILING</h2>
+                        <h3 th:text="${#temporals.format(order.getTimestamp(), 'dd MMMM yyyy')}">
+                            Timestamp</h3>
+                    </div>
+                    <div th:if="${order.getStatus().toString() != 'WAITING_FOR_REVIEW'}" class="info-header">
+                        <h3 class="blueText" th:text="|Pris: ${order.getTotalPrice()} kr.|">Total pris</h3>
+                    </div>
+                    <div class="info-header">
+                        <h4 th:text="|Id: ${order.getOrderId()}|">Order Id</h4>
+                    </div>
+
+                    <div class="info-content">
+                        <h4 th:text="${order.getTitle()}">Order Title</h4>
+                    </div>
+                </div>
+
+                <div class="buttons-container">
+                    <form th:if="${order.getStatus().toString() == 'REVIEW_APPROVED'}" action="/payOrder" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit" class="green">Betal</button>
+                    </form>
+                    <form th:if="${order.getStatus().toString() == 'PAID'}" action="/viewInvoice" method="get">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit">Se faktura</button>
+                    </form>
+                    <form action="/carportSchematic" method="get">
+                        <input type="hidden" name="width" th:value="${order.getCarportWidth()}">
+                        <input type="hidden" name="length" th:value="${order.getCarportLength()}">
+
+                        <button type="submit">Se Tegning</button>
+                    </form>
+                    <form th:if="${order.getStatus().toString() != 'PAID'}" action="/cancelOrder" method="post">
+                        <input type="hidden" name="orderId" th:value="${order.getOrderId()}">
+
+                        <button type="submit" class="red">Annuller ordre</button>
+                    </form>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

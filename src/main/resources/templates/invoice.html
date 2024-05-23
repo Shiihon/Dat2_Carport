@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="da-dk">
+
+<head>
+    <title>invoice</title>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../public/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <link href="../public/css/warehouse.css" th:href="@{/css/warehouse.css}" rel="stylesheet"/>
+</head>
+
+<body>
+<div class="main-container">
+    <ul th:replace="~{fragments :: header('invoice', ~{::li.nav-bar-button})}">
+        <li class="nav-bar-button">
+            <a href="/" th:href="@{/}">Forside</a>
+        </li>
+        <li class="nav-bar-button">
+            <a href="/myorders" th:href="@{/myorders}">Mine ordrer</a>
+        </li>
+    </ul>
+
+    <div class="main-content">
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Ordre id:</th>
+                <th>Fakturanummer:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${order.getOrderId()}"></td>
+                <td th:text="${invoice.getInvoiceId()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Navn :</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="|${customer.getFirstName()} ${customer.getLastName()}|"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Betalingsdato :</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="|${invoice.getDate()}|"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th>Beskrivelse</th>
+                <th>Længde</th>
+                <th>Antal</th>
+                <th>Enhed</th>
+                <th>Beskrivelse</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderBillItem: ${order.getOrderBill}">
+                <td th:text="${orderBillItem.getMaterial().getDescription()}"></td>
+                <td th:text="|${orderBillItem.getMaterial().getLength()} cm.|"></td>
+                <td th:text="${orderBillItem.getQuantity()}"></td>
+                <td th:text="${orderBillItem.getMaterial().getUnit()}"></td>
+                <td th:text="${orderBillItem.getDescription()}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <table style="width: 25%">
+            <thead>
+            <tr>
+                <th>Samlet pris:</th>
+            </tr>
+            <tr>
+                <td th:text="|${order.getTotalPrice()} kr|"></td>
+            </tr>
+            </thead>
+        </table>
+        <br>
+    </div>
+</div>
+
+</body>
+</html>

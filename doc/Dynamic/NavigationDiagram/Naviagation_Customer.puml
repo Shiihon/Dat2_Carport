@@ -1,0 +1,89 @@
+@startuml
+'https://plantuml.com/state-diagram
+
+scale 350 width
+[*] --> FrontPage : customer
+
+state FrontPage {
+FrontPage : FOG Logo
+}
+
+state Info
+Info : Customer can log out from all pages,
+Info : and enter the front page from the other pages as well.
+
+state BuildACarportPage
+FrontPage --> BuildACarportPage
+BuildACarportPage : Customer enters details for their carport
+BuildACarportPage --> LogInPage
+
+
+state CreateAccountPage
+CreateAccountPage : Customer enters
+CreateAccountPage : Name
+CreateAccountPage : Address
+CreateAccountPage : PostalCode
+CreateAccountPage : City
+CreateAccountPage : PhoneNumber
+CreateAccountPage : E-mail
+CreateAccountPage : Password
+CreateAccountPage : Repeat password
+CreateAccountPage --> OrderOverviewPage : Account created successfully
+
+state LogInPage
+FrontPage --> LogInPage
+LogInPage : Customer enters E-mail and Password
+LogInPage --> LogInPage : Failed Logging in
+LogInPage --> CreateAccountPage
+
+state OrderOverviewPage
+LogInPage --> OrderOverviewPage : Logged in successfully
+OrderOverviewPage : View of customers chosen measurements
+OrderOverviewPage : view of the drawing of the carport
+OrderOverviewPage : Send request
+OrderOverviewPage --> RequestConfirmPage : Request sent
+
+state RequestConfirmPage
+RequestConfirmPage --> MyOrdersPage
+RequestConfirmPage : Request has been sent, waiting for approval.
+RequestConfirmPage : You can now see your order under "My orders"
+
+state MyOrdersPage {
+
+state OrderPage {
+
+state Paid
+Paid --> SeeDrawing
+Paid --> OrderBill
+
+state OrderBill
+OrderBill : orderId and orderNr.
+OrderBill : Customer Name
+OrderBill : Date of Payment
+OrderBill : List of materials
+OrderBill : Total price
+
+state NotPaid
+NotPaid --> Paid : Order paid
+NotPaid --> SeeDrawing
+NotPaid --> CancelOrder
+
+state SeeDrawing
+
+state CancelOrder
+CancelOrder --> OrderDeleted
+
+state OrderDeleted
+
+state CarportDrawing
+SeeDrawing --> CarportDrawing
+ }
+
+}
+
+state LogOut
+MyOrdersPage --> LogOut
+
+LogOut --> [*]
+
+@enduml

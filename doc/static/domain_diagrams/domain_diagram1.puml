@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+!pragma layout smetana
+
+object Customer {
+name
+email
+password
+address
+phoneNumber
+}
+
+object Order {
+ordre nr.
+ordre title
+order status
+total price
+date
+}
+
+object Seller {
+email
+password
+}
+
+object Invoice {
+invoice nr.
+material info
+receipt info
+}
+
+object Material {
+Material nr.
+Material name
+Material amount
+Material price
+}
+
+Customer "1" *-- "M" Order
+Seller "M" --* "M" Order
+Order "1" *-- "M" Invoice
+Invoice "M" *-- "M" Material
+
+@enduml
